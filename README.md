@@ -1,10 +1,15 @@
-# ULM Defensive Intelligence — Mississippi State v29
+# ULM Defensive Intelligence — Mississippi State v30
 
-P & 10 correction:
-- The prior build incorrectly looked for `P` inside `pff_DOWN`.
-- PFF down values are numeric, so that could never produce P & 10.
-- P & 10 is now defined as:
-  - first offensive play of the possession / drive (`pff_DRIVEPLAY = 1`)
-  - 1st down
-  - 10 yards to go
-- Those plays are separated from ordinary 1 & 10 throughout the standardized D&D views and filters.
+Coach Notes are now append-only history instead of one editable shared note.
+
+What changed:
+- Every save creates a new Supabase row.
+- Existing notes are never overwritten by a later coach update.
+- All notes for the player load in chronological order.
+- Each entry shows the author and timestamp.
+- The text box is only for adding a new note.
+- The button now says `Add Note`.
+- After a note saves, the text box clears and the new note is added to the thread.
+- Notes remain shared across devices.
+
+No database schema change is required. The existing `defensive_player_notes` table and current SELECT / INSERT policies are sufficient for adding and reading note history.

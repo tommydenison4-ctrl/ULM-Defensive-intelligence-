@@ -61,6 +61,13 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .note-status{font-size:11px;color:var(--muted);padding:8px 0}
 .note-status.ok{color:#18794e}.note-status.err{color:#b42318}.note-status.loading{color:#667085}
 .note-history{font-size:10px;color:var(--muted);margin-top:8px}
+.note-thread{display:flex;flex-direction:column;gap:9px;margin:12px 0 14px}
+.note-entry{border:1px solid var(--line);border-radius:10px;background:#fff;padding:11px 12px}
+.note-entry-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:6px}
+.note-entry-author{font-weight:900;color:var(--maroon)}
+.note-entry-time{font-size:10px;color:var(--muted);white-space:nowrap}
+.note-entry-text{font-size:13px;line-height:1.45;white-space:pre-wrap}
+.note-empty{font-size:12px;color:var(--muted);padding:10px 0}
 @media(max-width:900px){.fau-drawer{width:100vw}.fau-hero{grid-template-columns:190px 1fr}.route-stage-v6{grid-template-columns:1fr}.top-games,.target-grid,.coverage-grid-v6{grid-template-columns:1fr}.player-card{grid-template-columns:108px 1fr}}
 @media(max-width:620px){.fau-hero{display:block}.fau-hero .player-photo{height:270px}.fau-season-grid{grid-template-columns:repeat(2,1fr)}.player-card{grid-template-columns:108px 1fr}.player-card .player-photo{min-height:156px}}
 
@@ -343,57 +350,57 @@ async function notesRequest(url,options={}){
 function cloudNoteMarkup(p,cls='coach-notes'){
  let name=coachIdentity();
  return `<div class="card ${cls}"><h3>Coach Notes</h3>
-   <div class="note-toolbar"><label>Your Name<input id="coachNoteAuthor" value="${esc(name)}" placeholder="Coach name"></label><div id="coachNoteStatus" class="note-status loading">Loading shared note…</div></div>
-   <textarea class="${cls==='coach-notes'?'':'notes-v6'}" id="coachNote" placeholder="Personnel alert, alignment tendency, matchup note, coverage thought..."></textarea>
-   <div id="coachNoteHistory" class="note-history"></div>
-   <div class="profile-actions"><button class="primary" id="coachNoteSaveBtn" onclick="saveCoachNoteForPlayer()">Save Shared Note</button></div>
+   <div id="coachNoteThread" class="note-thread"><div class="note-empty">Loading shared notes…</div></div>
+   <div class="note-toolbar"><label>Your Name<input id="coachNoteAuthor" value="${esc(name)}" placeholder="Coach name"></label><div id="coachNoteStatus" class="note-status"></div></div>
+   <textarea class="${cls==='coach-notes'?'':'notes-v6'}" id="coachNote" placeholder="Add a new staff note..."></textarea>
+   <div class="profile-actions"><button class="primary" id="coachNoteSaveBtn" onclick="saveCoachNoteForPlayer()">Add Note</button></div>
  </div>`;
 }
 function coachNotes(p){
  setTimeout(()=>loadCoachNoteForPlayer(p),0);
  return cloudNoteMarkup(p,'coach-notes');
 }
+function renderCoachNoteThread(rows){
+ let el=document.getElementById('coachNoteThread');
+ if(!el)return;
+ if(!rows?.length){
+   el.innerHTML='<div class="note-empty">No shared notes yet.</div>';
+   return;
+ }
+ el.innerHTML=rows.map(row=>{
+   let who=row.created_by||row.updated_by||'Staff';
+   let when=row.created_at||row.updated_at;
+   return `<div class="note-entry"><div class="note-entry-head"><div class="note-entry-author">${esc(who)}</div><div class="note-entry-time">${esc(noteTime(when))}</div></div><div class="note-entry-text">${esc(row.note||'')}</div></div>`;
+ }).join('');
+}
 async function loadCoachNoteForPlayer(p){
- let t=document.getElementById('coachNote'),status=document.getElementById('coachNoteStatus'),hist=document.getElementById('coachNoteHistory');
- if(!t)return;
- if(status){status.textContent='Loading shared note…';status.className='note-status loading'}
+ let status=document.getElementById('coachNoteStatus');
  let playerName=notePlayerName(p);
  if(!playerName){
    if(status){status.textContent='Could not identify this player for shared notes.';status.className='note-status err'}
    return;
  }
- let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(playerName)}&order=updated_at.desc.nullslast,created_at.desc&limit=1`;
+ if(status){status.textContent='Loading shared notes…';status.className='note-status loading'}
+ let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(playerName)}&order=created_at.asc`;
  try{
-   let rows=await notesRequest(NOTES_API+q),row=Array.isArray(rows)&&rows.length?rows[0]:null;
+   let rows=await notesRequest(NOTES_API+q);
    let key=notePlayerKey(p);
-   if(row){
-     cloudNotes[key]=row;
-     t.value=row.note||'';
-     if(status){status.textContent='Shared across devices';status.className='note-status ok'}
-     if(hist){
-       let who=row.updated_by||row.created_by||'Staff';
-       let when=row.updated_at||row.created_at;
-       hist.textContent=`Last saved by ${who}${when?' · '+noteTime(when):''}`;
-     }
-   }else{
-     let local=localStorage.getItem('ulm-def-notes:'+notePlayerName(p))||'';
-     t.value=local;
-     cloudNotes[key]=null;
-     if(status){status.textContent=local?'Local note found — save once to move it to the shared cloud note.':'No shared note yet';status.className='note-status'}
-     if(hist)hist.textContent='';
-   }
+   cloudNotes[key]=Array.isArray(rows)?rows:[];
+   renderCoachNoteThread(cloudNotes[key]);
+   if(status){status.textContent='Shared across devices';status.className='note-status ok'}
  }catch(e){
-   let local=localStorage.getItem('ulm-def-notes:'+notePlayerName(p))||'';
-   if(!t.value)t.value=local;
-   if(status){status.textContent='Cloud note unavailable: '+e.message;status.className='note-status err'}
+   renderCoachNoteThread([]);
+   if(status){status.textContent='Cloud notes unavailable: '+e.message;status.className='note-status err'}
  }
 }
 window.saveCoachNoteForPlayer=async()=>{
- let p=typeof selected==='string'?(resolveRosterPlayer(selected)||selected):selected,t=document.getElementById('coachNote'),authorEl=document.getElementById('coachNoteAuthor'),
-     status=document.getElementById('coachNoteStatus'),btn=document.getElementById('coachNoteSaveBtn'),hist=document.getElementById('coachNoteHistory');
+ let p=typeof selected==='string'?(resolveRosterPlayer(selected)||selected):selected,
+     t=document.getElementById('coachNote'),authorEl=document.getElementById('coachNoteAuthor'),
+     status=document.getElementById('coachNoteStatus'),btn=document.getElementById('coachNoteSaveBtn');
  if(!p||!t)return;
  let author=(authorEl?.value||'').trim();
  let playerName=notePlayerName(p);
+ let noteText=(t.value||'').trim();
  if(!playerName){
    if(status){status.textContent='Could not identify this player for cloud notes.';status.className='note-status err'}
    return;
@@ -402,37 +409,43 @@ window.saveCoachNoteForPlayer=async()=>{
    if(status){status.textContent='Enter your name before saving.';status.className='note-status err'}
    authorEl?.focus();return;
  }
+ if(!noteText){
+   if(status){status.textContent='Type a note before saving.';status.className='note-status err'}
+   t.focus();return;
+ }
  localStorage.setItem('ulm-def-coach-name',author);
  if(btn){btn.disabled=true;btn.textContent='Saving…'}
- if(status){status.textContent='Saving shared note…';status.className='note-status loading'}
- let now=new Date().toISOString(),key=notePlayerKey(p),existing=cloudNotes[key];
+ if(status){status.textContent='Adding shared note…';status.className='note-status loading'}
+ let now=new Date().toISOString(),key=notePlayerKey(p);
  try{
-   let row;
-   if(existing?.id){
-     let body={note:t.value,updated_by:author,updated_at:now};
-     let rows=await notesRequest(NOTES_API+'?id=eq.'+encodeURIComponent(existing.id),{
-       method:'PATCH',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)
-     });
-     row=Array.isArray(rows)?rows[0]:rows;
-   }else{
-     let body={
-       team:NOTES_TEAM,season:NOTES_SEASON,player_name:notePlayerName(p),
-       note:t.value,created_by:author,updated_by:author,updated_at:now
-     };
-     let rows=await notesRequest(NOTES_API,{
-       method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)
-     });
-     row=Array.isArray(rows)?rows[0]:rows;
-   }
-   cloudNotes[key]=row||existing||{...existing,note:t.value,updated_by:author,updated_at:now};
-   localStorage.removeItem('ulm-def-notes:'+notePlayerName(p));
-   if(status){status.textContent='Saved to shared notes ✓';status.className='note-status ok'}
-   if(hist)hist.textContent=`Last saved by ${author} · ${noteTime(now)}`;
+   let body={
+     team:NOTES_TEAM,
+     season:NOTES_SEASON,
+     player_name:playerName,
+     note:noteText,
+     created_by:author,
+     updated_by:author,
+     updated_at:now
+   };
+   let rows=await notesRequest(NOTES_API,{
+     method:'POST',
+     headers:{'Prefer':'return=representation'},
+     body:JSON.stringify(body)
+   });
+   let row=Array.isArray(rows)?rows[0]:rows;
+   let list=Array.isArray(cloudNotes[key])?cloudNotes[key]:[];
+   if(row)list.push(row);
+   else list.push({...body,created_at:now});
+   cloudNotes[key]=list;
+   renderCoachNoteThread(list);
+   t.value='';
+   localStorage.removeItem('ulm-def-notes:'+playerName);
+   if(status){status.textContent='Note added ✓';status.className='note-status ok'}
  }catch(e){
-   localStorage.setItem('ulm-def-notes:'+notePlayerName(p),t.value);
+   localStorage.setItem('ulm-def-notes:'+playerName,noteText);
    if(status){status.textContent='Cloud save failed — kept locally on this device. '+e.message;status.className='note-status err'}
  }finally{
-   if(btn){btn.disabled=false;btn.textContent='Save Shared Note'}
+   if(btn){btn.disabled=false;btn.textContent='Add Note'}
  }
 };
 window.saveCoachNote=()=>window.saveCoachNoteForPlayer();
