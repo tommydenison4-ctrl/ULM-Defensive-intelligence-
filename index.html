@@ -282,6 +282,19 @@ function heatQBMatches(r){
  if(heatQB==='ALL')return true;
  return String(r.pff_PASSER||'').trim()===heatQB;
 }
+function sideLabel(col){
+ return ['Def Left Sideline','Def Left Hash','Middle','Def Right Hash','Def Right Sideline'][col];
+}
+function hashLabel(v){
+ if(v==='L')return 'Def Right Hash';
+ if(v==='R')return 'Def Left Hash';
+ if(v==='C')return 'Middle';
+ if(v==='ALL')return 'All Hashes';
+ return 'Unknown';
+}
+function qbHeatLeft(){
+ return heatHash==='R'?'25%':heatHash==='L'?'75%':'50%';
+}
 
 function heatFiltered(){
  let rows=throwRows();
@@ -332,7 +345,7 @@ function heatmapPage(){
    <div class="heat-controls">
     <div class="view-toggle">${[['all','ALL'],['man','MAN'],['zone','ZONE'],['coverage','COVERAGE']].map(([v,l])=>`<button class="${heatScope===v?'active':''}" onclick="setHeatScope('${v}')">${l}</button>`).join('')}</div>
     ${heatScope==='coverage'?`<select onchange="setHeatCoverage(this.value)"><option value="ALL">All coverages</option>${covs.map(c=>`<option ${heatCoverage===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`:''}
-    <select onchange="setHeatHash(this.value)"><option value="ALL" ${heatHash==='ALL'?'selected':''}>All Hashes</option><option value="L" ${heatHash==='L'?'selected':''}>Left Hash</option><option value="C" ${heatHash==='C'?'selected':''}>Middle</option><option value="R" ${heatHash==='R'?'selected':''}>Right Hash</option></select>
+    <select onchange="setHeatHash(this.value)"><option value="ALL" ${heatHash==='ALL'?'selected':''}>All Hashes</option><option value="R" ${heatHash==='R'?'selected':''}>Def Left Hash</option><option value="C" ${heatHash==='C'?'selected':''}>Middle</option><option value="L" ${heatHash==='L'?'selected':''}>Def Right Hash</option></select>
     <select onchange="setHeatQB(this.value)"><option value="ALL" ${heatQB==='ALL'?'selected':''}>All QBs</option>${heatQBOptions().map(([v,l])=>`<option value="${esc(v)}" ${heatQB===v?'selected':''}>${esc(l)}</option>`).join('')}</select>
     <select onchange="setHeatMetric(this.value)">${[['attempts','Attempts'],['completions','Completions'],['explosives','Explosives 15+'],['td','Touchdowns'],['int','Interceptions'],['yards','Yards']].map(([v,l])=>`<option value="${v}" ${heatMetric===v?'selected':''}>${l}</option>`).join('')}</select>
     ${dndSelect()}
@@ -342,11 +355,11 @@ function heatmapPage(){
    <div class="heat-field">
      <div class="heat-los">
        <div class="heat-los-label">LOS</div>
-       <div class="heat-qb-marker" style="left:${heatHash==='R'?'25%':heatHash==='L'?'75%':'50%'}">QB</div>
+       <div class="heat-qb-marker" style="left:${qbHeatLeft()}">QB</div>
      </div>
-     <div class="heat-grid heat-grid-4">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div>
+     <div class="heat-grid heat-grid-4">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${sideLabel(i%5)}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div>
    </div>
-   <div class="heat-axis"><span>OFFENSE RIGHT</span><span>DEFENSIVE VIEW</span><span>OFFENSE LEFT</span></div>
+   <div class="heat-axis"><span>DEF LEFT</span><span>DEFENSIVE VIEW</span><span>DEF RIGHT</span></div>
  </div>`;
 }
 
@@ -755,8 +768,8 @@ function targetsPanel(p){
  return `<div class="card">
    <div class="section-head"><div><h3>Targets</h3><small>Receiver target heat map by depth and width. Each square shows where this player is targeted most often.</small></div>${freqToggle()}</div>
    <div class="heat-summary">${metric('Targets',rows.length)}${metric('Catches',comp)}${metric('Catch %',pct(100*comp/Math.max(1,rows.length)))}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric(freqMode==='raw'?'Explosives':'Explosive %',freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,rows.length)))}${metric('TD',rows.filter(isPassTouchdown).length)}</div>
-   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let p=100*c.n/Math.max(1,total),op=.08+.82*(c.n/max);return `<div class="heat-cell ${c.n?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?c.n:fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${c.comp} catches · ${c.y} yds</small></div>`}).join('')}</div></div>
-   <div class="heat-axis"><span>OFFENSE RIGHT</span><span>DEFENSIVE VIEW</span><span>OFFENSE LEFT</span></div>
+   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let p=100*c.n/Math.max(1,total),op=.08+.82*(c.n/max);return `<div class="heat-cell ${c.n?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?c.n:fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${sideLabel(i%5)}</span><small>${c.comp} catches · ${c.y} yds</small></div>`}).join('')}</div></div>
+   <div class="heat-axis"><span>DEF LEFT</span><span>DEFENSIVE VIEW</span><span>DEF RIGHT</span></div>
    
  </div>`;
 }
@@ -990,7 +1003,7 @@ function runVisualizer(){
  return `<div class="card"><div class="section-head"><div><h3>Run Game Explorer</h3></div>${freqToggle()}</div>
  <div class="run-filter-bar">
   <label>Concept<select onchange="setRunFilter('concept',this.value)">${concepts.map(v=>`<option value="${esc(v)}" ${v===current?'selected':''}>${esc(v==='ALL'?'All Concepts':v)}</option>`).join('')}</select></label>
-  <label>Hash<select onchange="setRunFilter('hash',this.value)">${[['ALL','All Hashes'],['L','Left Hash'],['C','Middle'],['R','Right Hash']].map(([v,l])=>`<option value="${v}" ${runHashF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>Hash<select onchange="setRunFilter('hash',this.value)">${[['ALL','All Hashes'],['R','Def Left Hash'],['C','Middle'],['L','Def Right Hash']].map(([v,l])=>`<option value="${v}" ${runHashF===v?'selected':''}>${l}</option>`).join('')}</select></label>
   <label>RB Side<select onchange="setRunFilter('rb',this.value)">${[['ALL','All RB Alignments'],['LEFT','RB Left'],['RIGHT','RB Right'],['CENTER','Pistol / Center'],['SPLIT','Split Backs'],['UNKNOWN','Unknown']].map(([v,l])=>`<option value="${v}" ${runRBSideF===v?'selected':''}>${l}</option>`).join('')}</select></label>
   <label>Personnel<select onchange="setRunFilter('personnel',this.value)">${personnel.map(v=>`<option value="${esc(v)}" ${runPersonnelF===v?'selected':''}>${v==='ALL'?'All Personnel':v}</option>`).join('')}</select></label>
   <label>Formation<select onchange="setRunFilter('formation',this.value)">${forms.map(v=>`<option value="${esc(v)}" ${runFormationF===v?'selected':''}>${v==='ALL'?'All Formations':v}</option>`).join('')}</select></label>
@@ -998,10 +1011,10 @@ function runVisualizer(){
   <div class="run-filter-actions"><button onclick="resetRunFilters()">Reset Run Filters</button></div>
  </div>
  <div class="kpis"><div class="kpi"><span>Filtered Runs</span><b>${total}</b><small>current view</small></div><div class="kpi"><span>YPP</span><b>${fmt(avg(gains),2)}</b><small>filtered plays</small></div><div class="kpi"><span>Median</span><b>${fmt(calcMedian(gains),1)}</b><small>yards</small></div><div class="kpi"><span>Explosives</span><b>${freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x>=15).length/Math.max(1,total)):`${gains.filter(x=>x>=15).length} plays`}</small></div><div class="kpi"><span>Negative Plays</span><b>${freqMode==='raw'?gains.filter(x=>x<=0).length:pct(100*gains.filter(x=>x<=0).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x<=0).length/Math.max(1,total)):`${gains.filter(x=>x<=0).length} plays`}</small></div></div>
- <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':runHashF} · ${runRBSideF==='ALL'?'all RB alignments':runRBSideF} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?'all formations':runFormationF}</div>
+ <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':hashLabel(runHashF)} · ${runRBSideF==='ALL'?'all RB alignments':runRBSideF} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?'all formations':runFormationF}</div>
  ${filteredRunDiagram(selected,gaps,total)}
  <div class="gap-strip">${gapOrder.map(([k,label])=>{let x=gaps[k],share=100*x.n/Math.max(1,total),hot=primary&&primary[0]===k;return `<div class="gap-box ${hot?'hot':''}"><div class="gap-name">${label}</div><div class="gap-count">${freqMode==='raw'?x.n:pct(share)}</div><div class="gap-ypp2">${x.n?fmt(x.ypp,2):'—'} YPP</div><div class="subtle">${x.n?`${fmt(x.med,1)} median`:''}</div></div>`}).join('')}</div>
- <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Left Hash',hashes.L],['Middle',hashes.C],['Right Hash',hashes.R],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['RB Left',rb.LEFT],['RB Right',rb.RIGHT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
+ <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Def Left Hash',hashes.R],['Middle',hashes.C],['Def Right Hash',hashes.L],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['RB Left',rb.LEFT],['RB Right',rb.RIGHT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
  ${runSurfacePanel(selected,total)}
  </div>`;
 }
