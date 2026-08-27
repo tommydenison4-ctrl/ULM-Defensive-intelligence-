@@ -55,6 +55,12 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .route-dashboard-v6{border:1px solid #111;border-radius:14px;background:#fff;padding:14px}.route-stage-v6{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,.8fr);gap:14px}.route-tree-panel-v6{position:relative;border:1px solid #cfd6df;border-radius:12px;background:linear-gradient(to bottom,transparent 49%,#eef1f4 50%,transparent 51%),linear-gradient(to right,transparent 49%,#eef1f4 50%,transparent 51%),#fff;min-height:500px;overflow:hidden}.route-tree-svg-v6{width:100%;height:500px;display:block}.route-tree-svg-v6 path{fill:none;stroke:#111;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.route-tree-svg-v6 text{font-family:Inter,Segoe UI,Arial,sans-serif}.route-node{fill:#111}.route-label-box{fill:#fff;stroke:#cfd6df}.route-detail-v6{border:1px solid #d8e0e8;border-radius:12px;padding:14px;background:#f8fafc}.route-detail-v6 h3{font-size:24px;margin:0 0 4px}.route-detail-grid-v6{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.route-detail-stat-v6{background:#fff;border:1px solid #e3e8ef;border-radius:9px;padding:9px;text-align:center}.route-detail-stat-v6 small{display:block;font-size:8px;text-transform:uppercase;color:#667085}.route-detail-stat-v6 b{display:block;font-size:16px;margin-top:2px}
 .target-grid,.coverage-grid-v6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.target-card,.coverage-card-v6{border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff}.target-card h4,.coverage-card-v6 h4{margin:0 0 8px}.target-card .big,.coverage-card-v6 .big{font-size:24px;font-weight:950;color:var(--maroon)}
 .trend-card-v6{border:1px solid var(--line);border-radius:11px;padding:10px;background:#fff}.trend-svg-v6{width:100%;height:180px}.notes-v6{width:100%;min-height:190px;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit}
+.note-toolbar{display:grid;grid-template-columns:minmax(180px,260px) 1fr;gap:10px;align-items:end;margin:10px 0}
+.note-toolbar label{font-size:9px;text-transform:uppercase;font-weight:900;color:var(--muted)}
+.note-toolbar input{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:9px;font:inherit}
+.note-status{font-size:11px;color:var(--muted);padding:8px 0}
+.note-status.ok{color:#18794e}.note-status.err{color:#b42318}.note-status.loading{color:#667085}
+.note-history{font-size:10px;color:var(--muted);margin-top:8px}
 @media(max-width:900px){.fau-drawer{width:100vw}.fau-hero{grid-template-columns:190px 1fr}.route-stage-v6{grid-template-columns:1fr}.top-games,.target-grid,.coverage-grid-v6{grid-template-columns:1fr}.player-card{grid-template-columns:108px 1fr}}
 @media(max-width:620px){.fau-hero{display:block}.fau-hero .player-photo{height:270px}.fau-season-grid{grid-template-columns:repeat(2,1fr)}.player-card{grid-template-columns:108px 1fr}.player-card .player-photo{min-height:156px}}
 
@@ -93,6 +99,12 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 const SUPABASE_BASE='https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public';
 const STORAGE_ROSTER=SUPABASE_BASE+'/Special%20Teams/Current/roster.json';
 const PFF_BASE=SUPABASE_BASE+'/Defensive%20Intelligence/Mississippi%20State/Current/';
+const SUPABASE_URL='https://hzrosmevuejjlxigdxmg.supabase.co';
+const SUPABASE_KEY='sb_publishable_FtmUeN1QkLlkRIqCIdQ5gw_KDbEFy1H';
+const NOTES_API=SUPABASE_URL+'/rest/v1/defensive_player_notes';
+const NOTES_TEAM='Mississippi State';
+const NOTES_SEASON=2026;
+let cloudNotes={};
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runDownF='ALL',runDistF='ALL';
 const $=id=>document.getElementById(id);
@@ -269,11 +281,113 @@ function coverageTable(rows){
  let hdr=freqMode==='raw'?['Coverage','Frequency','C/A','Comp %','YPP','Explosives','Negative','TD','INT','Sack','Scr']:['Coverage','Frequency','C/A','Comp %','YPP','Expl %','Neg %','TD','INT','Sack','Scr'];
  return table(hdr,rows.map(x=>[esc(x.cov),freqVal(x.n,pct(100*x.n/Math.max(1,total)),'plays'),`${x.comp}/${x.att}`,pct(100*x.comp/Math.max(1,x.att)),fmt(x.yds/Math.max(1,x.n),2),freqMode==='raw'?x.expl:pct(100*x.expl/Math.max(1,x.n)),freqMode==='raw'?x.neg:pct(100*x.neg/Math.max(1,x.n)),x.td,x.int,x.sack,x.scr]));
 }
-function coachNotes(p){
- let key='ulm-def-notes:'+p.name,n=localStorage.getItem(key)||'';
- return `<div class="card coach-notes"><h3>Coach Notes</h3><p class="subtle">Saved on this device for ${esc(p.name)}.</p><textarea id="coachNote" placeholder="Personnel alert, alignment tendency, matchup note, coverage thought...">${esc(n)}</textarea><div class="profile-actions"><button class="primary" onclick="saveCoachNote(${JSON.stringify(p.name)})">Save Note</button></div></div>`;
+function notePlayerKey(p){return `${NOTES_TEAM}|${NOTES_SEASON}|${String(p.name||'').trim()}`}
+function coachIdentity(){
+ return localStorage.getItem('ulm-def-coach-name')||'';
 }
-window.saveCoachNote=name=>{let t=document.getElementById('coachNote');if(t){localStorage.setItem('ulm-def-notes:'+name,t.value);let b=t.nextElementSibling?.querySelector('button');if(b){b.textContent='Saved ✓';setTimeout(()=>b.textContent='Save Note',1000)}}};
+function noteTime(v){
+ if(!v)return '';
+ try{return new Date(v).toLocaleString()}catch{return String(v)}
+}
+async function notesRequest(url,options={}){
+ let headers={
+   'apikey':SUPABASE_KEY,
+   'Authorization':'Bearer '+SUPABASE_KEY,
+   'Content-Type':'application/json',
+   ...(options.headers||{})
+ };
+ let r=await fetch(url,{...options,headers});
+ let text=await r.text(),data=null;
+ try{data=text?JSON.parse(text):null}catch{data=text}
+ if(!r.ok)throw new Error((data&&data.message)||text||`HTTP ${r.status}`);
+ return data;
+}
+function cloudNoteMarkup(p,cls='coach-notes'){
+ let name=coachIdentity();
+ return `<div class="card ${cls}"><h3>Coach Notes</h3>
+   <div class="note-toolbar"><label>Your Name<input id="coachNoteAuthor" value="${esc(name)}" placeholder="Coach name"></label><div id="coachNoteStatus" class="note-status loading">Loading shared note…</div></div>
+   <textarea class="${cls==='coach-notes'?'':'notes-v6'}" id="coachNote" placeholder="Personnel alert, alignment tendency, matchup note, coverage thought..."></textarea>
+   <div id="coachNoteHistory" class="note-history"></div>
+   <div class="profile-actions"><button class="primary" id="coachNoteSaveBtn" onclick="saveCoachNoteForPlayer()">Save Shared Note</button></div>
+ </div>`;
+}
+function coachNotes(p){
+ setTimeout(()=>loadCoachNoteForPlayer(p),0);
+ return cloudNoteMarkup(p,'coach-notes');
+}
+async function loadCoachNoteForPlayer(p){
+ let t=document.getElementById('coachNote'),status=document.getElementById('coachNoteStatus'),hist=document.getElementById('coachNoteHistory');
+ if(!t)return;
+ if(status){status.textContent='Loading shared note…';status.className='note-status loading'}
+ let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(p.name)}&order=updated_at.desc.nullslast,created_at.desc&limit=1`;
+ try{
+   let rows=await notesRequest(NOTES_API+q),row=Array.isArray(rows)&&rows.length?rows[0]:null;
+   let key=notePlayerKey(p);
+   if(row){
+     cloudNotes[key]=row;
+     t.value=row.note||'';
+     if(status){status.textContent='Shared across devices';status.className='note-status ok'}
+     if(hist){
+       let who=row.updated_by||row.created_by||'Staff';
+       let when=row.updated_at||row.created_at;
+       hist.textContent=`Last saved by ${who}${when?' · '+noteTime(when):''}`;
+     }
+   }else{
+     let local=localStorage.getItem('ulm-def-notes:'+p.name)||'';
+     t.value=local;
+     cloudNotes[key]=null;
+     if(status){status.textContent=local?'Local note found — save once to move it to the shared cloud note.':'No shared note yet';status.className='note-status'}
+     if(hist)hist.textContent='';
+   }
+ }catch(e){
+   let local=localStorage.getItem('ulm-def-notes:'+p.name)||'';
+   if(!t.value)t.value=local;
+   if(status){status.textContent='Cloud note unavailable: '+e.message;status.className='note-status err'}
+ }
+}
+window.saveCoachNoteForPlayer=async()=>{
+ let p=selected,t=document.getElementById('coachNote'),authorEl=document.getElementById('coachNoteAuthor'),
+     status=document.getElementById('coachNoteStatus'),btn=document.getElementById('coachNoteSaveBtn'),hist=document.getElementById('coachNoteHistory');
+ if(!p||!t)return;
+ let author=(authorEl?.value||'').trim();
+ if(!author){
+   if(status){status.textContent='Enter your name before saving.';status.className='note-status err'}
+   authorEl?.focus();return;
+ }
+ localStorage.setItem('ulm-def-coach-name',author);
+ if(btn){btn.disabled=true;btn.textContent='Saving…'}
+ if(status){status.textContent='Saving shared note…';status.className='note-status loading'}
+ let now=new Date().toISOString(),key=notePlayerKey(p),existing=cloudNotes[key];
+ try{
+   let row;
+   if(existing?.id){
+     let body={note:t.value,updated_by:author,updated_at:now};
+     let rows=await notesRequest(NOTES_API+'?id=eq.'+encodeURIComponent(existing.id),{
+       method:'PATCH',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)
+     });
+     row=Array.isArray(rows)?rows[0]:rows;
+   }else{
+     let body={
+       team:NOTES_TEAM,season:NOTES_SEASON,player_name:p.name,
+       note:t.value,created_by:author,updated_by:author,updated_at:now
+     };
+     let rows=await notesRequest(NOTES_API,{
+       method:'POST',headers:{'Prefer':'return=representation'},body:JSON.stringify(body)
+     });
+     row=Array.isArray(rows)?rows[0]:rows;
+   }
+   cloudNotes[key]=row||existing||{...existing,note:t.value,updated_by:author,updated_at:now};
+   localStorage.removeItem('ulm-def-notes:'+p.name);
+   if(status){status.textContent='Saved to shared notes ✓';status.className='note-status ok'}
+   if(hist)hist.textContent=`Last saved by ${author} · ${noteTime(now)}`;
+ }catch(e){
+   localStorage.setItem('ulm-def-notes:'+p.name,t.value);
+   if(status){status.textContent='Cloud save failed — kept locally on this device. '+e.message;status.className='note-status err'}
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Save Shared Note'}
+ }
+};
+window.saveCoachNote=()=>window.saveCoachNoteForPlayer();
 
 function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="window.print()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Routes & Usage'],['tendencies','Coverage / Tendencies'],['games','Game Log'],['compare','Comparison'],['notes','Coach Notes']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):facet==='games'?games(p):facet==='compare'?comparison(p):coachNotes(p)}</div>`}
 
@@ -584,8 +698,8 @@ function gameLogFAU(p){
  return `<div class="card"><h3>Game Log</h3>${games.length?table(['Date','Opponent','Plays','Pass C/A','Pass Yds','Rush Yds','Rec/Tgt','Rec Yds','TD','Expl'],games.map(g=>[g.date,g.opp,g.plays,g.att?`${g.comp}/${g.att}`:'—',g.att?g.passY:'—',g.rush?g.rushY:'—',g.tgt?`${g.rec}/${g.tgt}`:'—',g.tgt?g.recY:'—',g.passTD+g.td,g.expl])):'<div class="empty">No game log matched.</div>'}</div>`;
 }
 function coachNotesFAU(p){
- let key='ulm-def-notes:'+p.name,n=localStorage.getItem(key)||'';
- return `<div class="card"><h3>Coach Notes</h3><textarea class="notes-v6" id="coachNote">${esc(n)}</textarea><div class="profile-actions"><button class="primary" onclick="saveCoachNote(${JSON.stringify(p.name)})">Save Notes</button></div></div>`;
+ setTimeout(()=>loadCoachNoteForPlayer(p),0);
+ return cloudNoteMarkup(p,'');
 }
 function renderPortalTab(p){
  if(portalTab==='passing')return passingPanel(p);
