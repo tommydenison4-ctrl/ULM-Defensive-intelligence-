@@ -281,7 +281,10 @@ function coverageTable(rows){
  let hdr=freqMode==='raw'?['Coverage','Frequency','C/A','Comp %','YPP','Explosives','Negative','TD','INT','Sack','Scr']:['Coverage','Frequency','C/A','Comp %','YPP','Expl %','Neg %','TD','INT','Sack','Scr'];
  return table(hdr,rows.map(x=>[esc(x.cov),freqVal(x.n,pct(100*x.n/Math.max(1,total)),'plays'),`${x.comp}/${x.att}`,pct(100*x.comp/Math.max(1,x.att)),fmt(x.yds/Math.max(1,x.n),2),freqMode==='raw'?x.expl:pct(100*x.expl/Math.max(1,x.n)),freqMode==='raw'?x.neg:pct(100*x.neg/Math.max(1,x.n)),x.td,x.int,x.sack,x.scr]));
 }
-function notePlayerKey(p){return `${NOTES_TEAM}|${NOTES_SEASON}|${String(p.name||'').trim()}`}
+function notePlayerName(p){
+ return String(p?.name||p?.player_name||p?.full_name||p?.display_name||p?.playerName||'').trim();
+}
+function notePlayerKey(p){return `${NOTES_TEAM}|${NOTES_SEASON}|${notePlayerName(p)}`}
 function coachIdentity(){
  return localStorage.getItem('ulm-def-coach-name')||'';
 }
@@ -319,7 +322,12 @@ async function loadCoachNoteForPlayer(p){
  let t=document.getElementById('coachNote'),status=document.getElementById('coachNoteStatus'),hist=document.getElementById('coachNoteHistory');
  if(!t)return;
  if(status){status.textContent='Loading shared note…';status.className='note-status loading'}
- let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(p.name)}&order=updated_at.desc.nullslast,created_at.desc&limit=1`;
+ let playerName=notePlayerName(p);
+ if(!playerName){
+   if(status){status.textContent='Could not identify this player for shared notes.';status.className='note-status err'}
+   return;
+ }
+ let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(playerName)}&order=updated_at.desc.nullslast,created_at.desc&limit=1`;
  try{
    let rows=await notesRequest(NOTES_API+q),row=Array.isArray(rows)&&rows.length?rows[0]:null;
    let key=notePlayerKey(p);
@@ -333,14 +341,14 @@ async function loadCoachNoteForPlayer(p){
        hist.textContent=`Last saved by ${who}${when?' · '+noteTime(when):''}`;
      }
    }else{
-     let local=localStorage.getItem('ulm-def-notes:'+p.name)||'';
+     let local=localStorage.getItem('ulm-def-notes:'+notePlayerName(p))||'';
      t.value=local;
      cloudNotes[key]=null;
      if(status){status.textContent=local?'Local note found — save once to move it to the shared cloud note.':'No shared note yet';status.className='note-status'}
      if(hist)hist.textContent='';
    }
  }catch(e){
-   let local=localStorage.getItem('ulm-def-notes:'+p.name)||'';
+   let local=localStorage.getItem('ulm-def-notes:'+notePlayerName(p))||'';
    if(!t.value)t.value=local;
    if(status){status.textContent='Cloud note unavailable: '+e.message;status.className='note-status err'}
  }
@@ -350,6 +358,11 @@ window.saveCoachNoteForPlayer=async()=>{
      status=document.getElementById('coachNoteStatus'),btn=document.getElementById('coachNoteSaveBtn'),hist=document.getElementById('coachNoteHistory');
  if(!p||!t)return;
  let author=(authorEl?.value||'').trim();
+ let playerName=notePlayerName(p);
+ if(!playerName){
+   if(status){status.textContent='Could not identify this player for cloud notes.';status.className='note-status err'}
+   return;
+ }
  if(!author){
    if(status){status.textContent='Enter your name before saving.';status.className='note-status err'}
    authorEl?.focus();return;
@@ -368,7 +381,7 @@ window.saveCoachNoteForPlayer=async()=>{
      row=Array.isArray(rows)?rows[0]:rows;
    }else{
      let body={
-       team:NOTES_TEAM,season:NOTES_SEASON,player_name:p.name,
+       team:NOTES_TEAM,season:NOTES_SEASON,player_name:notePlayerName(p),
        note:t.value,created_by:author,updated_by:author,updated_at:now
      };
      let rows=await notesRequest(NOTES_API,{
@@ -377,11 +390,11 @@ window.saveCoachNoteForPlayer=async()=>{
      row=Array.isArray(rows)?rows[0]:rows;
    }
    cloudNotes[key]=row||existing||{...existing,note:t.value,updated_by:author,updated_at:now};
-   localStorage.removeItem('ulm-def-notes:'+p.name);
+   localStorage.removeItem('ulm-def-notes:'+notePlayerName(p));
    if(status){status.textContent='Saved to shared notes ✓';status.className='note-status ok'}
    if(hist)hist.textContent=`Last saved by ${author} · ${noteTime(now)}`;
  }catch(e){
-   localStorage.setItem('ulm-def-notes:'+p.name,t.value);
+   localStorage.setItem('ulm-def-notes:'+notePlayerName(p),t.value);
    if(status){status.textContent='Cloud save failed — kept locally on this device. '+e.message;status.className='note-status err'}
  }finally{
    if(btn){btn.disabled=false;btn.textContent='Save Shared Note'}
