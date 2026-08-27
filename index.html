@@ -21,36 +21,957 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.detail{background:#f7f8fa;border:1px solid #e2e6eb;border-radius:9px;padding:10px}.detail span{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:900}.detail b{display:block;font-size:17px;margin-top:3px}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd2da;border-radius:12px;background:#fafbfc}.source-card{font-size:11px;color:var(--muted)}.source-card code{color:var(--maroon);font-weight:800}.pff-coming{min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center}.pff-coming h3{margin:0 0 6px;font-size:22px}.pff-coming p{max-width:650px;color:var(--muted)}
 @media(max-width:1200px){.player-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.shell{grid-template-columns:1fr}aside{display:flex;overflow:auto;border-right:0;border-bottom:1px solid #203746}.side-title{display:none}.nav{width:auto;white-space:nowrap}.toolbar{grid-template-columns:1fr 1fr}.player-grid{grid-template-columns:repeat(2,1fr)}.player-hero{grid-template-columns:190px 1fr}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){header{padding:12px}.header-inner{display:block}.header-actions{margin-top:10px;justify-content:flex-start}.brand img{width:62px;height:62px}.brand h1{font-size:23px}.shell main{padding:13px}.toolbar{grid-template-columns:1fr}.player-grid{grid-template-columns:1fr}.player-hero{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.opp-name{font-size:24px}}
 @media print{header,aside,.toolbar,.position-tabs,.facet-tabs,.no-print,.opponent-banner{display:none!important}.shell{display:block}.shell main{padding:0}.player-grid,.page-title,.kpis,.notice{display:none!important}.profile{border:0}.card{box-shadow:none}.player-hero{grid-template-columns:180px 1fr}.player-name{font-size:28px}.detail-grid{grid-template-columns:repeat(4,1fr)}@page{size:landscape;margin:.45in}}
+
+.data-status{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 15px}.data-chip{font-size:9px;font-weight:900;border-radius:999px;padding:5px 8px;border:1px solid #d8dee6;background:#fff;color:var(--muted)}.data-chip.ok{background:#e8f5ef;color:var(--good);border-color:#b9ddcb}.data-chip.bad{background:#fff0f0;color:#9b3232;border-color:#efc1c1}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}.data-table{width:100%;border-collapse:collapse;background:#fff;font-size:11px}.data-table th{position:sticky;top:0;background:#0d2234;color:#fff;text-align:left;padding:9px 8px;white-space:nowrap}.data-table td{padding:8px;border-top:1px solid #edf0f3;white-space:nowrap}.data-table tr:hover td{background:#fffaf0}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:10px}.section-head h3{margin:0}.section-head small{color:var(--muted)}.metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.metric{background:#f7f8fa;border:1px solid #e2e6eb;border-radius:10px;padding:10px}.metric span{display:block;font-size:8px;text-transform:uppercase;font-weight:900;color:var(--muted)}.metric b{display:block;font-size:18px;color:var(--maroon);margin-top:3px}.subtle{color:var(--muted);font-size:11px}
+@media(max-width:1000px){.metric-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:620px){.metric-grid{grid-template-columns:repeat(2,1fr)}}
+
+
+.view-toggle{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}.view-toggle button{border:0;border-radius:0;padding:7px 11px;font-size:10px}.view-toggle button.active{background:var(--maroon);color:#fff}
+.freq-cell{font-weight:900}.freq-cell small{display:block;font-weight:700;color:var(--muted);margin-top:2px}.freq-cell .primary-val{font-size:13px;color:var(--ink)}
+.heat-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}.route-pill-wrap{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.route-pill-wrap button{white-space:nowrap}.heat-controls select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;font-weight:800}
+.heat-field{position:relative;background:linear-gradient(90deg,#edf6ee,#f7fbf7);border:3px solid #fff;outline:1px solid #cfd8cf;border-radius:12px;overflow:hidden;min-height:520px}.heat-field:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(10% - 1px),rgba(20,80,35,.12) calc(10% - 1px),rgba(20,80,35,.12) 10%);pointer-events:none}.heat-field:after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(20,80,35,.18);pointer-events:none}
+.heat-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);min-height:520px}.heat-cell{border-right:1px solid rgba(20,80,35,.11);border-bottom:1px solid rgba(20,80,35,.11);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;position:relative}.heat-cell b{font-size:25px;line-height:1}.heat-cell span{font-size:9px;font-weight:900;text-transform:uppercase;margin-top:4px}.heat-cell small{font-size:9px;margin-top:3px}.heat-cell.zero{opacity:.35}.heat-axis{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-weight:900;margin-top:5px}.heat-legend{font-size:10px;color:var(--muted);margin-top:8px}.heat-summary{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:10px 0}.heat-summary .metric{min-width:0}
+.player-drawer{border-top:5px solid var(--gold);box-shadow:0 12px 34px rgba(8,27,49,.13)}.compare-notes{display:grid;grid-template-columns:1fr 1fr;gap:12px}.coach-notes textarea{width:100%;min-height:130px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}.profile-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.profile-tabs button.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+@media(max-width:900px){.heat-summary{grid-template-columns:repeat(3,1fr)}.compare-notes{grid-template-columns:1fr}}@media(max-width:620px){.heat-grid{min-height:420px}.heat-summary{grid-template-columns:repeat(2,1fr)}}
+
+
+/* FAU Player Portal parity */
+.player-card{display:grid;grid-template-columns:118px 1fr;min-height:168px;cursor:pointer}
+.player-card .player-photo{aspect-ratio:auto;height:100%;min-height:168px}
+.player-card .player-body{padding:13px}
+.player-card .mini-row{grid-template-columns:repeat(2,1fr)}
+.player-card .mini b{font-size:15px}
+.fau-card-actions{display:flex;gap:7px;margin-top:10px}.fau-card-actions button{padding:7px 9px;font-size:10px;flex:1}
+.profile-overlay{position:fixed;inset:0;background:rgba(3,9,14,.56);z-index:200;display:none}.profile-overlay.open{display:block}
+.fau-drawer{position:fixed;top:0;right:-100%;width:min(1180px,96vw);height:100vh;background:#f5f7fa;z-index:210;overflow:auto;box-shadow:-18px 0 50px rgba(0,0,0,.24);transition:right .22s ease}
+.fau-drawer.open{right:0}.drawer-top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px}.drawer-top .back{background:var(--navy);color:#fff}.drawer-top .drawer-player{font-size:17px;font-weight:950}.drawer-top .drawer-pos{font-size:11px;color:var(--muted)}.drawer-spacer{flex:1}
+.fau-hero{display:grid;grid-template-columns:245px 1fr;background:#fff;border-bottom:1px solid var(--line)}.fau-hero .player-photo{height:315px;aspect-ratio:auto}.fau-hero-info{padding:22px}.fau-hero-name{font-size:38px;font-weight:950;color:var(--maroon)}.fau-hero-pos{font-size:17px;font-weight:900;margin-top:3px}.fau-meta{margin-top:7px;color:var(--muted);line-height:1.65}
+.season-title{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:950;margin:18px 0 7px}.fau-season-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:560px}.fau-season-stat{border:1px solid #e1e6eb;border-radius:8px;padding:8px;background:#f8fafc}.fau-season-stat small{display:block;font-size:8px;color:var(--muted);text-transform:uppercase;font-weight:900}.fau-season-stat b{display:block;font-size:18px;margin-top:2px}
+.sample-row{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:10px}.sample-badge{background:#e7f5ec;color:#176a43;border:1px solid #b9ddcb;padding:4px 7px;border-radius:999px;font-weight:900}
+.fau-tabs{position:sticky;top:55px;z-index:4;background:#fff;border-bottom:1px solid var(--line);display:flex;overflow:auto;padding:0 12px}.fau-tab{border:0;border-bottom:3px solid transparent;border-radius:0;background:#fff;padding:13px 12px;white-space:nowrap;color:#475467}.fau-tab.active{color:var(--maroon);border-bottom-color:var(--maroon);background:#fff}
+.fau-panel{padding:16px}.fau-panel .card{margin-bottom:12px}
+.top-games{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.top-game{border:1px solid var(--line);border-radius:12px;background:#fff;padding:13px;position:relative}.top-game .rank{position:absolute;right:10px;top:10px;font-size:22px;font-weight:950;color:#d8dde3}.top-game h4{margin:0 0 4px;color:var(--maroon)}.top-game .big{font-size:26px;font-weight:950}.top-game .line{font-size:10px;color:var(--muted);margin-top:5px}
+.route-dashboard-v6{border:1px solid #111;border-radius:14px;background:#fff;padding:14px}.route-stage-v6{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,.8fr);gap:14px}.route-tree-panel-v6{position:relative;border:1px solid #cfd6df;border-radius:12px;background:linear-gradient(to bottom,transparent 49%,#eef1f4 50%,transparent 51%),linear-gradient(to right,transparent 49%,#eef1f4 50%,transparent 51%),#fff;min-height:500px;overflow:hidden}.route-tree-svg-v6{width:100%;height:500px;display:block}.route-tree-svg-v6 path{fill:none;stroke:#111;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.route-tree-svg-v6 text{font-family:Inter,Segoe UI,Arial,sans-serif}.route-node{fill:#111}.route-label-box{fill:#fff;stroke:#cfd6df}.route-detail-v6{border:1px solid #d8e0e8;border-radius:12px;padding:14px;background:#f8fafc}.route-detail-v6 h3{font-size:24px;margin:0 0 4px}.route-detail-grid-v6{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.route-detail-stat-v6{background:#fff;border:1px solid #e3e8ef;border-radius:9px;padding:9px;text-align:center}.route-detail-stat-v6 small{display:block;font-size:8px;text-transform:uppercase;color:#667085}.route-detail-stat-v6 b{display:block;font-size:16px;margin-top:2px}
+.target-grid,.coverage-grid-v6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.target-card,.coverage-card-v6{border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff}.target-card h4,.coverage-card-v6 h4{margin:0 0 8px}.target-card .big,.coverage-card-v6 .big{font-size:24px;font-weight:950;color:var(--maroon)}
+.trend-card-v6{border:1px solid var(--line);border-radius:11px;padding:10px;background:#fff}.trend-svg-v6{width:100%;height:180px}.notes-v6{width:100%;min-height:190px;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit}
+@media(max-width:900px){.fau-drawer{width:100vw}.fau-hero{grid-template-columns:190px 1fr}.route-stage-v6{grid-template-columns:1fr}.top-games,.target-grid,.coverage-grid-v6{grid-template-columns:1fr}.player-card{grid-template-columns:108px 1fr}}
+@media(max-width:620px){.fau-hero{display:block}.fau-hero .player-photo{height:270px}.fau-season-grid{grid-template-columns:repeat(2,1fr)}.player-card{grid-template-columns:108px 1fr}.player-card .player-photo{min-height:156px}}
+
+
+.run-context-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.run-context-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+.run-context-card h4{margin:0 0 8px}.run-context-row{display:grid;grid-template-columns:1.1fr .65fr .65fr .65fr;gap:8px;padding:8px 0;border-bottom:1px solid #edf0f3;align-items:center}.run-context-row:last-child{border-bottom:0}.run-context-row.head{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:900}.run-context-row b{font-size:13px}.gap-ypp{font-size:10px;margin-top:3px;color:#fff7d6;font-weight:900}.gap-sub{font-size:9px;margin-top:1px;color:#f7eaca}.run-data-note{font-size:10px;color:var(--muted);margin-top:9px}
+@media(max-width:850px){.run-context-grid{grid-template-columns:1fr}}
+
+
+.run-filter-bar{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr));gap:9px;margin:10px 0 14px}.run-filter-bar label{font-size:9px;text-transform:uppercase;font-weight:900;color:var(--muted)}.run-filter-bar select{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#fff;font-weight:800}.run-filter-actions{display:flex;align-items:end}.run-filter-actions button{width:100%;height:38px}.gap-strip{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}.gap-box{border:1px solid var(--line);border-radius:11px;padding:10px;text-align:center;background:#fff}.gap-box.hot{border-color:#c7a24d;box-shadow:0 0 0 2px rgba(211,168,61,.12)}.gap-box .gap-name{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:900}.gap-box .gap-count{font-size:23px;font-weight:950;color:var(--maroon);margin-top:3px}.gap-box .gap-ypp2{font-size:12px;font-weight:900;margin-top:3px}.filter-result-note{font-size:11px;color:var(--muted);margin:6px 0 12px}
+@media(max-width:1000px){.run-filter-bar{grid-template-columns:repeat(2,1fr)}.gap-strip{grid-template-columns:repeat(4,1fr)}}@media(max-width:620px){.run-filter-bar{grid-template-columns:1fr}.gap-strip{grid-template-columns:repeat(2,1fr)}}
+
+
+.weekly-chart-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px;margin-bottom:12px}.weekly-chart-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:10px}.weekly-chart-head h3{margin:0}.weekly-svg{width:100%;height:240px;display:block}.weekly-grid-line{stroke:#e6e9ee;stroke-width:1}.weekly-axis-text{font-size:9px;fill:#667085;font-weight:700}.weekly-line{fill:none;stroke:#8A2432;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}.weekly-dot{fill:#D3A83D;stroke:#8A2432;stroke-width:2}.weekly-label{font-size:9px;fill:#172033;font-weight:900}.weekly-opponent{font-size:8px;fill:#667085;font-weight:800}.no-sample-banner{border:1px solid #f0d5d9;background:#fff7f8;border-radius:10px;padding:12px;color:#7b2130;font-weight:800;margin:10px 0}
+
+.run-diagram{background:linear-gradient(180deg,#0e5137,#1f754f);border:1px solid #0d3e2a;border-radius:18px;padding:12px;margin:12px 0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+
+.rush-count-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:12px 0}
+.rush-count-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+.rush-count-card h3{margin:0 0 8px;color:var(--maroon)}
+.rush-count-card .big{font-size:30px;font-weight:950;color:var(--maroon)}
+.rush-count-card .sub{font-size:10px;color:var(--muted);font-weight:800}
+.rush-split-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+@media(max-width:1100px){.rush-count-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.rush-count-grid{grid-template-columns:repeat(2,1fr)}.rush-split-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <header><div class="header-inner"><div class="brand"><img src="ulm_avg_roundel_edge_star.png" alt="ULM"><div><div class="kicker">ULM Football</div><h1>Defensive Intelligence</h1><div class="sub">Independent defensive staff workspace · opponent offense · personnel intelligence</div><div id="headerStatus" class="status">Connecting to Mississippi State roster…</div></div></div><div class="header-actions"><button id="reloadBtn">Reload Live Roster</button><button id="printBtn">Print / Save PDF</button></div></div></header>
-<div class="shell"><aside><div class="side-title">DEFENSIVE STAFF<div class="side-sub">Mississippi State Week</div></div><button class="nav" data-page="dashboard">⌂ Dashboard</button><button class="nav active" data-page="players">♟ Player Intelligence</button><button class="nav" data-page="personnel">▦ Personnel & Formations</button><button class="nav" data-page="run">↗ Run Game</button><button class="nav" data-page="pass">◎ Pass Game</button><button class="nav" data-page="situations"># Situations</button><button class="nav" data-page="pressure">✥ Pressure Response</button></aside><main><div class="opponent-banner"><div><div class="kicker">2026 Opponent Workspace</div><div class="opp-name">Mississippi State</div><div class="opp-meta">Defensive staff · opponent offense scouting</div></div><div class="live-pill">LIVE ROSTER SOURCE</div></div><div id="app"></div></main></div>
+<div class="shell"><aside><div class="side-title">DEFENSIVE STAFF<div class="side-sub">Mississippi State Week</div></div><button class="nav" data-page="dashboard">⌂ Dashboard</button><button class="nav active" data-page="players">♟ Player Intelligence</button><button class="nav" data-page="personnel">▦ Personnel & Formations</button><button class="nav" data-page="run">↗ Run Game</button><button class="nav" data-page="pass">◎ Pass Game</button><button class="nav" data-page="heatmaps">▦ Passing Heat Maps</button><button class="nav" data-page="coverage">◫ Coverage Response</button><button class="nav" data-page="situations"># Situations</button><button class="nav" data-page="rushcount">⇧ Rush Count</button><button class="nav" data-page="pressure">✥ Pressure Response</button></aside><main><div class="opponent-banner"><div><div class="kicker">2026 Opponent Workspace</div><div class="opp-name">Mississippi State</div><div class="opp-meta">Defensive staff · opponent offense scouting</div></div><div class="live-pill">LIVE ROSTER SOURCE</div></div><div id="app"></div></main></div>
+<div id="profileOverlay" class="profile-overlay" onclick="closeFAUProfile()"></div>
+<aside id="fauDrawer" class="fau-drawer" aria-label="Player profile"><div id="fauDrawerBody"></div></aside>
 <script>
-const STORAGE_ROSTER='https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Special%20Teams/Current/roster.json';
-let roster=[];let page='players';let group='ALL';let selected=null;let facet='overview';
-const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function normPos(x){x=String(x||'').toUpperCase().trim().replace(/\s+/g,'');if(['QB'].includes(x))return'QB';if(['RB','HB','TB','FB'].includes(x))return'RB';if(['WR','FL','SE'].includes(x))return'WR';if(['TE','Y'].includes(x))return'TE';if(['OL','OT','OG','C','LT','LG','RG','RT','T','G','OC'].includes(x))return'OL';return x||'OTHER'}
+
+const SUPABASE_BASE='https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public';
+const STORAGE_ROSTER=SUPABASE_BASE+'/Special%20Teams/Current/roster.json';
+const PFF_BASE=SUPABASE_BASE+'/Defensive%20Intelligence/Mississippi%20State/Current/';
+const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
+let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runDownF='ALL',runDistF='ALL';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const num=v=>{let n=parseFloat(String(v??'').replace(/[%,$]/g,''));return Number.isFinite(n)?n:0};
+const pct=v=>{if(v===null||v===undefined||v==='')return '—';let s=String(v);return s.includes('%')?s:(num(v).toFixed(1)+'%')};
+function parsePctValue(v){let n=parseFloat(String(v??'').replace('%','').trim());return Number.isFinite(n)?n:0}
+const fmt=(v,d=1)=>Number.isFinite(+v)?(+v).toFixed(d):'—';
+const cleanName=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function jerseyNum(v){let m=String(v??'').match(/\d+/);return m?String(parseInt(m[0],10)):''}
+function tokenJersey(token){
+ let s=String(token||'').toUpperCase();
+ let m=s.match(/\bMSST\s+D?(\d{1,2})\b/);
+ if(!m)m=s.match(/\b(\d{1,2})\s*\((QB|HB|RB|WR|TE|FB|LWR|RWR|SRWR|SLWR)/);
+ return m?String(parseInt(m[1],10)):'';
+}
+function hasNamedPFFIdentity(p){
+ let pos=normPos(p.position);
+ if(pos==='QB')return !!findPlayerRow('qb',p.name);
+ if(['WR','TE','RB'].includes(pos))return !!findPlayerRow('receiving',p.name);
+ if(pos==='OL')return !!findPlayerRow('passBlocking',p.name)||!!findPlayerRow('runBlocking',p.name);
+ return false;
+}
+function playerTokenMatch(token,p,expectedPos=''){
+ if(!token||!p)return false;
+ if(cleanName(token)===cleanName(p.name))return true;
+ if(!hasNamedPFFIdentity(p))return false;
+ let pj=jerseyNum(p.number),tj=tokenJersey(token);
+ if(!pj||!tj||pj!==tj)return false;
+ let pos=normPos(p.position), t=String(token).toUpperCase();
+ if(expectedPos==='QB'||pos==='QB') return t.includes('(QB)') || expectedPos==='QB';
+ if(expectedPos==='TARGET' && ['WR','TE','RB'].includes(pos)) return true;
+ if(expectedPos==='CARRIER' && ['RB','QB'].includes(pos)) return true;
+ return true;
+}
+function resolvePlayer(value){
+ if(typeof value==='object'&&value)return value;
+ return roster.find(x=>cleanName(x.name)===cleanName(value))||null;
+}
+
+function normPos(x){x=String(x||'').toUpperCase().trim().replace(/\s+/g,'');if(x==='QB')return'QB';if(['RB','HB','TB','FB'].includes(x))return'RB';if(['WR','FL','SE'].includes(x))return'WR';if(['TE','Y'].includes(x))return'TE';if(['OL','OT','OG','C','LT','LG','RG','RT','T','G','OC'].includes(x))return'OL';return x||'OTHER'}
 function initials(n){return String(n||'?').split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()}
 function photo(p){return p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.remove();this.parentElement.querySelector('.initials').style.display='flex'"><div class="initials" style="display:none">${initials(p.name)}</div>`:`<div class="initials">${initials(p.name)}</div>`}
 function value(x){return x===null||x===undefined||x===''?'—':x}
+function nonEmpty(v){return v!==null&&v!==undefined&&String(v).trim()!==''&&String(v).trim().toLowerCase()!=='nan'}
+function passResult(r){return String(r?.pff_PASSRESULT||'').trim().toUpperCase()}
+function isInterception(r){return passResult(r)==='INTERCEPTION'||nonEmpty(r?.pff_INTERCEPTION)}
+function isPassTouchdown(r){return String(r?.pff_RUNPASS||'').toUpperCase()==='P'&&passResult(r)==='COMPLETE'&&nonEmpty(r?.pff_TOUCHDOWN)&&!isInterception(r)}
+function isRushTouchdown(r){return String(r?.pff_RUNPASS||'').toUpperCase()==='R'&&nonEmpty(r?.pff_TOUCHDOWN)}
 function positionGroups(){return[['ALL','All Offense'],['QB','QB'],['RB','RB'],['WR','WR'],['TE','TE'],['OL','OL']]}
 function offenseRoster(){return roster.filter(p=>['QB','RB','WR','TE','OL'].includes(normPos(p.position)))}
 function filteredPlayers(){let q=($('playerSearch')?.value||'').toLowerCase().trim(),sort=$('playerSort')?.value||'number';let a=offenseRoster().filter(p=>(group==='ALL'||normPos(p.position)===group)&&(!q||[p.name,p.number,p.position,p.hometown,p.previousSchool].some(x=>String(x||'').toLowerCase().includes(q))));a.sort((a,b)=>sort==='name'?String(a.name).localeCompare(String(b.name)):sort==='position'?normPos(a.position).localeCompare(normPos(b.position))||(+a.number||999)-(+b.number||999):(+a.number||999)-(+b.number||999));return a}
-function playerCard(p){return `<div class="player-card ${selected===p.name?'selected':''}" onclick='openPlayer(${JSON.stringify(p.name)})'><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="player-body"><h3>${esc(p.name)}</h3><div class="player-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}</div><div class="mini-row"><div class="mini"><b>${esc(p.number||'—')}</b><span>Number</span></div><div class="mini"><b>${esc(normPos(p.position))}</b><span>Group</span></div><div class="mini"><b>${p.image?'✓':'—'}</b><span>Photo</span></div></div></div></div>`}
+function parseCSV(text){let rows=[],row=[],cell='',q=false;for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];if(q){if(c==='"'&&n==='"'){cell+='"';i++;}else if(c==='"')q=false;else cell+=c}else if(c==='"')q=true;else if(c===','){row.push(cell);cell=''}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell=''}else cell+=c}if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row)}if(!rows.length)return[];let headers=rows.shift().map(h=>h.trim());return rows.filter(r=>r.some(x=>String(x).trim()!=='')).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]??''])))}
+async function fetchCSV(key){
+ let candidates=Array.isArray(FILES[key])?FILES[key]:[FILES[key]];
+ let lastErr='';
+ for(const file of candidates){
+   try{
+     let url=PFF_BASE+encodeURIComponent(file);
+     let r=await fetch(url+'?v='+Date.now(),{cache:'no-store'});
+     if(!r.ok){lastErr='HTTP '+r.status;continue}
+     let data=parseCSV(await r.text());
+     datasets[key]=data;
+     loadState[key]={ok:true,n:data.length,file};
+     return data
+   }catch(e){lastErr=String(e)}
+ }
+ datasets[key]=[];
+ loadState[key]={ok:false,n:0,error:lastErr||'not found'};
+ return[]
+}
+function findPlayerRow(key,name){let n=cleanName(name);return (datasets[key]||[]).find(r=>cleanName(r.Name)===n)}
+function findPlayerRows(key,name){let n=cleanName(name);return (datasets[key]||[]).filter(r=>cleanName(r.Name)===n)}
+function playsForPlayer(value){
+ let p=resolvePlayer(value);if(!p)return[];
+ return (datasets.plays||[]).filter(r=>
+   playerTokenMatch(r.pff_PASSER,p,'QB')||
+   playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')||
+   playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET')
+ );
+}
+function avg(arr){return arr.length?arr.reduce((a,b)=>a+num(b),0)/arr.length:0}
+function dataStatus(){let labels={plays:'Play Feed',qb:'QB',receiving:'Receiving',routes:'Routes',dropbacks:'Dropbacks',passOverall:'Pass Overall',pressure:'Pressure',runConcepts:'Run Concepts',runDirections:'Run Direction',runBlocking:'Run Block',passBlocking:'Pass Block',formations:'Formations',personnel:'Personnel'};return `<div class="data-status">${Object.entries(labels).map(([k,l])=>`<span class="data-chip ${loadState[k]?.ok?'ok':'bad'}">${loadState[k]?.ok?'✓':'×'} ${l}${loadState[k]?.ok?` · ${loadState[k].n}`:''}</span>`).join('')}</div>`}
+function metric(label,val,sub=''){return `<div class="metric"><span>${esc(label)}</span><b>${esc(value(val))}</b>${sub?`<div class="subtle">${esc(sub)}</div>`:''}</div>`}
 function detail(label,val){return `<div class="detail"><span>${label}</span><b>${esc(value(val))}</b></div>`}
-function overview(p){return `<div class="card"><h3>Roster Identity</h3><div class="detail-grid">${detail('Number',p.number)}${detail('Position',p.position)}${detail('Height',p.height)}${detail('Weight',p.weight?`${p.weight} lbs`:'')}${detail('Class',p.class)}${detail('Hometown',p.hometown)}${detail('Previous School',p.previousSchool)}${detail('Roster Status','2026 Current')}</div></div><div class="card"><h3>Biography</h3><div class="bio">${esc(p.bio||'Biography has not been enriched in the shared roster yet.')}</div></div>`}
-function usage(p){return `<div class="two"><div class="card"><h3>Usage & Alignment</h3><div class="empty">Ready for Mississippi State offensive PFF data. This facet will show snaps, personnel usage, alignment, formation participation, motion and role-specific usage.</div></div><div class="card"><h3>Personnel Context</h3><div class="detail-grid">${detail('Position Group',normPos(p.position))}${detail('Roster Number',p.number)}${detail('Class',p.class)}${detail('Previous',p.previousSchool)}</div></div></div>`}
-function tendencies(p){let pos=normPos(p.position);let text=pos==='QB'?'TTT, pressure response, scramble rate, target depth, explosive/negative play rates and situational passing.':pos==='RB'?'run concept usage, YPC/median, explosive rate, negative-play rate, targets, screens/checkdowns and personnel usage.':pos==='WR'||pos==='TE'?'route tree, target share, aDOT, slot/outside alignment, field/boundary usage, explosive rate and catch production.':'pass protection, pressure responsibility, sacks/hits/hurries allowed, run-block usage and alignment.';return `<div class="card"><h3>${pos} Tendencies</h3><div class="empty">The live roster identity is connected. Once Mississippi State offensive PFF data is connected, this page will calculate ${text}</div></div>`}
-function games(){return `<div class="card"><h3>Game Log</h3><div class="empty">No Mississippi State offensive PFF game file is connected to this standalone app yet. The roster is live; game-by-game offensive production will populate here from the next PFF connection.</div></div>`}
-function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="window.print()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Usage & Alignment'],['tendencies','Tendencies'],['games','Game Log']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):games()}</div>`}
-function playersPage(){let all=offenseRoster(),list=filteredPlayers(),posCounts={};all.forEach(p=>posCounts[normPos(p.position)]=(posCounts[normPos(p.position)]||0)+1);let p=roster.find(x=>x.name===selected);return `<div class="page-title"><h2>Player Intelligence</h2><p>Live Mississippi State roster identity from the same Supabase source used by Special Teams. Position-specific PFF facets are ready to connect next.</p></div><div class="card notice"><b>Shared roster, independent app.</b> Defensive Intelligence reads the existing Mississippi State roster but does not depend on the Special Teams interface or the old master Football Intelligence platform.</div><div class="toolbar"><input id="playerSearch" placeholder="Search name, number, hometown or previous school" oninput="render()"><select id="playerSort" onchange="render()"><option value="number">Sort: number</option><option value="name">Sort: name</option><option value="position">Sort: position</option></select><div></div><div></div></div><div class="position-tabs">${positionGroups().map(([id,l])=>`<button class="${group===id?'active':''}" onclick="setGroup('${id}')">${l}${id!=='ALL'&&posCounts[id]!=null?` (${posCounts[id]})`:''}</button>`).join('')}</div><div class="kpis"><div class="kpi"><span>Offensive Players</span><b>${all.length}</b><small>QB/RB/WR/TE/OL</small></div><div class="kpi"><span>Current View</span><b>${list.length}</b><small>${group==='ALL'?'All offense':group}</small></div><div class="kpi"><span>Photos Loaded</span><b>${all.filter(x=>x.image).length}</b><small>from roster.json</small></div><div class="kpi"><span>Bios Loaded</span><b>${all.filter(x=>x.bio).length}</b><small>from roster.json</small></div></div><div class="player-grid">${list.length?list.map(playerCard).join(''):'<div class="empty">No players match this view.</div>'}</div>${p?profile(p):''}<div class="card source-card"><b>Roster source:</b> <code>Supabase Storage / Special Teams / Current / roster.json</code></div>`}
-function waitingPage(title,desc){return `<div class="page-title"><h2>${title}</h2><p>${desc}</p></div><div class="card pff-coming"><div><div class="kicker">MISSISSIPPI STATE</div><h3>Roster connected. Offensive PFF connection is next.</h3><p>This module is intentionally not showing the old Florida Atlantic numbers under a Mississippi State label. Once we connect Mississippi State offensive PFF data, this page will populate from the live dataset.</p><button class="primary" onclick="page='players';syncNav();render()">Open Player Intelligence</button></div></div>`}
-function render(){let app=$('app');if(page==='players')app.innerHTML=playersPage();else if(page==='dashboard')app.innerHTML=waitingPage('Dashboard','Opponent-offense overview for the defensive staff.');else if(page==='personnel')app.innerHTML=waitingPage('Personnel & Formations','Personnel groupings, formations, motions and usage.');else if(page==='run')app.innerHTML=waitingPage('Run Game','Run concepts, efficiency, explosives and negative plays.');else if(page==='pass')app.innerHTML=waitingPage('Pass Game','Routes, concepts, target distribution and quarterback behavior.');else if(page==='situations')app.innerHTML=waitingPage('Situations','Down-distance, field zone, red zone, third down and two-minute.');else app.innerHTML=waitingPage('Pressure Response','Pressure, blitz, time to throw, sacks, scrambles and answers.');}
+function table(headers,rows){return `<div class="table-wrap"><table class="data-table"><thead><tr>${headers.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c??'—'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+
+function freqToggle(){return `<div class="view-toggle"><button class="${freqMode==='raw'?'active':''}" onclick="setFreqMode('raw')">RAW</button><button class="${freqMode==='pct'?'active':''}" onclick="setFreqMode('pct')">%</button></div>`}
+function freqVal(raw,percent,label='plays'){
+ let r=num(raw),p=String(percent??'').trim(); if(p&&!p.includes('%'))p=p+'%'; if(!p)p='—';
+ return freqMode==='raw'
+   ? `<div class="freq-cell"><span class="primary-val">${esc(r)}</span> ${esc(label)}<small>${esc(p)}</small></div>`
+   : `<div class="freq-cell"><span class="primary-val">${esc(p)}</span><small>${esc(r)} ${esc(label)}</small></div>`;
+}
+function countPctVal(total,percent,label='plays'){
+ let t=num(total),pv=num(percent),raw=Math.round(t*pv/100),p=String(percent??'').trim();
+ if(p&&!p.includes('%'))p=p+'%'; if(!p)p='—';
+ return freqMode==='raw'
+   ? `<div class="freq-cell"><span class="primary-val">${raw}</span> ${esc(label)}<small>${esc(p)}</small></div>`
+   : `<div class="freq-cell"><span class="primary-val">${esc(p)}</span><small>${raw} ${esc(label)}</small></div>`;
+}
+function calcMedian(a){let x=a.map(num).filter(Number.isFinite).sort((a,b)=>a-b);if(!x.length)return 0;let m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
+function isManCov(c){c=String(c||'').toUpperCase();return c==='COVER 0'||c==='COVER 1'||c==='COVER 2 MAN'||c.includes('2 MAN')}
+function throwRows(){return (datasets.plays||[]).filter(r=>r.pff_RUNPASS==='P' && r.pff_PASSER && (r.pff_PASSDEPTH!==''||r.pff_PASSWIDTH!==''||r.pff_PASSZONE))}
+function heatFiltered(){
+ let rows=throwRows();
+ if(heatScope==='man')rows=rows.filter(r=>isManCov(r.pff_PASS_COVERAGE_BASIC));
+ if(heatScope==='zone')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC&&!isManCov(r.pff_PASS_COVERAGE_BASIC));
+ if(heatScope==='coverage'&&heatCoverage!=='ALL')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC===heatCoverage);
+ return rows;
+}
+function heatMetricHit(r){
+ let result=passResult(r),gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);
+ if(heatMetric==='completions')return result==='COMPLETE';
+ if(heatMetric==='explosives')return gain>=15;
+ if(heatMetric==='td')return isPassTouchdown(r);
+ if(heatMetric==='int')return isInterception(r);
+ if(heatMetric==='yards')return true;
+ return ['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(result)||result!=='';
+}
+function heatBin(r){
+ let w=num(r.pff_PASSWIDTH),d=num(r.pff_PASSDEPTH);
+ if(!Number.isFinite(w)||w===0){
+   let dir=String(r.pff_PASSDIRECTION||'').toUpperCase();
+   w=dir==='L'?8:dir==='R'?45:26.5;
+ }
+ let col=Math.max(0,Math.min(4,Math.floor((w/53.34)*5)));
+ let row=d>=20?0:d>=10?1:d>=0?2:d>=-5?3:4;
+ return [row,col];
+}
+function heatmapPage(){
+ let base=heatFiltered(), attempts=base.filter(r=>heatMetricHit(r));
+ let cells=Array.from({length:25},()=>({n:0,y:0,att:0,comp:0}));
+ base.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc],res=String(r.pff_PASSRESULT||'').toUpperCase();c.att++;if(res==='COMPLETE')c.comp++;});
+ attempts.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc];c.n++;c.y+=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)});
+ let max=Math.max(1,...cells.map(c=>heatMetric==='yards'?c.y:c.n)),total=heatMetric==='yards'?cells.reduce((s,c)=>s+c.y,0):cells.reduce((s,c)=>s+c.n,0);
+ let covs=[...new Set(throwRows().map(r=>r.pff_PASS_COVERAGE_BASIC).filter(Boolean))].sort();
+ let att=base.filter(r=>['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(String(r.pff_PASSRESULT||'').toUpperCase())).length;
+ let comp=base.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
+ let gains=base.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),expl=gains.filter(x=>x>=15).length,neg=gains.filter(x=>x<=0).length,td=base.filter(isPassTouchdown).length,ints=base.filter(isInterception).length;
+ let labels=['20+','10–19','0–9','-5–-1','<-5'];
+ return `<div class="page-title"><h2>Passing Heat Maps</h2><p>Mississippi State target location by all throws, man/zone and every tagged coverage.</p></div>${dataStatus()}
+ <div class="card">
+   <div class="heat-controls">
+    <div class="view-toggle">${[['all','ALL'],['man','MAN'],['zone','ZONE'],['coverage','COVERAGE']].map(([v,l])=>`<button class="${heatScope===v?'active':''}" onclick="setHeatScope('${v}')">${l}</button>`).join('')}</div>
+    ${heatScope==='coverage'?`<select onchange="setHeatCoverage(this.value)"><option value="ALL">All coverages</option>${covs.map(c=>`<option ${heatCoverage===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`:''}
+    <select onchange="setHeatMetric(this.value)">${[['attempts','Attempts'],['completions','Completions'],['explosives','Explosives 15+'],['td','Touchdowns'],['int','Interceptions'],['yards','Yards']].map(([v,l])=>`<option value="${v}" ${heatMetric===v?'selected':''}>${l}</option>`).join('')}</select>
+    ${freqToggle()}
+   </div>
+   <div class="heat-summary">${metric('Attempts',att)}${metric('Completions',comp)}${metric('Comp %',pct(100*comp/Math.max(1,att)))}${metric('YPP',fmt(avg(gains),2))}${metric('Median YPP',fmt(calcMedian(gains),1))}${metric('Explosives',expl)}${metric('Pass TD',td)}${metric('INT',ints)}</div>
+   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['L sideline','L hash','Middle','R hash','R sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div></div>
+   <div class="heat-axis"><span>LEFT SIDELINE</span><span>FIELD WIDTH / PASSWIDTH</span><span>RIGHT SIDELINE</span></div>
+   <div class="heat-legend">Depth rows use PFF pass depth; horizontal location uses PFF pass width with direction fallback when width is unavailable.</div>
+ </div>`;
+}
+
+function playerSummary(p){let pos=normPos(p.position),q=findPlayerRow('qb',p.name),rec=findPlayerRow('receiving',p.name),pb=findPlayerRow('passBlocking',p.name),rb=findPlayerRow('runBlocking',p.name);if(pos==='QB'&&q)return [[q['PASS GRD'],'Pass Grade'],[q['PASS YDS'],'Pass Yds'],[q['PASS TD'],'TD']];if((pos==='WR'||pos==='TE'||pos==='RB')&&rec)return [[rec['TGT'],'Targets'],[rec['REC YDS'],'Rec Yds'],[rec['REC TD'],'TD']];if(pos==='OL'&&pb)return [[pb['PBLK GRD'],'PB Grade'],[pb['PBLK'],'PB Snaps'],[pb['PR'],'Pressures']];if(pos==='OL'&&rb)return [[rb['RBLK GRD'],'RB Grade'],[rb['RBLK'],'RB Snaps'],[rb['DEFEATED RBLK'],'Defeated']];return [[p.number||'—','Number'],[pos,'Group'],[p.image?'✓':'—','Photo']]}
+function cardMetricsFAU(p){
+ let pos=normPos(p.position),q=findPlayerRow('qb',p.name),rec=findPlayerRow('receiving',p.name),pb=findPlayerRow('passBlocking',p.name),rb=findPlayerRow('runBlocking',p.name),pl=playsForPlayer(p.name);
+ if(pos==='QB'&&q)return [['CMP %',q['COMP%']],['YDS',q['PASS YDS']],['YDS/ATT',q['PASS YPA']],['TD',q['PASS TD']],['INT',q.INT],['RATING',q.RTG]];
+ if(['WR','TE','RB'].includes(pos)&&rec)return [['TARGETS',rec.TGT],['REC',rec.REC],['YDS',rec['REC YDS']],['YPR',rec.YPR],['TD',rec['REC TD']],['YAC',rec.YAC]];
+ if(pos==='OL'&&pb)return [['PBLK',pb.PBLK],['PBLK GRD',pb['PBLK GRD']],['PRESSURES',pb.PR],['SACKS',pb.SK],['HITS',pb.HT],['RBLK GRD',rb?.['RBLK GRD']]];
+ return [['PLAYS',pl.length],['NO.',p.number],['GROUP',pos],['CLASS',p.class||'—']];
+}
+function playerCard(p){
+ let m=cardMetricsFAU(p), idx=roster.indexOf(p), safeName=esc(p.name||'');
+ return `<div class="player-card" role="button" tabindex="0" data-player-index="${idx}" aria-label="Open ${safeName} profile" onclick="openPlayerIndex(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPlayerIndex(${idx})}"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="player-body"><h3>${esc(p.name)}</h3><div class="player-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}</div><div class="mini-row">${m.slice(0,4).map(([l,v])=>`<div class="mini"><b>${esc(value(v))}</b><span>${esc(l)}</span></div>`).join('')}</div><div class="fau-card-actions"><button class="primary" type="button" onclick="event.stopPropagation();openPlayerIndex(${idx})">Full Profile</button>${p.profile?`<button type="button" onclick='event.stopPropagation();window.open(${JSON.stringify(p.profile)},"_blank")'>Bio ↗</button>`:''}</div></div></div>`;
+}
+function overview(p){let pos=normPos(p.position),q=findPlayerRow('qb',p.name),rec=findPlayerRow('receiving',p.name),pb=findPlayerRow('passBlocking',p.name),rb=findPlayerRow('runBlocking',p.name),stats='';if(pos==='QB'&&q)stats=`<div class="card"><h3>2025 PFF Passing Profile</h3><div class="metric-grid">${metric('Pass Grade',q['PASS GRD'])}${metric('Dropbacks',q.DB)}${metric('Att',q.ATT)}${metric('Comp %',q['COMP%'])}${metric('Pass Yds',q['PASS YDS'])}${metric('YPA',q['PASS YPA'])}${metric('TD',q['PASS TD'])}${metric('INT',q.INT)}${metric('Sacks',q.SK)}${metric('Scrambles',q.SCR)}${metric('avg TTT',q.avgTTT)}${metric('BTT',q.BTT)}${metric('TWP',q.TWP)}${metric('RTG',q.RTG)}</div></div>`;else if(rec&&['RB','WR','TE'].includes(pos))stats=`<div class="card"><h3>2025 PFF Receiving Profile</h3><div class="metric-grid">${metric('Rec Grade',rec['REC GRD'])}${metric('Route Snaps',rec['REC SNP'])}${metric('Targets',rec.TGT)}${metric('Receptions',rec.REC)}${metric('Rec Yds',rec['REC YDS'])}${metric('YPR',rec.YPR)}${metric('TD',rec['REC TD'])}${metric('1D',rec['REC 1D'])}${metric('Drops',rec.DP)}${metric('YAC',rec.YAC)}${metric('YAC/Rec',rec['YAC/REC'])}</div></div>`;else if(pos==='OL'&&(pb||rb))stats=`<div class="two">${pb?`<div class="card"><h3>Pass Blocking</h3><div class="metric-grid">${metric('Grade',pb['PBLK GRD'])}${metric('Snaps',pb.PBLK)}${metric('Sacks',pb.SK)}${metric('Hits',pb.HT)}${metric('Hurries',pb.HU)}${metric('Pressures',pb.PR)}</div></div>`:''}${rb?`<div class="card"><h3>Run Blocking</h3><div class="metric-grid">${metric('Grade',rb['RBLK GRD'])}${metric('Snaps',rb.RBLK)}${metric('Impact',rb['IMPACT RBLK'])}${metric('Impact %',rb['IMPACT RBLK%'])}${metric('Defeated',rb['DEFEATED RBLK'])}${metric('Defeated %',rb['DEFEATED RBLK%'])}</div></div>`:''}</div>`;return `<div class="card"><h3>Roster Identity</h3><div class="detail-grid">${detail('Number',p.number)}${detail('Position',p.position)}${detail('Height',p.height)}${detail('Weight',p.weight?`${p.weight} lbs`:'')}${detail('Class',p.class)}${detail('Hometown',p.hometown)}${detail('Previous School',p.previousSchool)}${detail('Roster Status','2026 Current')}</div></div>${stats}<div class="card"><h3>Biography</h3><div class="bio">${esc(p.bio||'Biography has not been enriched in the shared roster yet.')}</div></div>`}
+function usage(p){let pos=normPos(p.position),rec=findPlayerRow('receiving',p.name),plays=playsForPlayer(p);let pass=plays.filter(r=>r.pff_RUNPASS==='P').length,run=plays.filter(r=>r.pff_RUNPASS==='R').length;let forms={};plays.forEach(r=>{let x=r.pff_OFFFORMATIONGROUP||r.pff_STARTING_OFFENSIVE_FORMATION_GROUP;if(x)forms[x]=(forms[x]||0)+1});let topForms=Object.entries(forms).sort((a,b)=>b[1]-a[1]).slice(0,6);return `<div class="two"><div class="card"><h3>Usage & Alignment</h3><div class="metric-grid">${metric('Linked Plays',plays.length)}${metric('Pass Plays',pass)}${metric('Run Plays',run)}${rec?metric('Route Snaps',rec['REC SNP']):''}${rec?metric('Targets',rec.TGT):''}</div>${topForms.length?`<h4>Most Common Formation Groups on Linked Plays</h4>${table(['Formation','Plays','Share'],topForms.map(([k,v])=>[esc(k),v,pct(100*v/plays.length)]))}`:'<div class="empty">No play-level role matches for this player.</div>'}</div><div class="card"><h3>Personnel Context</h3><div class="detail-grid">${detail('Position Group',pos)}${detail('Roster Number',p.number)}${detail('Class',p.class)}${detail('Previous',p.previousSchool)}</div></div></div>`}
+function coverageRows(source){let rows=(source||[]).filter(r=>r.pff_RUNPASS==='P'&&r.pff_PASS_COVERAGE_BASIC);let g={};rows.forEach(r=>{let k=r.pff_PASS_COVERAGE_BASIC;if(!g[k])g[k]={cov:k,n:0,att:0,comp:0,yds:0,td:0,int:0,sack:0,scr:0,expl:0,neg:0};let x=g[k];x.n++;let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);x.yds+=gain;if(gain>=15)x.expl++;if(gain<=0)x.neg++;let pr=passResult(r);if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(pr)||isInterception(r))x.att++;if(pr==='COMPLETE')x.comp++;if(isInterception(r))x.int++;if(pr==='SACK')x.sack++;if(pr==='RUN')x.scr++;if(isPassTouchdown(r))x.td++});return Object.values(g).sort((a,b)=>b.n-a.n)}
+function coverageTable(rows){
+ let total=rows.reduce((s,x)=>s+x.n,0);
+ let hdr=freqMode==='raw'?['Coverage','Frequency','C/A','Comp %','YPP','Explosives','Negative','TD','INT','Sack','Scr']:['Coverage','Frequency','C/A','Comp %','YPP','Expl %','Neg %','TD','INT','Sack','Scr'];
+ return table(hdr,rows.map(x=>[esc(x.cov),freqVal(x.n,pct(100*x.n/Math.max(1,total)),'plays'),`${x.comp}/${x.att}`,pct(100*x.comp/Math.max(1,x.att)),fmt(x.yds/Math.max(1,x.n),2),freqMode==='raw'?x.expl:pct(100*x.expl/Math.max(1,x.n)),freqMode==='raw'?x.neg:pct(100*x.neg/Math.max(1,x.n)),x.td,x.int,x.sack,x.scr]));
+}
+function coachNotes(p){
+ let key='ulm-def-notes:'+p.name,n=localStorage.getItem(key)||'';
+ return `<div class="card coach-notes"><h3>Coach Notes</h3><p class="subtle">Saved on this device for ${esc(p.name)}.</p><textarea id="coachNote" placeholder="Personnel alert, alignment tendency, matchup note, coverage thought...">${esc(n)}</textarea><div class="profile-actions"><button class="primary" onclick="saveCoachNote(${JSON.stringify(p.name)})">Save Note</button></div></div>`;
+}
+window.saveCoachNote=name=>{let t=document.getElementById('coachNote');if(t){localStorage.setItem('ulm-def-notes:'+name,t.value);let b=t.nextElementSibling?.querySelector('button');if(b){b.textContent='Saved ✓';setTimeout(()=>b.textContent='Save Note',1000)}}};
+
+function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="window.print()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Routes & Usage'],['tendencies','Coverage / Tendencies'],['games','Game Log'],['compare','Comparison'],['notes','Coach Notes']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):facet==='games'?games(p):facet==='compare'?comparison(p):coachNotes(p)}</div>`}
+
+function pffRowForPlayer(p){let pos=normPos(p.position);return pos==='QB'?findPlayerRow('qb',p.name):['WR','TE','RB'].includes(pos)?findPlayerRow('receiving',p.name):findPlayerRow('passBlocking',p.name)}
+function playerSeasonStats(p){
+ let pos=normPos(p.position),q=findPlayerRow('qb',p.name),rec=findPlayerRow('receiving',p.name),pb=findPlayerRow('passBlocking',p.name),rb=findPlayerRow('runBlocking',p.name);
+ if(pos==='QB'&&q)return [['CMP %',q['COMP%']],['YDS',q['PASS YDS']],['YDS/ATT',q['PASS YPA']],['TD',q['PASS TD']],['INT',q.INT],['RATING',q.RTG],['SACKS',q.SK],['SCRAMBLES',q.SCR],['AVG TTT',q.avgTTT]];
+ if(['WR','TE','RB'].includes(pos)&&rec)return [['TARGETS',rec.TGT],['REC',rec.REC],['REC YDS',rec['REC YDS']],['YPR',rec.YPR],['TD',rec['REC TD']],['YAC',rec.YAC],['ROUTE SNAPS',rec['REC SNP']],['DROPS',rec.DP],['1ST DOWNS',rec['REC 1D']]];
+ if(pos==='OL'&&pb)return [['PBLK SNAPS',pb.PBLK],['PBLK GRD',pb['PBLK GRD']],['PRESSURES',pb.PR],['SACKS',pb.SK],['HITS',pb.HT],['HURRIES',pb.HU],['RBLK SNAPS',rb?.RBLK],['RBLK GRD',rb?.['RBLK GRD']],['DEFEATED',rb?.['DEFEATED RBLK']]];
+ return [['LINKED PLAYS',playsForPlayer(p.name).length],['NUMBER',p.number],['POSITION',p.position],['CLASS',p.class]];
+}
+function relevantGameRows(p){
+ let pos=normPos(p.position),rows=(datasets.plays||[]),games={};
+ rows.forEach(r=>{
+   let linked=false;
+   if(pos==='QB')linked=playerTokenMatch(r.pff_PASSER,p,'QB')||playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')||isQBRunRow(r,p);
+   else if(['WR','TE'].includes(pos))linked=playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET');
+   else if(pos==='RB')linked=playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')||playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET');
+   else if(pos==='OL')linked=false;
+   if(!linked)return;
+   let id=r.pff_GAMEID||r.pff_GAMEDATE||'Unknown',g=games[id]||(games[id]={id,date:r.pff_GAMEDATE||'',opp:r.pff_DEFTEAM||'',plays:0,att:0,comp:0,passY:0,passTD:0,int:0,rush:0,rushY:0,tgt:0,rec:0,recY:0,td:0,expl:0,gradeVals:[]});
+   g.plays++; let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS),res=String(r.pff_PASSRESULT||'').toUpperCase();
+   if(gain>=15)g.expl++;
+   if(pos==='QB'&&playerTokenMatch(r.pff_PASSER,p,'QB')){if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(res))g.att++;if(res==='COMPLETE')g.comp++;g.passY+=gain;if(isInterception(r))g.int++;if(isPassTouchdown(r))g.passTD++}
+   if((pos==='RB'&&playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')&&r.pff_RUNPASS==='R')||(pos==='QB'&&isQBRunRow(r,p))){g.rush++;g.rushY+=gain;if(isRushTouchdown(r))g.td++}
+   if(['WR','TE','RB'].includes(pos)&&playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET')){g.tgt++;if(res==='COMPLETE'){g.rec++;g.recY+=gain}if(isPassTouchdown(r))g.td++}
+ });
+ return Object.values(games);
+}
+function gameScore(p,g){
+ let pos=normPos(p.position);
+ if(pos==='QB')return g.passY + g.passTD*35 - g.int*25 + g.comp*2 + g.rushY;
+ if(['WR','TE'].includes(pos))return g.recY + g.td*35 + g.rec*4 + g.expl*8;
+ if(pos==='RB')return g.rushY+g.recY+g.td*35+(g.rec*3)+g.expl*8;
+ return g.plays;
+}
+
+function productionMetric(p,g){
+ let pos=normPos(p.position);
+ if(pos==='QB')return g.passY+g.rushY;
+ if(pos==='RB')return g.rushY+g.recY;
+ if(['WR','TE'].includes(pos))return g.recY;
+ return g.plays;
+}
+function productionLabel(p){
+ let pos=normPos(p.position);
+ return pos==='QB'?'Total Offense Yards':pos==='RB'?'Scrimmage Yards':['WR','TE'].includes(pos)?'Receiving Yards':'Linked Snaps';
+}
+function weeklyProductionChart(p){
+ let games=relevantGameRows(p).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ if(!games.length)return `<div class="weekly-chart-card"><div class="no-sample-banner">No 2025 Mississippi State game-by-game sample matched this player.</div></div>`;
+ let vals=games.map(g=>productionMetric(p,g)),max=Math.max(1,...vals),W=900,H=230,left=45,right=18,top=22,bottom=55,iw=W-left-right,ih=H-top-bottom;
+ let pts=vals.map((v,i)=>{let x=left+(games.length===1?iw/2:i*iw/(games.length-1)),y=top+ih-(v/max)*ih;return {x,y,v,g:games[i]}});
+ let path=pts.map((pt,i)=>(i?'L':'M')+pt.x.toFixed(1)+' '+pt.y.toFixed(1)).join(' ');
+ let grid=[0,.25,.5,.75,1].map(f=>{let y=top+ih-f*ih;return `<line class="weekly-grid-line" x1="${left}" y1="${y}" x2="${W-right}" y2="${y}"/><text class="weekly-axis-text" x="${left-7}" y="${y+3}" text-anchor="end">${Math.round(max*f)}</text>`}).join('');
+ let dots=pts.map(pt=>`<circle class="weekly-dot" cx="${pt.x}" cy="${pt.y}" r="5"/><text class="weekly-label" x="${pt.x}" y="${Math.max(12,pt.y-9)}" text-anchor="middle">${pt.v}</text><text class="weekly-opponent" x="${pt.x}" y="${H-28}" text-anchor="middle">vs ${esc(pt.g.opp||'—')}</text><text class="weekly-opponent" x="${pt.x}" y="${H-14}" text-anchor="middle">${esc(String(pt.g.date||'').slice(5))}</text>`).join('');
+ return `<div class="weekly-chart-card"><div class="weekly-chart-head"><div><h3>Week-to-Week Production</h3><div class="subtle">${productionLabel(p)} · every matched 2025 Mississippi State game</div></div></div><svg class="weekly-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${grid}<path class="weekly-line" d="${path}"/>${dots}</svg></div>`;
+}
+
+function topGamesPanel(p){
+ let all=relevantGameRows(p),games=[...all].sort((a,b)=>gameScore(p,b)-gameScore(p,a)).slice(0,3),pos=normPos(p.position);
+ if(!games.length)return `${weeklyProductionChart(p)}<div class="card"><div class="empty">No game-by-game PFF plays matched ${esc(p.name)}.</div></div>`;
+ return `${weeklyProductionChart(p)}<div class="card"><div class="section-head"><div><h3>Top 3 Performances</h3><small>Best three games from the matched 2025 Mississippi State sample.</small></div></div><div class="top-games">${games.map((g,i)=>`<div class="top-game"><div class="rank">#${i+1}</div><h4>vs ${esc(g.opp||'Opponent')}</h4><div class="subtle">${esc(g.date||'Game')}</div><div class="big">${pos==='QB'?`${g.passY+g.rushY} yds`:pos==='OL'?`${g.plays} snaps`:`${g.rushY+g.recY} yds`}</div><div class="line">${pos==='QB'?`${g.comp}/${g.att} · ${g.passY} pass · ${g.rushY} rush · ${g.passTD} TD · ${g.int} INT`:pos==='RB'?`${g.rush} rush · ${g.rushY} rush yds · ${g.rec}/${g.tgt} rec · ${g.recY} rec yds · ${g.td} TD`:['WR','TE'].includes(pos)?`${g.rec}/${g.tgt} rec · ${g.recY} yds · ${g.td} TD · ${g.expl} explosives`:`${g.plays} linked offensive snaps`}</div></div>`).join('')}</div></div>`;
+}
+
+
+const ROUTE_SHAPES={};
+function canonicalRouteName(name, raw=''){
+ let s=String(name||'').trim(), rawU=String(raw||'').trim().toUpperCase();
+ if(!s){
+   const fallback={
+     '6R':'Hitch','9S':'Slant','9R':'Go','0R':'Out','OR':'Out','1R':'Flat','2R':'Slant','3R':'In',
+     '4R':'Out','5R':'Comeback','6':'Hitch','7':'Corner','8':'Post','9':'Go','XR':'Go','SA':'Angle','GL':'Glance','H7':'Seam'
+   };
+   s=fallback[rawU]||'';
+ }
+ let u=s.toUpperCase().replace(/\s*ROUTE$/,'').replace(/\s+/g,' ').trim();
+ if(!u || ['UNKNOWN','N/A','NA','OTHER'].includes(u)) return '';
+ const groups=[
+   [/SLUGGO|STUTTER|HITCH\s*&\s*GO|HITCH AND GO|OUT\s*&\s*UP|OUT AND UP|POST-GO|OUT-POST|CORNER-POST|SLUGGO SEAM/, 'Double Move'],
+   [/WR SCREEN|RB SCREEN|BACKFIELD SCREEN|SCREEN/, 'Screen'],
+   [/BUBBLE|NOW SCREEN|SMOKE/, 'Bubble'],
+   [/JET/, 'Jet'],
+   [/FLAT-HITCH/, 'Flat-Hitch'],
+   [/BACKFIELD FLARE|FLARE|FLAT/, 'Flat'],
+   [/PIVOT|WHIP/, 'Pivot'],
+   [/ANGLE|TEXAS/, 'Angle'],
+   [/WHEEL/, 'Wheel'],
+   [/SEAM/, 'Seam'],
+   [/GLANCE/, 'Glance'],
+   [/SLANT/, 'Slant'],
+   [/HITCH/, 'Hitch'],
+   [/SKINNY POST|POST/, 'Post'],
+   [/CORNER/, 'Corner'],
+   [/COMEBACK/, 'Comeback'],
+   [/^OUT$|OUT ROUTE|BACKFIELD OUT/, 'Out'],
+   [/^IN$|IN ROUTE/, 'In'],
+   [/CROSSING|CROSS ROUTE|CROSS/, 'Cross'],
+   [/OVER/, 'Over'],
+   [/UNDER|DRAG/, 'Under'],
+   [/GO|FADE|VERTICAL|NUMBERS GO/, 'Go'],
+   [/SIT|BEHIND LB|GHOST|BLOCK RUN THROUGH|SPOT/, 'Sit'],
+   [/SCRAMBLE ADJUSTMENT|SCRAMBLE DRILL/, 'Scramble Drill']
+ ];
+ for(const [pat,label] of groups){if(pat.test(u)) return label;}
+ return s;
+}
+function routeFamily(name){
+ let s=String(name||'').toUpperCase();
+ if(/DOUBLE MOVE/.test(s)) return 'Double Move';
+ if(/SCREEN/.test(s)) return 'Screen';
+ if(/BUBBLE/.test(s)) return 'Bubble';
+ if(/JET/.test(s)) return 'Jet';
+ if(/FLAT-HITCH/.test(s)) return 'Flat-Hitch';
+ if(/FLAT/.test(s)) return 'Flat';
+ if(/ANGLE/.test(s)) return 'Angle';
+ if(/WHEEL/.test(s)) return 'Wheel';
+ if(/PIVOT/.test(s)) return 'Pivot';
+ if(/SEAM/.test(s)) return 'Seam';
+ if(/SLANT/.test(s)) return 'Slant';
+ if(/HITCH/.test(s)) return 'Hitch';
+ if(/POST/.test(s)) return 'Post';
+ if(/CORNER/.test(s)) return 'Corner';
+ if(/COMEBACK/.test(s)) return 'Comeback';
+ if(/^OUT$/.test(s)) return 'Out';
+ if(/^IN$/.test(s)) return 'In';
+ if(/CROSS/.test(s)) return 'Cross';
+ if(/OVER/.test(s)) return 'Over';
+ if(/UNDER/.test(s)) return 'Under';
+ if(/GO/.test(s)) return 'Go';
+ if(/SIT/.test(s)) return 'Sit';
+ if(/GLANCE/.test(s)) return 'Glance';
+ if(/SCRAMBLE/.test(s)) return 'Scramble Drill';
+ return 'Go';
+}
+function depthToY(depth){
+ let d=Math.max(-5,Math.min(22,num(depth)));
+ return 450 - ((d+5)/27)*300;
+}
+function routePathFor(family, depth){
+ let by=depthToY(depth), x=168, qbX=326;
+ if(family==='Go' || family==='Seam') return `M${x} 450 L${x} 80`;
+ if(family==='Hitch') return `M${x} 450 L${x} ${by} C ${x} ${by+12} ${x+34} ${by+12} ${x+44} ${by+38}`;
+ if(family==='Slant') return `M${x} 450 L${x} ${by+28} L ${x+92} ${by}`;
+ if(family==='Post') return `M${x} 450 L${x} ${by+34} L ${x+102} ${Math.max(90,by-58)}`;
+ if(family==='Corner') return `M${x} 450 L${x} ${by+34} L ${x-96} ${Math.max(90,by-58)}`;
+ if(family==='Comeback') return `M${x} 450 L${x} ${by-18} C ${x} ${by-2} ${x-48} ${by+8} ${x-58} ${by+30}`;
+ if(family==='Out') return `M${x} 450 L${x} ${by} L ${x-98} ${by}`;
+ if(family==='In') return `M${x} 450 L${x} ${by} L ${x+98} ${by}`;
+ if(family==='Cross') return `M${x-92} 410 C ${x-42} 380 ${x+30} 324 ${x+118} ${by}`;
+ if(family==='Over') return `M${x-98} 405 C ${x-30} 356 ${x+38} 298 ${x+122} ${by}`;
+ if(family==='Under') return `M${x-98} 410 C ${x-30} 400 ${x+38} 360 ${x+122} ${by+58}`;
+ if(family==='Flat') return `M${x} 450 Q ${x-30} 420 ${x-112} 396`;
+ if(family==='Flat-Hitch') return `M${x} 450 Q ${x-32} 420 ${x-110} 398 L ${x-110} 332 C ${x-110} 344 ${x-84} 346 ${x-88} 370`;
+ if(family==='Bubble') return `M${x} 450 C ${x-20} 440 ${x-62} 438 ${x-108} 430 S ${x-148} 384 ${x-166} 326`;
+ if(family==='Screen') return `M${x} 450 m -2 0 a 2 2 0 1 0 4 0 a 2 2 0 1 0 -4 0`;
+ if(family==='Jet') return `M${x} 450 Q ${x-38} 420 ${x-118} 392`;
+ if(family==='Angle') return `M${x-38} 432 L ${x-12} 378 L ${x+62} ${by+40}`;
+ if(family==='Wheel') return `M${x} 450 Q ${x-42} 420 ${x-112} 392 L ${x-112} ${Math.max(94,by-95)}`;
+ if(family==='Pivot') return `M${x} 450 L ${x} ${by+38} Q ${x-36} ${by+16} ${x-50} ${by} Q ${x-32} ${by-10} ${x-6} ${by-2}`;
+ if(family==='Sit') return `M${x} 450 L ${x} ${by+18}`;
+ if(family==='Glance') return `M${x} 450 L ${x} ${by+28} L ${x+52} ${by}`;
+ if(family==='Double Move') return `M${x} 450 L ${x} ${by+52} Q ${x} ${by+24} ${x-22} ${by+32} Q ${x+8} ${by+6} ${x+84} ${Math.max(92,by-74)}`;
+ if(family==='Scramble Drill') return `M${x} 450 C ${x-12} 392 ${x+52} 296 ${x+104} ${by}`;
+ return `M${x} 450 L${x} 80`;
+}
+function playerTargetRoutes(p){
+ let pos=normPos(p.position),g={};
+ let rows=(datasets.plays||[]).filter(r=>{
+   if(pos==='QB') return playerTokenMatch(r.pff_PASSER,p,'QB')&&String(r.pff_RUNPASS||'').toUpperCase()==='P';
+   if(['WR','TE','RB'].includes(pos)) return playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET');
+   return false;
+ });
+ rows.forEach(r=>{
+   let rawTag=String(r.pff_PASSROUTETARGETGROUP||r.pff_PASSROUTETARGET||'').trim();
+   let name=canonicalRouteName(r.pff_ROUTE_THROWN, rawTag);
+   if(!name) return;
+   let family=routeFamily(name),
+       x=g[name]||(g[name]={route:name,family:family,tgt:0,rec:0,yds:0,td:0,expl:0,neg:0,rawTags:new Set(),depths:[],breaks:[]});
+   x.tgt++;
+   if(nonEmpty(rawTag)) x.rawTags.add(rawTag);
+   let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS),res=String(r.pff_PASSRESULT||'').toUpperCase(),depth=num(r.pff_PASSDEPTH);
+   if(!isNaN(depth)) {x.depths.push(depth); if(depth>=0) x.breaks.push(depth)}
+   if(res==='COMPLETE'){x.rec++;x.yds+=gain}
+   if(gain>=15) x.expl++;
+   if(gain<=0) x.neg++;
+   if(isPassTouchdown(r)) x.td++;
+  });
+ return Object.values(g).map(x=>({...x,rawText:[...x.rawTags].filter(Boolean).join(', '),avgDepth:avg(x.depths),breakDepth:avg(x.breaks)})).sort((a,b)=>b.tgt-a.tgt||b.yds-a.yds);
+}
+function routeTableHTML(rs,focus){
+ return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Route</th><th>Targets</th><th>Rec</th><th>Catch %</th><th>Avg Depth</th><th>Yards</th><th>Yds/Tgt</th><th>TD</th><th>Expl</th><th>Neg</th></tr></thead><tbody>${
+   rs.map(r=>`<tr onclick='setRouteFocus(${JSON.stringify(r.route)})' style="cursor:pointer;${focus&&focus.route===r.route?'background:#f8f2e8;':''}">
+     <td>${esc(r.route)}</td><td>${r.tgt}</td><td>${r.rec}</td><td>${pct(100*r.rec/Math.max(1,r.tgt))}</td><td>${fmt(r.avgDepth,1)}</td><td>${r.yds}</td><td>${fmt(r.yds/Math.max(1,r.tgt),1)}</td><td>${r.td}</td><td>${freqMode==='raw'?r.expl:pct(100*r.expl/Math.max(1,r.tgt))}</td><td>${freqMode==='raw'?r.neg:pct(100*r.neg/Math.max(1,r.tgt))}</td>
+   </tr>`).join('')
+ }</tbody></table></div>`;
+}
+function routeTreePanel(p){
+ let pos=normPos(p.position),rs=playerTargetRoutes(p);
+ if(!['QB','WR','TE','RB'].includes(pos)) return `<div class="card"><h3>Route Dashboard</h3><div class="empty">Route view applies to quarterbacks and skill players.</div></div>`;
+ if(!rs.length) return `<div class="card"><h3>Route Dashboard</h3><div class="empty">No targeted route tags matched this player in the current play feed.</div></div>`;
+ let focus=routeFocus==='ALL'?rs[0]:(rs.find(x=>x.route===routeFocus)||rs[0]);
+ let breakDepth=isNaN(focus.breakDepth)?focus.avgDepth:focus.breakDepth;
+ let breakY=depthToY(breakDepth), path=routePathFor(focus.family,breakDepth);
+ let pills=`<div class="route-pill-wrap"><button class="${routeFocus==='ALL'?'primary':''}" onclick="setRouteFocus('ALL')">Top Route View</button>`+
+   rs.map(r=>`<button class="${focus.route===r.route?'primary':''}" onclick='setRouteFocus(${JSON.stringify(r.route)})'>${esc(r.route)} (${r.tgt})</button>`).join('')+`</div>`;
+ return `<div class="route-dashboard-v6">
+   <div class="section-head"><div><h3>Route Dashboard</h3></div>${freqToggle()}</div>
+   <div class="heat-controls">${pills}</div>
+   <div class="route-stage-v6">
+     <div class="route-tree-panel-v6">
+       <svg class="route-tree-svg-v6" viewBox="0 0 360 500">
+         <line x1="25" y1="450" x2="326" y2="450" stroke="#98a2b3" stroke-width="2"/>
+         <line x1="168" y1="60" x2="168" y2="450" stroke="#eef1f4" stroke-width="2"/>
+         <line x1="36" y1="${breakY}" x2="324" y2="${breakY}" stroke="#d0d5dd" stroke-dasharray="5 5" stroke-width="1.5"/>
+         <text x="40" y="${breakY-6}" font-size="10" fill="#667085">~${fmt(breakDepth,1)} yds</text>
+         <circle cx="168" cy="456" r="6" fill="#8A2432"/>
+         <circle cx="326" cy="472" r="16" fill="#0f172a"/>
+         <text x="326" y="476" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">QB</text>
+         <path d="${path}" onclick='setRouteFocus(${JSON.stringify(focus.route)})' style="cursor:pointer"/>
+         <rect class="route-label-box" x="100" y="92" width="160" height="46" rx="8" onclick='setRouteFocus(${JSON.stringify(focus.route)})' style="cursor:pointer"/>
+         <text x="180" y="110" text-anchor="middle" font-size="13" font-weight="800">${esc(focus.route)}</text>
+         <text x="180" y="124" text-anchor="middle" font-size="9" fill="#667085">${focus.tgt} tgt · ${focus.rec} rec · ${fmt(focus.avgDepth,1)} avg depth</text>
+         <text x="180" y="490" text-anchor="middle" font-size="10" fill="#667085">LINE OF SCRIMMAGE</text>
+       </svg>
+     </div>
+     <div class="route-detail-v6">
+       <h3>${esc(focus.route)}</h3>
+       <div class="subtle">${focus.rawText?`PFF tag(s): ${esc(focus.rawText)}`:'Generic route view'}</div>
+       <div class="route-detail-grid-v6">
+         <div class="route-detail-stat-v6"><small>Targets</small><b>${focus.tgt}</b></div>
+         <div class="route-detail-stat-v6"><small>Receptions</small><b>${focus.rec}</b></div>
+         <div class="route-detail-stat-v6"><small>Catch %</small><b>${pct(100*focus.rec/Math.max(1,focus.tgt))}</b></div>
+         <div class="route-detail-stat-v6"><small>Yards</small><b>${focus.yds}</b></div>
+         <div class="route-detail-stat-v6"><small>Yards / Target</small><b>${fmt(focus.yds/Math.max(1,focus.tgt),1)}</b></div>
+         <div class="route-detail-stat-v6"><small>TD</small><b>${focus.td}</b></div>
+         <div class="route-detail-stat-v6"><small>Explosive</small><b>${freqMode==='raw'?focus.expl:pct(100*focus.expl/Math.max(1,focus.tgt))}</b></div>
+         <div class="route-detail-stat-v6"><small>Negative</small><b>${freqMode==='raw'?focus.neg:pct(100*focus.neg/Math.max(1,focus.tgt))}</b></div>
+         <div class="route-detail-stat-v6"><small>Avg Depth</small><b>${fmt(focus.avgDepth,1)}</b></div>
+         <div class="route-detail-stat-v6"><small>Break Depth</small><b>${fmt(breakDepth,1)}</b></div>
+       </div>
+     </div>
+   </div>
+   <div class="route-table-wrap" style="margin-top:14px">${routeTableHTML(rs,focus)}</div>
+ </div>`;
+}
+function targetsPanel(p){
+ let rows=(datasets.plays||[]).filter(r=>playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET'));
+ if(!rows.length) return `<div class="card"><h3>Targets</h3><div class="empty">No target locations matched.</div></div>`;
+ let cells=Array.from({length:25},()=>({n:0,comp:0,y:0,td:0,expl:0}));
+ rows.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc],res=String(r.pff_PASSRESULT||'').toUpperCase(),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);c.n++;if(res==='COMPLETE')c.comp++;c.y+=g;if(isPassTouchdown(r))c.td++;if(g>=15)c.expl++;});
+ let total=cells.reduce((s,c)=>s+c.n,0),max=Math.max(1,...cells.map(c=>c.n));
+ let comp=rows.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
+ let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
+ let labels=['20+','10–19','0–9','-5–-1','<-5'];
+ return `<div class="card">
+   <div class="section-head"><div><h3>Targets</h3><small>Receiver target heat map by depth and width. Each square shows where this player is targeted most often.</small></div>${freqToggle()}</div>
+   <div class="heat-summary">${metric('Targets',rows.length)}${metric('Catches',comp)}${metric('Catch %',pct(100*comp/Math.max(1,rows.length)))}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric(freqMode==='raw'?'Explosives':'Explosive %',freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,rows.length)))}${metric('TD',rows.filter(isPassTouchdown).length)}</div>
+   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let p=100*c.n/Math.max(1,total),op=.08+.82*(c.n/max);return `<div class="heat-cell ${c.n?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?c.n:fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['L sideline','L hash','Middle','R hash','R sideline'][i%5]}</span><small>${c.comp} catches · ${c.y} yds</small></div>`}).join('')}</div></div>
+   <div class="heat-axis"><span>LEFT SIDELINE</span><span>FIELD WIDTH / PASSWIDTH</span><span>RIGHT SIDELINE</span></div>
+   
+ </div>`;
+}
+function coveragePlayerPanel(p,manZoneOnly=false){
+ let pos=normPos(p.position),rows=(datasets.plays||[]).filter(r=>{if(r.pff_RUNPASS!=='P')return false;if(pos==='QB')return playerTokenMatch(r.pff_PASSER,p,'QB');if(['WR','TE','RB'].includes(pos))return playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET');return false}),g={};
+ rows.forEach(r=>{let raw=r.pff_PASS_COVERAGE_BASIC||'Unknown',k=manZoneOnly?(isManCov(raw)?'MAN':'ZONE'):raw,x=g[k]||(g[k]={n:0,att:0,comp:0,y:0,td:0,int:0,expl:0});x.n++;let res=String(r.pff_PASSRESULT||'').toUpperCase(),gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(res))x.att++;if(res==='COMPLETE')x.comp++;if(isInterception(r))x.int++;x.y+=gain;if(gain>=15)x.expl++;if(isPassTouchdown(r))x.td++});
+ return `<div class="card"><h3>${manZoneOnly?'Man / Zone':'Vs Coverage'}</h3><div class="coverage-grid-v6">${Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>`<div class="coverage-card-v6"><h4>${esc(k)}</h4><div class="big">${x.n} plays</div><div class="metric-grid">${metric('C/A',`${x.comp}/${x.att}`)}${metric('YPP',fmt(x.y/Math.max(1,x.n),2))}${metric('Expl',x.expl)}${metric('TD / INT',`${x.td} / ${x.int}`)}</div></div>`).join('')||'<div class="empty">No coverage-linked data matched this player.</div>'}</div></div>`;
+}
+function passingPanel(p){
+ if(normPos(p.position)!=='QB')return `<div class="card"><div class="empty">Passing view applies to quarterbacks.</div></div>`;
+ let q=findPlayerRow('qb',p.name),pr=findPlayerRows('pressure',p.name);
+ return `${q?`<div class="card"><h3>Passing</h3><div class="metric-grid">${playerSeasonStats(p).map(([l,v])=>metric(l,v)).join('')}</div></div>`:''}${pr.length?`<div class="card"><h3>Pressure Splits</h3>${table(['Look','DB','ATT','COMP%','YPA','TD','INT','BTT','TWP','SCR'],pr.map(r=>[r['PRESS PLAY'],r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP,r.SCR]))}</div>`:''}`;
+}
+
+function isQBRunRow(r,p){
+ if(normPos(p.position)!=='QB')return false;
+ if(playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')&&String(r.pff_RUNPASS||'').toUpperCase()==='R')return true;
+ if(!playerTokenMatch(r.pff_PASSER,p,'QB'))return false;
+ let qbs=String(r.pff_QBSCRAMBLE||'').trim().toUpperCase(), pr=passResult(r), rp=String(r.pff_RUNPASS||'').toUpperCase();
+ if(nonEmpty(r.pff_QBSCRAMBLE)&&!['0','FALSE','N','NO'].includes(qbs))return true;
+ if(pr==='RUN')return true;
+ // PFF may retain the play as a pass/dropback while tagging the QB movement/run elsewhere.
+ if(rp==='P' && nonEmpty(r.pff_QBMOVEDOFFSPOT) && pr==='')return true;
+ return false;
+}
+function playerRushRows(p){
+ let pos=normPos(p.position);
+ if(pos==='QB')return (datasets.plays||[]).filter(r=>isQBRunRow(r,p));
+ return (datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R'&&playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER'));
+}
+function countPctMetric(label,count,total){
+ return metric(label,freqMode==='raw'?count:pct(100*count/Math.max(1,total)),freqMode==='raw'?pct(100*count/Math.max(1,total)):`${count} plays`);
+}
+
+function rushingPanel(p){
+ let rows=playerRushRows(p),gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
+ if(!rows.length)return `<div class="card"><div class="empty">No 2025 Mississippi State rushing sample matched ${esc(p.name)}.</div></div>`;
+ let byConcept={};rows.forEach(r=>{let k=r.pff_RUNCONCEPTPRIMARY||((normPos(p.position)==='QB'&&(nonEmpty(r.pff_QBSCRAMBLE)||passResult(r)==='RUN'))?'Scramble / Off-Script':'Unknown'),x=byConcept[k]||(byConcept[k]={n:0,y:0,vals:[]});let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);x.n++;x.y+=gain;x.vals.push(gain)});
+ let expl=gains.filter(x=>x>=15).length,neg=gains.filter(x=>x<=0).length;
+ return `<div class="card"><div class="section-head"><div><h3>Rushing</h3><small>${normPos(p.position)==='QB'?'Includes PFF QB scrambles / off-script runs plus tagged designed runs.':'Player rushing sample.'}</small></div>${freqToggle()}</div><div class="metric-grid">${metric('Runs',rows.length)}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric('Median',fmt(calcMedian(gains),1))}${countPctMetric('Explosive 15+',expl,rows.length)}${countPctMetric('Negative',neg,rows.length)}</div></div><div class="card"><h3>Run Type / Concept</h3>${table(['Concept','Runs','Yards','YPP','Median','Explosive','Negative'],Object.entries(byConcept).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>{let e=x.vals.filter(v=>v>=15).length,n=x.vals.filter(v=>v<=0).length;return[esc(k),x.n,x.y,fmt(x.y/Math.max(1,x.n),2),fmt(calcMedian(x.vals),1),freqMode==='raw'?e:pct(100*e/Math.max(1,x.n)),freqMode==='raw'?n:pct(100*n/Math.max(1,x.n))]}))}</div>`;
+}
+function overviewFAU(p){
+ let stats=playerSeasonStats(p),named=hasNamedPFFIdentity(p);
+ return `${!named?`<div class="no-sample-banner">This current roster player does not have a named 2025 Mississippi State PFF player row. Historical play-feed stats are not being attached by jersey number alone.</div>`:''}<div class="card"><h3>2025 Season Snapshot</h3><div class="metric-grid">${stats.map(([l,v])=>metric(l,v)).join('')}</div></div>${topGamesPanel(p)}`;
+}
+function gameLogFAU(p){
+ let pos=normPos(p.position),games=relevantGameRows(p).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ return `<div class="card"><h3>Game Log</h3>${games.length?table(['Date','Opponent','Plays','Pass C/A','Pass Yds','Rush Yds','Rec/Tgt','Rec Yds','TD','Expl'],games.map(g=>[g.date,g.opp,g.plays,g.att?`${g.comp}/${g.att}`:'—',g.att?g.passY:'—',g.rush?g.rushY:'—',g.tgt?`${g.rec}/${g.tgt}`:'—',g.tgt?g.recY:'—',g.passTD+g.td,g.expl])):'<div class="empty">No game log matched.</div>'}</div>`;
+}
+function coachNotesFAU(p){
+ let key='ulm-def-notes:'+p.name,n=localStorage.getItem(key)||'';
+ return `<div class="card"><h3>Coach Notes</h3><textarea class="notes-v6" id="coachNote">${esc(n)}</textarea><div class="profile-actions"><button class="primary" onclick="saveCoachNote(${JSON.stringify(p.name)})">Save Notes</button></div></div>`;
+}
+function renderPortalTab(p){
+ if(portalTab==='passing')return passingPanel(p);
+ if(portalTab==='rushing')return rushingPanel(p);
+ if(portalTab==='routes')return routeTreePanel(p);
+ if(portalTab==='top')return topGamesPanel(p);
+ if(portalTab==='targets')return targetsPanel(p);
+ if(portalTab==='coverage')return coveragePlayerPanel(p,false);
+ if(portalTab==='manzone')return coveragePlayerPanel(p,true);
+ if(portalTab==='games')return gameLogFAU(p);
+ if(portalTab==='notes')return coachNotesFAU(p);
+ return overviewFAU(p);
+}
+function resolveRosterPlayer(value){
+ if(typeof value==='number' && roster[value]) return roster[value];
+ let raw=String(value??'');
+ let exact=roster.find(x=>String(x.name||'')===raw);
+ if(exact)return exact;
+ let key=cleanName(raw);
+ return roster.find(x=>cleanName(x.name)===key)||null;
+}
+function openPlayerIndex(idx){openFAUProfile(Number(idx))}
+function openFAUProfile(value){
+ let p=resolveRosterPlayer(value);
+ if(!p){console.error('Player not found',value);return}
+ selected=p.name;portalTab='overview';routeFocus='ALL';
+ let overlay=$('profileOverlay'),drawer=$('fauDrawer'),body=$('fauDrawerBody');
+ if(overlay)overlay.classList.add('open');
+ if(drawer)drawer.classList.add('open');
+ document.body.style.overflow='hidden';
+ if(body)body.innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(normPos(p.position))} · Mississippi State</div></div></div><div class="fau-panel"><div class="card"><h3>Loading profile…</h3></div></div>`;
+ try{renderFAUDrawer(p)}
+ catch(err){
+   console.error('Player profile render error',err);
+   if(body)body.innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(normPos(p.position))} · Mississippi State</div></div></div><div class="fau-panel"><div class="card error-card"><h3>Profile opened, but one profile section failed</h3><div class="subtle">${esc(err?.message||String(err))}</div></div></div>`;
+ }
+}
+function closeFAUProfile(){
+ $('profileOverlay')?.classList.remove('open');
+ $('fauDrawer')?.classList.remove('open');
+ document.body.style.overflow='';
+}
+function renderFAUDrawer(p){
+ let pos=normPos(p.position),stats=playerSeasonStats(p),linked=playsForPlayer(p.name).length;
+ $('fauDrawerBody').innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(pos)} · Mississippi State</div></div><div class="drawer-spacer"></div>${p.profile?`<button onclick='window.open(${JSON.stringify(p.profile)},"_blank")'>Official Bio ↗</button>`:''}<button onclick="window.print()">Add to Report</button></div><div class="fau-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="fau-hero-info"><div class="kicker">MISSISSIPPI STATE PLAYER INTELLIGENCE</div><div class="fau-hero-name">${esc(p.name)}</div><div class="fau-hero-pos">${esc(p.position||'')} · #${esc(p.number||'—')}</div><div class="fau-meta">${p.height?esc(p.height):''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.class?` · ${esc(p.class)}`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="season-title">2025 SEASON STATS</div><div class="fau-season-grid">${stats.slice(0,9).map(([l,v])=>`<div class="fau-season-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div><div class="sample-row"><span class="sample-badge">${linked>=30?'Large Sample':linked>=10?'Medium Sample':'Small Sample'}</span><span>${linked} matched historical play-feed events</span></div></div></div><div class="fau-tabs">${[['overview','Overview'],['passing','Passing'],['rushing','Rushing'],['routes','Routes'],['top','Top Games'],['targets','Targets'],['coverage','Vs Coverage'],['manzone','Man / Zone'],['games','Game Log'],['notes','Coach Notes']].map(([id,l])=>`<button class="fau-tab ${portalTab===id?'active':''}" onclick="setPortalTab('${id}')">${l}</button>`).join('')}</div><div id="fauPanel" class="fau-panel">${renderPortalTab(p)}</div>`;
+}
+window.setPortalTab=id=>{portalTab=id;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};
+window.setRouteFocus=r=>{routeFocus=r;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};
+window.openFAUProfile=openFAUProfile;window.openPlayerIndex=openPlayerIndex;window.closeFAUProfile=closeFAUProfile;
+
+function playersPage(){let all=offenseRoster(),list=filteredPlayers(),posCounts={};all.forEach(p=>posCounts[normPos(p.position)]=(posCounts[normPos(p.position)]||0)+1);return `<div class="page-title"><h2>Player Intelligence</h2><p>Mississippi State player portal rebuilt around the Florida Atlantic card + full-profile experience.</p></div>${dataStatus()}<div class="toolbar"><input id="playerSearch" placeholder="Search name, number, hometown or previous school" oninput="render()"><select id="playerSort" onchange="render()"><option value="number">Sort: number</option><option value="name">Sort: name</option><option value="position">Sort: position</option></select><div></div><div></div></div><div class="position-tabs">${positionGroups().map(([id,l])=>`<button class="${group===id?'active':''}" onclick="setGroup('${id}')">${l}${id!=='ALL'&&posCounts[id]!=null?` (${posCounts[id]})`:''}</button>`).join('')}</div><div class="kpis"><div class="kpi"><span>Offensive Players</span><b>${all.length}</b><small>2026 roster</small></div><div class="kpi"><span>Current View</span><b>${list.length}</b><small>${group==='ALL'?'All offense':group}</small></div><div class="kpi"><span>PFF Plays</span><b>${(datasets.plays||[]).length}</b><small>2025 play feed</small></div><div class="kpi"><span>PFF Files Live</span><b>${Object.values(loadState).filter(x=>x.ok).length}</b><small>Supabase Storage</small></div></div><div class="player-grid">${list.length?list.map(playerCard).join(''):'<div class="empty">No players match this view.</div>'}</div><div class="card source-card"><b>Roster:</b> <code>Special Teams / Current / roster.json</code><br><b>PFF:</b> <code>Defensive Intelligence / Mississippi State / Current</code></div>`}
+function playMetrics(rows){let plays=rows.filter(r=>['P','R'].includes(r.pff_RUNPASS)),g=plays.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),pass=plays.filter(r=>r.pff_RUNPASS==='P'),run=plays.filter(r=>r.pff_RUNPASS==='R');return {plays:plays.length,ypp:avg(g),expl:g.filter(x=>x>=15).length/Math.max(1,g.length)*100,neg:g.filter(x=>x<=0).length/Math.max(1,g.length)*100,pass:pass.length,run:run.length,passY:avg(pass.map(r=>r.pff_GAINLOSSNET||r.pff_GAINLOSS)),runY:avg(run.map(r=>r.pff_GAINLOSSNET||r.pff_GAINLOSS))}}
+function dashboardPage(){let m=playMetrics(datasets.plays||[]),q=(datasets.qb||[])[0],o=(datasets.passOverall||[])[0];return `<div class="page-title"><h2>Dashboard</h2><p>Mississippi State offensive scouting overview from the live PFF files.</p></div>${dataStatus()}<div class="kpis"><div class="kpi"><span>Charted Plays</span><b>${m.plays}</b><small>run + pass</small></div><div class="kpi"><span>YPP</span><b>${fmt(m.ypp,2)}</b><small>play feed</small></div><div class="kpi"><span>Explosive %</span><b>${fmt(m.expl,1)}%</b><small>15+ yards</small></div><div class="kpi"><span>Negative %</span><b>${fmt(m.neg,1)}%</b><small>0 or fewer</small></div></div><div class="two"><div class="card"><h3>Run / Pass Profile</h3><div class="metric-grid">${metric('Pass Plays',m.pass)}${metric('Pass YPP',fmt(m.passY,2))}${metric('Run Plays',m.run)}${metric('Run YPP',fmt(m.runY,2))}${metric('Run %',pct(100*m.run/Math.max(1,m.plays)))}</div></div><div class="card"><h3>Passing Overview</h3>${o?`<div class="metric-grid">${metric('Dropbacks',o.DB)}${metric('ATT',o.ATT)}${metric('COMP%',o['COMP%'])}${metric('YPA',o['PASS YPA'])}${metric('TD',o['PASS TD'])}${metric('INT',o.INT)}${metric('Sacks',o.SK)}${metric('Scrambles',o.SCR)}</div>`:q?`<div class="metric-grid">${metric('QB',q.Name)}${metric('Yards',q['PASS YDS'])}${metric('TD',q['PASS TD'])}${metric('INT',q.INT)}</div>`:'<div class="empty">Passing summary file not available.</div>'}</div></div>`}
+function personnelPage(){let pers=datasets.personnel||[],forms=datasets.formations||[],hdr=freqMode==='raw'?['Personnel','Frequency','Run','Pass','RPO','Tempo']:['Personnel','Frequency','Run %','Pass %','RPO %','Tempo %'],fhdr=freqMode==='raw'?['Formation','Frequency','Run','Pass','RPO','Tempo']:['Formation','Frequency','Run %','Pass %','RPO %','Tempo %'];return `<div class="page-title"><h2>Personnel & Formations</h2><p>Structure, run/pass tendency, RPO and tempo usage.</p></div>${dataStatus()}<div class="card"><div class="section-head"><div><h3>Frequency View</h3><small>RAW changes every frequency/tendency field to counts. % changes every one back to percentages.</small></div>${freqToggle()}</div></div><div class="two"><div class="card"><h3>Personnel</h3>${table(hdr,pers.map(r=>[esc(r['O PERS']),freqVal(r.OFF,r['OFF%'],'plays'),countPctVal(r.OFF,r['RUN%']),countPctVal(r.OFF,r['PASS%']),countPctVal(r.OFF,r['RPO%']),countPctVal(r.OFF,r['TEMPO%'])]))}</div><div class="card"><h3>Formation Groups</h3>${table(fhdr,forms.map(r=>[esc(r['Final Formation Group']),freqVal(r.OFF,r['OFF%'],'plays'),countPctVal(r.OFF,r['RUN%']),countPctVal(r.OFF,r['PASS%']),countPctVal(r.OFF,r['RPO%']),countPctVal(r.OFF,r['TEMPO%'])]))}</div></div>`}
+
+
+function runConceptMatch(r,concept){
+ if(concept==='ALL')return String(r.pff_RUNPASS||'').toUpperCase()==='R';
+ let primary=String(r.pff_RUNCONCEPTPRIMARY||'').trim().toUpperCase(), target=String(concept||'').trim().toUpperCase();
+ return String(r.pff_RUNPASS||'').toUpperCase()==='R' && primary===target;
+}
+function normalizePOA(v){
+ let s=String(v||'').trim().toUpperCase();
+ const exact={LE:'LE',LT:'LT',LG:'LG',ML:'ML',MR:'MR',RG:'RG',RT:'RT',RE:'RE'};
+ if(exact[s])return exact[s];
+ if(s.includes('LEFT END')||s==='LEND')return'LE';
+ if(s.includes('LEFT TACKLE'))return'LT';
+ if(s.includes('LEFT GUARD'))return'LG';
+ if(s.includes('MID LEFT')||s.includes('LEFT A'))return'ML';
+ if(s.includes('MID RIGHT')||s.includes('RIGHT A'))return'MR';
+ if(s.includes('RIGHT GUARD'))return'RG';
+ if(s.includes('RIGHT TACKLE'))return'RT';
+ if(s.includes('RIGHT END')||s==='REND')return'RE';
+ return '';
+}
+function runDistBucket(r){
+ let d=num(r.pff_DISTANCE);
+ if(d<=3)return'SHORT';if(d<=7)return'MED';return'LONG';
+}
+function selectedRunRows(concept){
+ return (datasets.plays||[]).filter(r=>{
+   if(!runConceptMatch(r,concept))return false;
+   if(runHashF!=='ALL'&&normHash(r.pff_HASH)!==runHashF)return false;
+   if(runRBSideF!=='ALL'&&rbSideFromRow(r)!==runRBSideF)return false;
+   if(runPersonnelF!=='ALL'&&String(r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'')!==runPersonnelF)return false;
+   if(runFormationF!=='ALL'&&String(r.pff_OFFFORMATIONGROUP||'')!==runFormationF)return false;
+   if(runDownF!=='ALL'&&String(Math.round(num(r.pff_DOWN)))!==runDownF)return false;
+   if(runDistF!=='ALL'&&runDistBucket(r)!==runDistF)return false;
+   return true;
+ });
+}
+function gapPlayStats(concept){
+ const keys=['LE','LT','LG','ML','MR','RG','RT','RE'], out=Object.fromEntries(keys.map(k=>[k,{n:0,y:0,vals:[]}]));
+ selectedRunRows(concept).forEach(r=>{let k=normalizePOA(r.pff_POAACTUAL);if(!k)return;let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);out[k].n++;out[k].y+=gain;out[k].vals.push(gain)});
+ Object.values(out).forEach(x=>{x.ypp=x.n?x.y/x.n:0;x.med=x.n?calcMedian(x.vals):0});
+ return out;
+}
+function normHash(v){let s=String(v||'').trim().toUpperCase();if(s==='L'||s.includes('LEFT'))return'L';if(s==='R'||s.includes('RIGHT'))return'R';if(s==='C'||s==='M'||s.includes('MID')||s.includes('CENTER'))return'C';return'UNK'}
+function hashRunStats(concept){
+ let o={L:{n:0,y:0},C:{n:0,y:0},R:{n:0,y:0},UNK:{n:0,y:0}};
+ selectedRunRows(concept).forEach(r=>{let k=normHash(r.pff_HASH),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);o[k].n++;o[k].y+=g});
+ Object.values(o).forEach(x=>x.ypp=x.n?x.y/x.n:0);return o;
+}
+function rbSideFromRow(r){
+ let s=String(r.pff_RBDEPTH||r.pff_RBSINBACKFIELD||'').toUpperCase();
+ let hasL=/HB-L|FB-L|\\(HB-L\\)|\\(FB-L\\)/.test(s),hasR=/HB-R|FB-R|\\(HB-R\\)|\\(FB-R\\)/.test(s);
+ if(hasL&&hasR)return'SPLIT';
+ if(hasL)return'LEFT';
+ if(hasR)return'RIGHT';
+ if(/HB(?:-?[0-9 ]|\s|\(|$)|FB(?:-?[0-9 ]|\s|\(|$)/.test(s)||String(r.pff_BACKSET||'').toUpperCase().includes('PISTOL'))return'CENTER';
+ return'UNKNOWN';
+}
+function rbSideStats(concept){
+ let o={LEFT:{n:0,y:0},RIGHT:{n:0,y:0},CENTER:{n:0,y:0},SPLIT:{n:0,y:0},UNKNOWN:{n:0,y:0}};
+ selectedRunRows(concept).forEach(r=>{let k=rbSideFromRow(r),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);o[k].n++;o[k].y+=g});
+ Object.values(o).forEach(x=>x.ypp=x.n?x.y/x.n:0);return o;
+}
+function contextTable(title, rows, total){
+ return `<div class="run-context-card"><h4>${title}</h4><div class="run-context-row head"><span>Look</span><span>Plays</span><span>Share</span><span>YPP</span></div>${rows.filter(x=>x[1].n>0).map(([label,x])=>`<div class="run-context-row"><b>${label}</b><span>${x.n}</span><span>${pct(100*x.n/Math.max(1,total))}</span><span>${fmt(x.ypp,2)}</span></div>`).join('')||'<div class="empty">No tagged plays.</div>'}</div>`;
+}
+
+function getRunDirectionRow(key){let rows=datasets.runDirections||[];if(key==='ALL'){
+  let agg={RC:'All Runs',RUSH:0};
+  ['LE (D)%','LT (C)%','LG (B)%','ML (A)%','MR (A)%','RG (B)%','RT (C)%','RE (D)%'].forEach(k=>agg[k]=0);
+  rows.forEach(r=>{let rush=num(r.RUSH), basis=rush||0; agg.RUSH+=rush; ['LE (D)%','LT (C)%','LG (B)%','ML (A)%','MR (A)%','RG (B)%','RT (C)%','RE (D)%'].forEach(k=>agg[k]+=basis*parsePctValue(r[k])/100)});
+  if(agg.RUSH>0){['LE (D)%','LT (C)%','LG (B)%','ML (A)%','MR (A)%','RG (B)%','RT (C)%','RE (D)%'].forEach(k=>agg[k]=100*agg[k]/agg.RUSH)}
+  return agg;
+}
+return rows.find(r=>String(r.RC||'')===String(key))||null}
+function getRunConceptStat(key){let rows=datasets.runConcepts||[];if(key==='ALL'){let rush=rows.reduce((s,r)=>s+num(r.RUSH),0),yds=rows.reduce((s,r)=>s+num(r['RUSH YDS']),0),td=rows.reduce((s,r)=>s+num(r['RUN TD']),0),stuff=rows.reduce((s,r)=>s+num(r.STUFF),0);return {RC:'All Runs',RUSH:rush,'RUSH YDS':yds,YPC:rush?yds/rush:0,'RUN TD':td,STUFF:stuff,'YBC/ATT':'—',YCO:'—','YCo%':'—'}}
+return rows.find(r=>String(r.RC||'')===String(key))||null}
+function runDirectionLanes(row){
+ const map=[['LE (D)%','Left D','D Gap','LE'],['LT (C)%','Left C','C Gap','LT'],['LG (B)%','Left B','B Gap','LG'],['ML (A)%','Left A','A Gap','ML'],['MR (A)%','Right A','A Gap','MR'],['RG (B)%','Right B','B Gap','RG'],['RT (C)%','Right C','C Gap','RT'],['RE (D)%','Right D','D Gap','RE']];
+ let rush=num(row?.RUSH), actual=gapPlayStats(runConceptFocus);
+ return map.map(([key,short,gap,poa],idx)=>{let pctv=parsePctValue(row?.[key]);let raw=rush?Math.round(rush*pctv/100):0;let a=actual[poa]||{n:0,ypp:0,med:0};return {key,short,gap,pct:pctv,raw,idx,poa,actualN:a.n,ypp:a.ypp,med:a.med}});
+}
+function runPrimaryLane(lanes){return [...lanes].sort((a,b)=>b.pct-a.pct)[0]||null}
+function runDiagramSVG(lanes){
+ const xs=[70,145,220,295,405,480,555,630], labels=['D','C','B','A','A','B','C','D'];
+ const maxPct=Math.max(1,...lanes.map(l=>l.pct));
+ const arrows=lanes.map((lane,i)=>{let x=xs[i], pctv=lane.pct||0; let width=6+(pctv/maxPct)*24; let opacity=0.2+(pctv/maxPct)*0.8; let endY=110; let startY=246; let color=i<4?'rgba(255,228,143,'+opacity+')':'rgba(255,195,107,'+opacity+')'; return `<path d="M350 ${startY} Q ${Math.round((350+x)/2)} 195 ${x} ${endY}" stroke="${color}" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/><circle cx="${x}" cy="${endY}" r="${Math.max(14,12+(pctv/maxPct)*18).toFixed(1)}" fill="rgba(127,17,40,${0.25+(pctv/maxPct)*0.7})" stroke="#fff2" stroke-width="2"/><text x="${x}" y="${endY-3}" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">${Math.round(freqMode==='raw'?lane.raw:pctv)}</text><text x="${x}" y="${endY+13}" text-anchor="middle" font-size="9" font-weight="800" fill="#f4efe8">${freqMode==='raw'?'plays':'%'}</text><text x="${x}" y="${endY+28}" text-anchor="middle" font-size="9" font-weight="900" fill="#fff7d6">${lane.actualN?fmt(lane.ypp,1)+' YPP':'— YPP'}</text><text x="${x}" y="84" text-anchor="middle" font-size="11" font-weight="900" fill="#ffe9a8">${labels[i]}</text>`}).join('');
+ return `<svg viewBox="0 0 700 290" width="100%" height="290" role="img" aria-label="Run hit visual"><defs><linearGradient id="rbBall" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f7d77c"/><stop offset="100%" stop-color="#d4a93e"/></linearGradient></defs><rect x="1" y="1" width="698" height="288" rx="16" fill="transparent" stroke="rgba(255,255,255,.08)"/><line x1="25" y1="110" x2="675" y2="110" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/><text x="34" y="103" fill="#e5f4e8" font-size="11" font-weight="900">LOS</text><rect x="210" y="93" width="280" height="34" rx="12" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.12)"/><circle cx="245" cy="110" r="12" fill="#f3f5f7"/><circle cx="290" cy="110" r="12" fill="#f3f5f7"/><circle cx="335" cy="110" r="12" fill="#f3f5f7"/><circle cx="380" cy="110" r="12" fill="#f3f5f7"/><circle cx="425" cy="110" r="12" fill="#f3f5f7"/><text x="245" y="84" text-anchor="middle" fill="#f4efe8" font-size="10" font-weight="800">LT</text><text x="290" y="84" text-anchor="middle" fill="#f4efe8" font-size="10" font-weight="800">LG</text><text x="335" y="84" text-anchor="middle" fill="#f4efe8" font-size="10" font-weight="800">C</text><text x="380" y="84" text-anchor="middle" fill="#f4efe8" font-size="10" font-weight="800">RG</text><text x="425" y="84" text-anchor="middle" fill="#f4efe8" font-size="10" font-weight="800">RT</text><circle cx="350" cy="246" r="16" fill="url(#rbBall)" stroke="#fff4d2" stroke-width="2"/><text x="350" y="250" text-anchor="middle" fill="#53260c" font-size="11" font-weight="900">RB</text>${arrows}</svg>`;
+}
+
+function filteredRunDiagram(selected,gaps,total){
+ const lanes=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
+ const xs=[70,145,220,295,405,480,555,630], maxN=Math.max(1,...lanes.map(([k])=>gaps[k].n));
+ let arrows=lanes.map(([k,label],i)=>{let x=xs[i],g=gaps[k],ratio=g.n/maxN,width=6+24*ratio,op=.20+.78*ratio;return `<path d="M350 246 Q ${(350+x)/2} 195 ${x} 110" stroke="rgba(255,198,96,${op.toFixed(2)})" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/><circle cx="${x}" cy="110" r="${(14+17*ratio).toFixed(1)}" fill="rgba(127,17,40,${(.25+.72*ratio).toFixed(2)})"/><text x="${x}" y="106" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${freqMode==='raw'?g.n:pct(100*g.n/Math.max(1,total))}</text><text x="${x}" y="123" text-anchor="middle" font-size="9" font-weight="800" fill="#fff2c8">${g.n?fmt(g.ypp,1)+' YPP':'—'}</text><text x="${x}" y="72" text-anchor="middle" font-size="10" font-weight="900" fill="#ffe9a8">${label}</text>`}).join('');
+ return `<div class="run-diagram"><svg viewBox="0 0 700 290" width="100%" height="290"><line x1="25" y1="110" x2="675" y2="110" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/><text x="34" y="102" fill="#e5f4e8" font-size="10" font-weight="900">LOS</text><circle cx="245" cy="110" r="11" fill="#f3f5f7"/><circle cx="290" cy="110" r="11" fill="#f3f5f7"/><circle cx="335" cy="110" r="11" fill="#f3f5f7"/><circle cx="380" cy="110" r="11" fill="#f3f5f7"/><circle cx="425" cy="110" r="11" fill="#f3f5f7"/><circle cx="350" cy="246" r="16" fill="#D3A83D" stroke="#fff4d2" stroke-width="2"/><text x="350" y="250" text-anchor="middle" fill="#53260c" font-size="11" font-weight="900">RB</text>${arrows}</svg></div>`;
+}
+
+function runVisualizer(){
+ let allRuns=(datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R');
+ let concepts=['ALL',...(datasets.runConcepts||[]).map(r=>r.RC).filter(Boolean)];
+ let personnel=['ALL',...[...new Set(allRuns.map(r=>String(r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'')).filter(Boolean))].sort()];
+ let forms=['ALL',...[...new Set(allRuns.map(r=>String(r.pff_OFFFORMATIONGROUP||'')).filter(Boolean))].sort()];
+ let current=concepts.includes(runConceptFocus)?runConceptFocus:'ALL', selected=selectedRunRows(current), total=selected.length;
+ let gains=selected.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)), gaps=gapPlayStats(current), hashes=hashRunStats(current), rb=rbSideStats(current);
+ let gapOrder=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
+ let primary=gapOrder.map(([k,l])=>[k,l,gaps[k]]).sort((a,b)=>b[2].n-a[2].n)[0];
+ return `<div class="card"><div class="section-head"><div><h3>Run Game Explorer</h3><small>Change a filter and the entire run-path visual plus every number underneath recalculates.</small></div>${freqToggle()}</div>
+ <div class="run-filter-bar">
+  <label>Concept<select onchange="setRunFilter('concept',this.value)">${concepts.map(v=>`<option value="${esc(v)}" ${v===current?'selected':''}>${esc(v==='ALL'?'All Concepts':v)}</option>`).join('')}</select></label>
+  <label>Hash<select onchange="setRunFilter('hash',this.value)">${[['ALL','All Hashes'],['L','Left Hash'],['C','Middle'],['R','Right Hash']].map(([v,l])=>`<option value="${v}" ${runHashF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>RB Side<select onchange="setRunFilter('rb',this.value)">${[['ALL','All RB Alignments'],['LEFT','RB Left'],['RIGHT','RB Right'],['CENTER','Pistol / Center'],['SPLIT','Split Backs'],['UNKNOWN','Unknown']].map(([v,l])=>`<option value="${v}" ${runRBSideF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>Personnel<select onchange="setRunFilter('personnel',this.value)">${personnel.map(v=>`<option value="${esc(v)}" ${runPersonnelF===v?'selected':''}>${v==='ALL'?'All Personnel':v}</option>`).join('')}</select></label>
+  <label>Formation<select onchange="setRunFilter('formation',this.value)">${forms.map(v=>`<option value="${esc(v)}" ${runFormationF===v?'selected':''}>${v==='ALL'?'All Formations':v}</option>`).join('')}</select></label>
+  <label>Down<select onchange="setRunFilter('down',this.value)">${[['ALL','All Downs'],['1','1st Down'],['2','2nd Down'],['3','3rd Down'],['4','4th Down']].map(([v,l])=>`<option value="${v}" ${runDownF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>Distance<select onchange="setRunFilter('distance',this.value)">${[['ALL','All Distances'],['SHORT','1–3'],['MED','4–7'],['LONG','8+']].map(([v,l])=>`<option value="${v}" ${runDistF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <div class="run-filter-actions"><button onclick="resetRunFilters()">Reset Run Filters</button></div>
+ </div>
+ <div class="kpis"><div class="kpi"><span>Filtered Runs</span><b>${total}</b><small>current view</small></div><div class="kpi"><span>YPP</span><b>${fmt(avg(gains),2)}</b><small>filtered plays</small></div><div class="kpi"><span>Median</span><b>${fmt(calcMedian(gains),1)}</b><small>yards</small></div><div class="kpi"><span>Explosives</span><b>${freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x>=15).length/Math.max(1,total)):`${gains.filter(x=>x>=15).length} plays`}</small></div><div class="kpi"><span>Negative Plays</span><b>${freqMode==='raw'?gains.filter(x=>x<=0).length:pct(100*gains.filter(x=>x<=0).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x<=0).length/Math.max(1,total)):`${gains.filter(x=>x<=0).length} plays`}</small></div></div>
+ <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':runHashF} · ${runRBSideF==='ALL'?'all RB alignments':runRBSideF} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?'all formations':runFormationF}</div>
+ ${filteredRunDiagram(selected,gaps,total)}
+ <div class="gap-strip">${gapOrder.map(([k,label])=>{let x=gaps[k],share=100*x.n/Math.max(1,total),hot=primary&&primary[0]===k;return `<div class="gap-box ${hot?'hot':''}"><div class="gap-name">${label}</div><div class="gap-count">${freqMode==='raw'?x.n:pct(share)}</div><div class="gap-ypp2">${x.n?fmt(x.ypp,2):'—'} YPP</div><div class="subtle">${x.n?`${fmt(x.med,1)} median`:''}</div></div>`}).join('')}</div>
+ <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Left Hash',hashes.L],['Middle',hashes.C],['Right Hash',hashes.R],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['RB Left',rb.LEFT],['RB Right',rb.RIGHT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
+ ${runSurfacePanel(selected,total)}
+ </div>`;
+}
+
+
+function runActualSide(r){
+ let s=String(r.pff_POAACTUAL||'').toUpperCase();
+ if(/^L/.test(s)) return 'LEFT';
+ if(/^R/.test(s)) return 'RIGHT';
+ if(/^M/.test(s)) return 'MIDDLE';
+ return 'UNKNOWN';
+}
+function parseSurfaceSide(text){
+ let s=String(text||'').toUpperCase();
+ let hasL=/(^|[^A-Z])L([^A-Z]|$)|-L\b/.test(s),hasR=/(^|[^A-Z])R([^A-Z]|$)|-R\b/.test(s);
+ if(hasL&&hasR) return 'BOTH';
+ if(hasL) return 'LEFT';
+ if(hasR) return 'RIGHT';
+ return 'NONE';
+}
+function teSurfaceSide(r){
+ let base=String(r.pff_TEALIGNMENT||'');
+ if(!base) base=`${r.pff_OFFPLAYERS||''}; ${r.pff_OFFFORMATION||''}`;
+ let s=String(base).toUpperCase();
+ let hasL=s.includes('TE-L')||(/\bL\b/.test(s)&&!s.includes('TE-R')&&!s.includes('TE-L;R'));
+ let hasR=s.includes('TE-R')||(/\bR\b/.test(s)&&!s.includes('TE-L')&&!s.includes('TE-L;R'));
+ if(s.includes('TE-L')&&s.includes('TE-R')) return 'BOTH';
+ if(hasL&&hasR) return 'BOTH';
+ if(hasL) return 'LEFT';
+ if(hasR) return 'RIGHT';
+ return 'NONE';
+}
+function hBackSurfaceSide(r){
+ let s=`${r.pff_OFFPLAYERS||''}; ${r.pff_OFFFORMATION||''}`.toUpperCase();
+ let hasL=/FB-L|H-BACK-L|HBACK-L|\(H-L\)|\bH-L\b/.test(s),hasR=/FB-R|H-BACK-R|HBACK-R|\(H-R\)|\bH-R\b/.test(s);
+ if(hasL&&hasR) return 'BOTH';
+ if(hasL) return 'LEFT';
+ if(hasR) return 'RIGHT';
+ return 'NONE';
+}
+function runBucketMetrics(rows,total){
+ let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
+ let expl=gains.filter(x=>x>=15).length,neg=gains.filter(x=>x<=0).length,n=rows.length;
+ return {n,share:100*n/Math.max(1,total),ypp:avg(gains),med:calcMedian(gains),expl,neg};
+}
+function runSurfaceCard(label,m,total){
+ return `<div class="card" style="padding:14px">
+   <h4 style="margin:0 0 10px">${esc(label)}</h4>
+   <div class="metric-grid">
+     ${metric(freqMode==='raw'?'Plays':'Share',freqMode==='raw'?m.n:pct(m.share))}
+     ${metric('YPP',fmt(m.ypp,2))}
+     ${metric('Median',fmt(m.med,1))}
+     ${metric(freqMode==='raw'?'Explosive':'Explosive %',freqMode==='raw'?m.expl:pct(100*m.expl/Math.max(1,m.n)))}
+     ${metric(freqMode==='raw'?'Negative':'Negative %',freqMode==='raw'?m.neg:pct(100*m.neg/Math.max(1,m.n)))}
+   </div>
+ </div>`;
+}
+function runSurfacePanel(rows,total){
+ let dirRows=rows.filter(r=>['LEFT','RIGHT'].includes(runActualSide(r)));
+ let teTo=dirRows.filter(r=>{let s=teSurfaceSide(r),d=runActualSide(r);return (s==='LEFT'&&d==='LEFT')||(s==='RIGHT'&&d==='RIGHT')});
+ let teAway=dirRows.filter(r=>{let s=teSurfaceSide(r),d=runActualSide(r);return (s==='LEFT'&&d==='RIGHT')||(s==='RIGHT'&&d==='LEFT')});
+ let hTo=dirRows.filter(r=>{let s=hBackSurfaceSide(r),d=runActualSide(r);return (s==='LEFT'&&d==='LEFT')||(s==='RIGHT'&&d==='RIGHT')});
+ let hAway=dirRows.filter(r=>{let s=hBackSurfaceSide(r),d=runActualSide(r);return (s==='LEFT'&&d==='RIGHT')||(s==='RIGHT'&&d==='LEFT')});
+ return `<div class="card">
+   <div class="section-head"><div><h3>Run Surface Tendencies</h3><small>Runs to and away from the TE surface and H-back surface using the current run filters.</small></div>${freqToggle()}</div>
+   <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+     ${runSurfaceCard('To Tight End Surface',runBucketMetrics(teTo,total),total)}
+     ${runSurfaceCard('Away From Tight End Surface',runBucketMetrics(teAway,total),total)}
+     ${runSurfaceCard('To H-Back Surface',runBucketMetrics(hTo,total),total)}
+     ${runSurfaceCard('Away From H-Back Surface',runBucketMetrics(hAway,total),total)}
+   </div>
+   
+ </div>`;
+}
+
+function runPageInner(){let rc=datasets.runConcepts||[],dir=datasets.runDirections||[];return `<div class="page-title"><h2>Run Game</h2><p>Run concept efficiency and point-of-attack distribution.</p></div>${dataStatus()}<div class="card">${table(['Concept','Rushes','Yards','YPC','TD','Stuff','YBC/Att','YCO','YCo %'],rc.map(r=>[esc(r.RC),r.RUSH,r['RUSH YDS'],r.YPC,r['RUN TD'],r.STUFF,r['YBC/ATT'],r.YCO,r['YCo%']]))}</div>${runVisualizer()}<div class="card"><h3>Direction by Concept</h3>${table(['Concept','Rush','LE','LT','LG','ML','MR','RG','RT','RE'],dir.map(r=>[esc(r.RC),r.RUSH,r['LE (D)%'],r['LT (C)%'],r['LG (B)%'],r['ML (A)%'],r['MR (A)%'],r['RG (B)%'],r['RT (C)%'],r['RE (D)%']]))}</div>`}
+function runPage(){
+ try{return runPageInner()}
+ catch(err){
+   console.error('Run Game render error',err);
+   return `<div class="page-title"><h2>Run Game</h2><p>Run concept efficiency and point-of-attack distribution.</p></div>${dataStatus()}<div class="card error-card"><h3>Run visual error</h3><div class="subtle">${esc(err?.message||String(err))}</div></div>`;
+ }
+}
+
+function passPage(){let routes=datasets.routes||[],db=datasets.dropbacks||[];return `<div class="page-title"><h2>Pass Game</h2><p>Route results and dropback-type production.</p></div>${dataStatus()}<div class="card"><h3>Routes / Concepts</h3>${table(['Route','Off %','ATT','COMP%','Yards','YPA','TD','INT','BTT','TWP'],routes.map(r=>[esc(r.ROUTE),r['OFF%'],r.ATT,r['COMP%'],r['PASS YDS'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP]))}</div><div class="card"><h3>Dropback Type</h3>${table(['Type','Off %','DB','ATT','COMP%','YPA','TD','INT','Sacks','Scrambles'],db.map(r=>[esc(r['Dropback Type']),r['OFF%'],r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.SK,r.SCR]))}</div>`}
+function coveragePage(){let rows=coverageRows(datasets.plays||[]);let man=rows.filter(x=>/COVER 0|COVER 1|2 MAN/.test(x.cov)),zone=rows.filter(x=>!(/COVER 0|COVER 1|2 MAN/.test(x.cov)));let sm=arr=>{let n=arr.reduce((s,x)=>s+x.n,0),y=arr.reduce((s,x)=>s+x.yds,0),e=arr.reduce((s,x)=>s+x.expl,0),ne=arr.reduce((s,x)=>s+x.neg,0);return{n,ypp:y/Math.max(1,n),e:100*e/Math.max(1,n),ne:100*ne/Math.max(1,n)}};let a=sm(man),z=sm(zone);return `<div class="page-title"><h2>Coverage Response</h2><p>How Mississippi State's offense performed against the coverage families tagged in the play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><h3>Frequency View</h3>${freqToggle()}</div></div><div class="two"><div class="card"><h3>Man Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?a.n:pct(100*a.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(a.ypp,2))}${metric('Explosive %',pct(a.e))}${metric('Negative %',pct(a.ne))}</div></div><div class="card"><h3>Zone Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?z.n:pct(100*z.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(z.ypp,2))}${metric('Explosive %',pct(z.e))}${metric('Negative %',pct(z.ne))}</div></div></div><div class="card"><h3>Coverage Detail</h3>${coverageTable(rows)}</div>`}
+function situationsPage(){
+ let rows=(datasets.plays||[]).filter(r=>['P','R'].includes(r.pff_RUNPASS)),groups={};
+ rows.forEach(r=>{let d=num(r.pff_DOWN),dist=num(r.pff_DISTANCE),k=d===1?'1st Down':d===2?'2nd Down':d===3?(dist<=3?'3rd 1-3':dist<=7?'3rd 4-7':'3rd 8+'):'4th Down';(groups[k]??=[]).push(r)});
+ let order=['1st Down','2nd Down','3rd 1-3','3rd 4-7','3rd 8+','4th Down'];
+ let hdr=freqMode==='raw'?['Situation','Plays','Runs','Passes','YPP','Explosives','Negative Plays']:['Situation','Plays','Run %','Pass %','YPP','Expl %','Negative %'];
+ let data=order.filter(k=>groups[k]?.length).map(k=>{let a=groups[k],m=playMetrics(a),expl=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)>=15).length,neg=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)<=0).length;return freqMode==='raw'?[k,m.plays,m.run,m.pass,fmt(m.ypp,2),expl,neg]:[k,m.plays,pct(100*m.run/Math.max(1,m.plays)),pct(100*m.pass/Math.max(1,m.plays)),fmt(m.ypp,2),pct(100*expl/Math.max(1,m.plays)),pct(100*neg/Math.max(1,m.plays))]});
+ return `<div class="page-title"><h2>Situations</h2><p>Down-and-distance efficiency from the Mississippi State play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><div><h3>Situation View</h3><small>RAW changes tendency/outcome rates to actual play counts. % shows rate.</small></div>${freqToggle()}</div>${table(hdr,data)}</div>`;
+}
+
+function rushCountFromRow(r){
+ let s=String(r.pff_PASSRUSHPLAYERS||'').trim();
+ let m=s.match(/^(\d+)/);
+ return m?parseInt(m[1],10):null;
+}
+function rushBucketLabel(n){
+ if(n===null||n===undefined)return'Unknown';
+ if(n>=7)return'Rush 7+';
+ return `Rush ${n}`;
+}
+function rushPassRows(){
+ return (datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='P' && rushCountFromRow(r)!==null);
+}
+function rushCountStats(rows){
+ let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),
+     att=0,comp=0,td=0,int=0,sacks=0,scr=0,expl=0,neg=0;
+ rows.forEach(r=>{
+   let pr=passResult(r),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);
+   if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(pr)||isInterception(r))att++;
+   if(pr==='COMPLETE')comp++;
+   if(isPassTouchdown(r))td++;
+   if(isInterception(r))int++;
+   if(pr==='SACK')sacks++;
+   if(pr==='RUN'||(nonEmpty(r.pff_QBSCRAMBLE)&&!['0','FALSE','N','NO'].includes(String(r.pff_QBSCRAMBLE).toUpperCase())))scr++;
+   if(g>=15)expl++;
+   if(g<=0)neg++;
+ });
+ return {n:rows.length,att,comp,td,int,sacks,scr,expl,neg,ypp:avg(gains),med:calcMedian(gains)};
+}
+function rushCountValue(count,total){
+ return freqMode==='raw'?count:pct(100*count/Math.max(1,total));
+}
+function rushCountTable(groups,total){
+ let labels=['Rush 3','Rush 4','Rush 5','Rush 6','Rush 7+'];
+ return table(
+   freqMode==='raw'
+     ? ['Rushers','Pass Plays','YPP','Median','C/A','Comp %','Expl','Negative','Sacks','Sack %','QB Scrambles','Scramble %','TD','INT']
+     : ['Rushers','Share','YPP','Median','C/A','Comp %','Expl %','Neg %','Sacks','Sack %','QB Scrambles','Scramble %','TD','INT'],
+   labels.filter(k=>groups[k]?.length).map(k=>{
+     let s=rushCountStats(groups[k]);
+     return freqMode==='raw'
+       ? [k,s.n,fmt(s.ypp,2),fmt(s.med,1),`${s.comp}/${s.att}`,pct(100*s.comp/Math.max(1,s.att)),s.expl,s.neg,s.sacks,pct(100*s.sacks/Math.max(1,s.n)),s.scr,pct(100*s.scr/Math.max(1,s.n)),s.td,s.int]
+       : [k,pct(100*s.n/Math.max(1,total)),fmt(s.ypp,2),fmt(s.med,1),`${s.comp}/${s.att}`,pct(100*s.comp/Math.max(1,s.att)),pct(100*s.expl/Math.max(1,s.n)),pct(100*s.neg/Math.max(1,s.n)),s.sacks,pct(100*s.sacks/Math.max(1,s.n)),s.scr,pct(100*s.scr/Math.max(1,s.n)),s.td,s.int];
+   })
+ );
+}
+function rushCoverageTable(rows){
+ let g={};
+ rows.forEach(r=>{
+   let rc=rushBucketLabel(rushCountFromRow(r)),cov=String(r.pff_PASS_COVERAGE_BASIC||'Unknown').trim()||'Unknown',key=rc+'|||'+cov;
+   (g[key]??=[]).push(r);
+ });
+ let data=Object.entries(g).map(([key,a])=>{
+   let [rc,cov]=key.split('|||'),s=rushCountStats(a);
+   return {rc,cov,s};
+ }).filter(x=>x.cov!=='Unknown').sort((a,b)=>{
+   let na=parseInt(a.rc.replace(/\D/g,''))||99,nb=parseInt(b.rc.replace(/\D/g,''))||99;
+   return na-nb||b.s.n-a.s.n;
+ });
+ return table(
+   freqMode==='raw'
+     ? ['Rush','Coverage','Plays','YPP','Median','Comp %','Expl','Negative','Sacks','QB Scrambles','Scramble %','TD','INT']
+     : ['Rush','Coverage','Plays','YPP','Median','Comp %','Expl %','Neg %','Sack %','QB Scrambles','Scramble %','TD','INT'],
+   data.map(x=>freqMode==='raw'
+     ? [x.rc,esc(x.cov),x.s.n,fmt(x.s.ypp,2),fmt(x.s.med,1),pct(100*x.s.comp/Math.max(1,x.s.att)),x.s.expl,x.s.neg,x.s.sacks,x.s.scr,pct(100*x.s.scr/Math.max(1,x.s.n)),x.s.td,x.s.int]
+     : [x.rc,esc(x.cov),x.s.n,fmt(x.s.ypp,2),fmt(x.s.med,1),pct(100*x.s.comp/Math.max(1,x.s.att)),pct(100*x.s.expl/Math.max(1,x.s.n)),pct(100*x.s.neg/Math.max(1,x.s.n)),pct(100*x.s.sacks/Math.max(1,x.s.n)),x.s.scr,pct(100*x.s.scr/Math.max(1,x.s.n)),x.s.td,x.s.int]
+   )
+ );
+}
+function rushQBTable(rows){
+ let g={};
+ rows.forEach(r=>{
+   let qb=String(r.pff_PASSER||'Unknown').trim()||'Unknown',rc=rushBucketLabel(rushCountFromRow(r)),key=qb+'|||'+rc;
+   (g[key]??=[]).push(r);
+ });
+ let data=Object.entries(g).map(([key,a])=>{
+   let [qb,rc]=key.split('|||'),s=rushCountStats(a);return {qb,rc,s};
+ }).filter(x=>x.qb!=='Unknown').sort((a,b)=>a.qb.localeCompare(b.qb)||b.s.n-a.s.n);
+ return table(
+   freqMode==='raw'
+    ? ['QB','Rushers','Pass Plays','YPP','Median','Comp %','Expl','Negative','Sacks','QB Scrambles','Scramble %','TD','INT']
+    : ['QB','Rushers','Pass Plays','YPP','Median','Comp %','Expl %','Neg %','Sack %','QB Scrambles','Scramble %','TD','INT'],
+   data.map(x=>freqMode==='raw'
+    ? [esc(x.qb),x.rc,x.s.n,fmt(x.s.ypp,2),fmt(x.s.med,1),pct(100*x.s.comp/Math.max(1,x.s.att)),x.s.expl,x.s.neg,x.s.sacks,x.s.scr,pct(100*x.s.scr/Math.max(1,x.s.n)),x.s.td,x.s.int]
+    : [esc(x.qb),x.rc,x.s.n,fmt(x.s.ypp,2),fmt(x.s.med,1),pct(100*x.s.comp/Math.max(1,x.s.att)),pct(100*x.s.expl/Math.max(1,x.s.n)),pct(100*x.s.neg/Math.max(1,x.s.n)),pct(100*x.s.sacks/Math.max(1,x.s.n)),x.s.scr,pct(100*x.s.scr/Math.max(1,x.s.n)),x.s.td,x.s.int]
+   )
+ );
+}
+function rushCountPage(){
+ let rows=rushPassRows(),groups={};
+ rows.forEach(r=>{let k=rushBucketLabel(rushCountFromRow(r));(groups[k]??=[]).push(r)});
+ let labels=['Rush 3','Rush 4','Rush 5','Rush 6','Rush 7+'],total=rows.length;
+ return `<div class="page-title"><h2>Rush Count</h2><p>Mississippi State passing production by number of pass rushers.</p></div>${dataStatus()}
+ <div class="card"><div class="section-head"><div><h3>Rush Distribution</h3></div>${freqToggle()}</div>
+   <div class="rush-count-grid">${labels.filter(k=>groups[k]?.length).map(k=>{let s=rushCountStats(groups[k]);return `<div class="rush-count-card"><h3>${k}</h3><div class="big">${freqMode==='raw'?s.n:pct(100*s.n/Math.max(1,total))}</div><div class="sub">${freqMode==='raw'?`${pct(100*s.n/Math.max(1,total))} of pass plays`:`${s.n} pass plays`}</div><div class="mini-row" style="margin-top:10px"><div class="mini"><b>${fmt(s.ypp,2)}</b><span>YPP</span></div><div class="mini"><b>${pct(100*s.comp/Math.max(1,s.att))}</b><span>Comp %</span></div><div class="mini"><b>${s.scr}</b><span>QB Scrambles</span></div><div class="mini"><b>${pct(100*s.scr/Math.max(1,s.n))}</b><span>Scramble %</span></div></div><div class="mini-row" style="margin-top:8px"><div class="mini"><b>${freqMode==='raw'?s.expl:pct(100*s.expl/Math.max(1,s.n))}</b><span>Expl</span></div><div class="mini"><b>${freqMode==='raw'?s.neg:pct(100*s.neg/Math.max(1,s.n))}</b><span>Neg</span></div><div class="mini"><b>${s.sacks}</b><span>Sacks</span></div><div class="mini"><b>${pct(100*s.sacks/Math.max(1,s.n))}</b><span>Sack %</span></div></div></div>`}).join('')}</div>
+ </div>
+ <div class="card"><h3>Rush Count Detail</h3>${rushCountTable(groups,total)}</div>
+ <div class="rush-split-grid"><div class="card"><h3>Rush Count × Coverage</h3>${rushCoverageTable(rows)}</div><div class="card"><h3>Rush Count × Quarterback</h3>${rushQBTable(rows)}</div></div>`;
+}
+
+function pressurePage(){let prs=datasets.pressure||[],plays=(datasets.plays||[]).filter(r=>r.pff_RUNPASS==='P'),g={Blitz:[],NoBlitz:[]};plays.forEach(r=>(String(r.pff_BLITZDOG)==='1'?g.Blitz:g.NoBlitz).push(r));let br=Object.entries(g).map(([k,a])=>{let m=playMetrics(a);let sacks=a.filter(r=>r.pff_PASSRESULT==='SACK').length;return[k,a.length,fmt(m.ypp,2),pct(m.expl),pct(m.neg),sacks,pct(100*sacks/Math.max(1,a.length))]});return `<div class="page-title"><h2>Pressure Response</h2><p>Blitz and pressure response, including quarterback splits.</p></div>${dataStatus()}<div class="card"><div class="section-head"><h3>Play Feed: Blitz vs No Blitz</h3>${freqToggle()}</div>${table(freqMode==='raw'?['Look','Pass Plays','YPP','Explosives','Negative','Sacks']:['Look','Pass Plays','YPP','Expl %','Neg %','Sacks'],Object.entries(g).map(([k,a])=>{let m=playMetrics(a),sacks=a.filter(r=>r.pff_PASSRESULT==='SACK').length,expl=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)>=15).length,neg=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)<=0).length;return freqMode==='raw'?[k,a.length,fmt(m.ypp,2),expl,neg,sacks]:[k,a.length,fmt(m.ypp,2),pct(100*expl/Math.max(1,a.length)),pct(100*neg/Math.max(1,a.length)),sacks]}))}</div><div class="card"><h3>PFF QB Pressure Splits</h3>${table(['QB','Pressure Look','DB','ATT','COMP%','YPA','TD','INT','BTT','TWP','SCR'],prs.map(r=>[esc(r.Name),esc(r['PRESS PLAY']),r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP,r.SCR]))}</div>`}
+function render(){let app=$('app');if(page==='players')app.innerHTML=playersPage();else if(page==='dashboard')app.innerHTML=dashboardPage();else if(page==='personnel')app.innerHTML=personnelPage();else if(page==='run')app.innerHTML=runPage();else if(page==='pass')app.innerHTML=passPage();else if(page==='heatmaps')app.innerHTML=heatmapPage();else if(page==='coverage')app.innerHTML=coveragePage();else if(page==='situations')app.innerHTML=situationsPage();else if(page==='rushcount')app.innerHTML=rushCountPage();else app.innerHTML=pressurePage()}
 function syncNav(){document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
-window.setGroup=id=>{group=id;selected=null;facet='overview';render()};window.openPlayer=name=>{selected=name;facet='overview';render();setTimeout(()=>document.querySelector('.profile')?.scrollIntoView({behavior:'smooth',block:'start'}),20)};window.setFacet=id=>{facet=id;render();setTimeout(()=>document.querySelector('.profile')?.scrollIntoView({block:'start'}),20)};
-async function loadRoster(){let h=$('headerStatus');h.textContent='Connecting to Mississippi State roster…';let data=null;try{let r=await fetch('/api/roster?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}if(!data){try{let r=await fetch(STORAGE_ROSTER+'?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}}let parsed=Array.isArray(data)?data:Array.isArray(data?.players)?data.players:[];if(parsed.length){roster=parsed;h.textContent=`Supabase live • ${roster.length} current roster players loaded`;render()}else{roster=[];h.textContent='Roster could not load. Deploy on Vercel or check Supabase Storage.';render()}}
+window.setGroup=id=>{group=id;selected=null;facet='overview';render()};window.openPlayer=name=>openFAUProfile(name);window.setFacet=id=>{facet=id;render()};
+window.setFreqMode=v=>{freqMode=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
+window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel')runPersonnelF=v;else if(kind==='formation')runFormationF=v;else if(kind==='down')runDownF=v;else if(kind==='distance')runDistF=v;render()};
+window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';runDownF='ALL';runDistF='ALL';render()};
+document.addEventListener('click',e=>{
+ let card=e.target.closest?.('.player-card[data-player-index]');
+ if(card && !e.target.closest('button,a')) openPlayerIndex(Number(card.dataset.playerIndex));
+});
+async function loadRoster(){let h=$('headerStatus');h.textContent='Loading Mississippi State roster + PFF…';let data=null;try{let r=await fetch('/api/roster?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}if(!data){try{let r=await fetch(STORAGE_ROSTER+'?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}}roster=Array.isArray(data)?data:Array.isArray(data?.players)?data.players:[];await Promise.all(Object.keys(FILES).map(fetchCSV));let ok=Object.values(loadState).filter(x=>x.ok).length;h.textContent=roster.length?`Supabase live • ${roster.length} roster players • ${ok}/${Object.keys(FILES).length} PFF files`:`Roster failed • ${ok}/${Object.keys(FILES).length} PFF files`;render()}
 document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{page=b.dataset.page;syncNav();render()});$('reloadBtn').onclick=loadRoster;$('printBtn').onclick=()=>window.print();render();loadRoster();
+
 </script>
+
 </body>
 </html>

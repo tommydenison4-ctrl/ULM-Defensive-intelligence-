@@ -1,21 +1,13 @@
-# ULM Defensive Intelligence — Mississippi State
+# ULM Defensive Intelligence — Mississippi State v23
 
-Standalone defensive-staff workspace.
+Rush Count tab update:
+- Completion % is explicitly included throughout.
+- QB Scrambles now always shows the raw scramble count.
+- Scramble % is shown alongside the raw scramble count.
+- Rush Count cards now surface Comp %, QB Scrambles, Scramble %, Sacks and Sack %.
+- Rush Count detail, Rush Count × Coverage and Rush Count × Quarterback all include:
+  - completion %
+  - raw QB scramble count
+  - QB scramble rate
 
-## Live roster source
-The app reads the same current roster used by Special Teams:
-
-`Supabase Storage / Special Teams / Current / roster.json`
-
-The Vercel route `/api/roster` proxies that public Storage object. The browser also has a direct Storage fallback.
-
-## Deploy
-Upload the full contents of this folder to a new GitHub repository and connect that repository to a new Vercel project. No Supabase keys are required for the roster because the existing Storage object is public.
-
-## Current build
-- Mississippi State is the active opponent.
-- Player Intelligence is the default landing view.
-- Position groups: QB, RB, WR, TE, OL.
-- Player profile facets: Overview, Usage & Alignment, Tendencies, Game Log.
-- Roster identity, photos, bios, official profile links, class, hometown and previous school come from the existing shared `roster.json`.
-- PFF-specific offensive production is intentionally not fabricated. Those fields activate when the Mississippi State offensive PFF source is connected next.
+RAW / % toggle continues to control tendency / outcome frequencies such as explosive and negative-play rates.
