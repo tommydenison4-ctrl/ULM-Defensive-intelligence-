@@ -1,17 +1,13 @@
-# ULM Defensive Intelligence — Mississippi State v26
+# ULM Defensive Intelligence — Mississippi State v27
 
-Shared Coach Notes identity fix.
+Shared Coach Notes final player identity fix.
 
-What was wrong:
-- Supabase successfully received the notes.
-- The screenshot showed `player_name = NULL`.
-- Because the rows had no player identity, another device could not query the note for Kamario Taylor.
+Root cause:
+- The open profile stores `selected` as the player's name string.
+- The cloud save code was treating `selected` as a full player object.
+- That caused the player identity guard to fail even though the profile clearly showed Kamario Taylor.
 
-What changed:
-- Added a robust player-name resolver using the roster object's available identity fields.
-- All note saves now write a real `player_name`.
-- All note loads query using the same resolved player name.
-- Added a guard that prevents any future note from being written with a blank player identity.
-- Existing timestamp / author / shared-note behavior is unchanged.
-
-The two existing NULL-player rows in Supabase can be deleted later; v26 will not use them.
+Fix:
+- `notePlayerName()` now accepts either a player object or a player-name string.
+- Save logic resolves the selected roster player before writing.
+- Player name is now written correctly to Supabase and used consistently for cross-device loading.

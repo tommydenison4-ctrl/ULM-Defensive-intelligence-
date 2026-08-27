@@ -282,6 +282,7 @@ function coverageTable(rows){
  return table(hdr,rows.map(x=>[esc(x.cov),freqVal(x.n,pct(100*x.n/Math.max(1,total)),'plays'),`${x.comp}/${x.att}`,pct(100*x.comp/Math.max(1,x.att)),fmt(x.yds/Math.max(1,x.n),2),freqMode==='raw'?x.expl:pct(100*x.expl/Math.max(1,x.n)),freqMode==='raw'?x.neg:pct(100*x.neg/Math.max(1,x.n)),x.td,x.int,x.sack,x.scr]));
 }
 function notePlayerName(p){
+ if(typeof p==='string') return p.trim();
  return String(p?.name||p?.player_name||p?.full_name||p?.display_name||p?.playerName||'').trim();
 }
 function notePlayerKey(p){return `${NOTES_TEAM}|${NOTES_SEASON}|${notePlayerName(p)}`}
@@ -354,7 +355,7 @@ async function loadCoachNoteForPlayer(p){
  }
 }
 window.saveCoachNoteForPlayer=async()=>{
- let p=selected,t=document.getElementById('coachNote'),authorEl=document.getElementById('coachNoteAuthor'),
+ let p=typeof selected==='string'?(resolveRosterPlayer(selected)||selected):selected,t=document.getElementById('coachNote'),authorEl=document.getElementById('coachNoteAuthor'),
      status=document.getElementById('coachNoteStatus'),btn=document.getElementById('coachNoteSaveBtn'),hist=document.getElementById('coachNoteHistory');
  if(!p||!t)return;
  let author=(authorEl?.value||'').trim();
