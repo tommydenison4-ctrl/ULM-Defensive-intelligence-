@@ -20,7 +20,90 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .profile{scroll-margin-top:12px}.player-hero{display:grid;grid-template-columns:235px 1fr;gap:18px}.player-hero .player-photo{border-radius:12px}.player-name{font-size:34px;font-weight:950;color:var(--maroon)}.profile-meta{font-size:12px;color:var(--muted);line-height:1.65}.bio{margin-top:13px;line-height:1.55;color:#39465a}.profile-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.profile-actions a{text-decoration:none;background:var(--navy);color:#fff;border-radius:8px;padding:9px 11px;font-weight:900;font-size:11px}.primary{background:var(--maroon);color:#fff;border-color:var(--maroon)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.detail{background:#f7f8fa;border:1px solid #e2e6eb;border-radius:9px;padding:10px}.detail span{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:900}.detail b{display:block;font-size:17px;margin-top:3px}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #cbd2da;border-radius:12px;background:#fafbfc}.source-card{font-size:11px;color:var(--muted)}.source-card code{color:var(--maroon);font-weight:800}.pff-coming{min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center}.pff-coming h3{margin:0 0 6px;font-size:22px}.pff-coming p{max-width:650px;color:var(--muted)}
 @media(max-width:1200px){.player-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.shell{grid-template-columns:1fr}aside{display:flex;overflow:auto;border-right:0;border-bottom:1px solid #203746}.side-title{display:none}.nav{width:auto;white-space:nowrap}.toolbar{grid-template-columns:1fr 1fr}.player-grid{grid-template-columns:repeat(2,1fr)}.player-hero{grid-template-columns:190px 1fr}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){header{padding:12px}.header-inner{display:block}.header-actions{margin-top:10px;justify-content:flex-start}.brand img{width:62px;height:62px}.brand h1{font-size:23px}.shell main{padding:13px}.toolbar{grid-template-columns:1fr}.player-grid{grid-template-columns:1fr}.player-hero{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.detail-grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.opp-name{font-size:24px}}
-@media print{header,aside,.toolbar,.position-tabs,.facet-tabs,.no-print,.opponent-banner{display:none!important}.shell{display:block}.shell main{padding:0}.player-grid,.page-title,.kpis,.notice{display:none!important}.profile{border:0}.card{box-shadow:none}.player-hero{grid-template-columns:180px 1fr}.player-name{font-size:28px}.detail-grid{grid-template-columns:repeat(4,1fr)}@page{size:landscape;margin:.45in}}
+
+.print-center-overlay{display:none;position:fixed;inset:0;background:rgba(4,18,31,.72);z-index:10000;align-items:center;justify-content:center;padding:24px}
+.print-center-overlay.open{display:flex}
+.print-center{width:min(900px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);padding:22px}
+.print-center h2{margin:0 0 4px;color:var(--navy)}
+.print-center-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.print-option{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.print-option h3{margin:0 0 8px}
+.print-layouts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.print-layouts button.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.report-queue{display:flex;gap:7px;flex-wrap:wrap;min-height:42px;margin:10px 0}
+.report-chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#f7f8fa;font-size:11px;font-weight:800}
+.report-chip button{border:0;background:transparent;padding:0 2px;color:#b42318}
+.print-center-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.print-only{display:none}
+#printReport{display:none}
+.print-report-head{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #8a2432;padding:0 0 8px;margin-bottom:10px}
+.print-report-brand{display:flex;align-items:center;gap:9px}
+.print-report-brand img{width:36px;height:36px;object-fit:contain}
+.print-report-brand h1{font-size:18px;margin:0;color:#071827}
+.print-report-brand small{font-size:9px;color:#667085}
+.print-sheet{page-break-after:always;break-after:page;display:grid;gap:10px;align-content:stretch}
+.print-sheet:last-child{page-break-after:auto;break-after:auto}
+.print-sheet.pp1{grid-template-columns:1fr;grid-template-rows:1fr}
+.print-sheet.pp2{grid-template-columns:repeat(2,1fr);grid-template-rows:1fr}
+.print-sheet.pp4{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}
+.print-sheet.pp8{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr)}
+.print-profile-card{border:1px solid #cfd6df;border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column;min-width:0}
+.print-profile-top{display:grid;grid-template-columns:74px 1fr;gap:10px;padding:10px;border-bottom:2px solid #d3a83d;background:linear-gradient(135deg,#fff,#faf7ef)}
+.print-profile-top img{width:74px;height:84px;object-fit:cover;object-position:top;border-radius:8px;background:#eef1f4}
+.print-profile-name{font-size:17px;font-weight:950;color:#8a2432;line-height:1.05}
+.print-profile-meta{font-size:10px;color:#4b5563;margin-top:4px;line-height:1.35}
+.print-profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:8px}
+.print-stat{border:1px solid #e1e5ea;border-radius:7px;padding:6px;min-width:0}
+.print-stat small{display:block;font-size:7px;text-transform:uppercase;color:#667085;font-weight:900}
+.print-stat b{font-size:12px;color:#071827}
+.print-profile-section{padding:7px 9px;border-top:1px solid #e6e9ed}
+.print-profile-section h4{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#8a2432;margin:0 0 5px}
+.print-game-line,.print-note-line{font-size:9px;line-height:1.35;margin:3px 0}
+.print-note-author{font-weight:900;color:#8a2432}
+.print-profile-card.dense .print-profile-top{grid-template-columns:52px 1fr;padding:7px;gap:7px}
+.print-profile-card.dense .print-profile-top img{width:52px;height:60px}
+.print-profile-card.dense .print-profile-name{font-size:13px}
+.print-profile-card.dense .print-profile-meta{font-size:8px}
+.print-profile-card.dense .print-profile-stats{grid-template-columns:repeat(2,1fr);padding:6px;gap:4px}
+.print-profile-card.dense .print-stat{padding:4px}
+.print-profile-card.dense .print-stat b{font-size:10px}
+.print-profile-card.dense .print-profile-section{padding:5px 7px}
+.print-profile-card.dense .print-game-line,.print-profile-card.dense .print-note-line{font-size:8px}
+.print-view-header{display:none}
+
+@media(max-width:760px){.print-center-grid{grid-template-columns:1fr}}
+
+@media print{
+  @page{size:letter landscape;margin:.34in}
+  html,body{background:#fff!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  .print-center-overlay,.profile-overlay,.fau-drawer{display:none!important}
+  body.print-profiles header,body.print-profiles .shell{display:none!important}
+  body.print-profiles #printReport{display:block!important}
+  body.print-profiles .print-only{display:block!important}
+  body.print-view header,body.print-view aside,body.print-view .opponent-banner,
+  body.print-view .header-actions,body.print-view .toolbar,body.print-view .position-tabs,
+  body.print-view .facet-tabs,body.print-view .fau-tabs,body.print-view .no-print,
+  body.print-view .source-card{display:none!important}
+  body.print-view .shell{display:block!important}
+  body.print-view .shell main{padding:0!important}
+  body.print-view #app{width:100%!important}
+  body.print-view .print-view-header{display:flex!important;align-items:center;justify-content:space-between;border-bottom:3px solid #8a2432;padding-bottom:8px;margin-bottom:10px}
+  body.print-view .print-view-header img{width:38px;height:38px}
+  body.print-view .page-title{margin-bottom:8px}
+  body.print-view .card{box-shadow:none!important;break-inside:avoid;border-color:#cfd6df}
+  body.print-view table{font-size:9px}
+  body.print-view th,body.print-view td{padding:5px 6px}
+  body.print-view .kpis{break-inside:avoid}
+  body.print-view .run-diagram,body.print-view .heat-field{break-inside:avoid}
+  body.print-view .player-grid{grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
+  body.print-view .player-card{break-inside:avoid;min-height:0!important}
+  body.print-view .player-card .player-photo{min-height:110px!important;height:110px!important}
+  body.print-view .player-card .player-body{padding:8px!important}
+  body.print-view .player-card .fau-card-actions{display:none!important}
+  .print-sheet{height:7.18in}
+}
+
 
 .data-status{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 15px}.data-chip{font-size:9px;font-weight:900;border-radius:999px;padding:5px 8px;border:1px solid #d8dee6;background:#fff;color:var(--muted)}.data-chip.ok{background:#e8f5ef;color:var(--good);border-color:#b9ddcb}.data-chip.bad{background:#fff0f0;color:#9b3232;border-color:#efc1c1}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}.data-table{width:100%;border-collapse:collapse;background:#fff;font-size:11px}.data-table th{position:sticky;top:0;background:#0d2234;color:#fff;text-align:left;padding:9px 8px;white-space:nowrap}.data-table td{padding:8px;border-top:1px solid #edf0f3;white-space:nowrap}.data-table tr:hover td{background:#fffaf0}.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:10px}.section-head h3{margin:0}.section-head small{color:var(--muted)}.metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.metric{background:#f7f8fa;border:1px solid #e2e6eb;border-radius:10px;padding:10px}.metric span{display:block;font-size:8px;text-transform:uppercase;font-weight:900;color:var(--muted)}.metric b{display:block;font-size:18px;color:var(--maroon);margin-top:3px}.subtle{color:var(--muted);font-size:11px}
@@ -108,6 +191,39 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 <div class="shell"><aside><div class="side-title">DEFENSIVE STAFF<div class="side-sub">Mississippi State Week</div></div><button class="nav" data-page="dashboard">⌂ Dashboard</button><button class="nav active" data-page="players">♟ Player Intelligence</button><button class="nav" data-page="personnel">▦ Personnel & Formations</button><button class="nav" data-page="run">↗ Run Game</button><button class="nav" data-page="pass">◎ Pass Game</button><button class="nav" data-page="heatmaps">▦ Passing Heat Maps</button><button class="nav" data-page="coverage">◫ Coverage Response</button><button class="nav" data-page="situations"># Situations</button><button class="nav" data-page="rushcount">⇧ Rush Count</button><button class="nav" data-page="pressure">✥ Pressure Response</button></aside><main><div class="opponent-banner"><div><div class="kicker">2026 Opponent Workspace</div><div class="opp-name">Mississippi State</div><div class="opp-meta">Defensive staff · opponent offense scouting</div></div><div class="live-pill">LIVE ROSTER SOURCE</div></div><div id="app"></div></main></div>
 <div id="profileOverlay" class="profile-overlay" onclick="closeFAUProfile()"></div>
 <aside id="fauDrawer" class="fau-drawer" aria-label="Player profile"><div id="fauDrawerBody"></div></aside>
+<div id="printCenterOverlay" class="print-center-overlay" onclick="if(event.target===this)closePrintCenter()">
+  <div class="print-center">
+    <h2>Print / Save PDF</h2>
+    <div class="subtle">Choose a polished scouting view or build a player profile pack.</div>
+    <div class="print-center-grid">
+      <div class="print-option">
+        <h3>Current Scouting View</h3>
+        <div class="subtle">Print the page you are currently viewing with the navigation and browser-only controls removed.</div>
+        <div style="margin-top:12px"><button class="primary" onclick="printCurrentView()">Print Current View</button></div>
+      </div>
+      <div class="print-option">
+        <h3>Player Profile Pack</h3>
+        <div class="subtle">Add players to the report, choose how many profiles fit on each sheet, then print or save as PDF.</div>
+        <div class="print-layouts">
+          <button id="pp1" onclick="setProfilesPerPage(1)">1 / page</button>
+          <button id="pp2" onclick="setProfilesPerPage(2)">2 / page</button>
+          <button id="pp4" class="active" onclick="setProfilesPerPage(4)">4 / page</button>
+          <button id="pp8" onclick="setProfilesPerPage(8)">8 / page</button>
+        </div>
+        <div id="reportQueue" class="report-queue"></div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button onclick="addCurrentPlayerToReport()">Add Current Player</button>
+          <button onclick="addVisiblePlayersToReport()">Add Visible Players</button>
+          <button onclick="clearReportQueue()">Clear</button>
+        </div>
+        <div style="margin-top:12px"><button class="primary" onclick="printProfilePack()">Print Profile Pack</button></div>
+      </div>
+    </div>
+    <div class="print-center-actions"><button onclick="closePrintCenter()">Close</button></div>
+  </div>
+</div>
+<div id="printReport" class="print-only"></div>
+
 <script>
 
 const SUPABASE_BASE='https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public';
@@ -118,7 +234,7 @@ const SUPABASE_KEY='sb_publishable_FtmUeN1QkLlkRIqCIdQ5gw_KDbEFy1H';
 const NOTES_API=SUPABASE_URL+'/rest/v1/defensive_player_notes';
 const NOTES_TEAM='Mississippi State';
 const NOTES_SEASON=2026;
-let cloudNotes={};
+let cloudNotes={}; let reportQueue=[]; let printProfilesPerPage=4;
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',heatQB='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',dndFilter='ALL';
 const $=id=>document.getElementById(id);
@@ -429,8 +545,10 @@ function renderCoachNoteThread(rows){
    return;
  }
  el.innerHTML=rows.map(row=>{
-   let who=row.created_by||row.updated_by||'Staff';
-   let when=row.created_at||row.updated_at;
+   let created=String(row.created_by||'').trim(),updated=String(row.updated_by||'').trim();
+   let changed=created&&updated&&created!==updated;
+   let who=changed?`${created} · updated by ${updated}`:(updated||created||'Staff');
+   let when=changed?(row.updated_at||row.created_at):(row.created_at||row.updated_at);
    return `<div class="note-entry"><div class="note-entry-head"><div class="note-entry-author">${esc(who)}</div><div class="note-entry-time">${esc(noteTime(when))}</div></div><div class="note-entry-text">${esc(row.note||'')}</div></div>`;
  }).join('');
 }
@@ -511,7 +629,113 @@ window.saveCoachNoteForPlayer=async()=>{
 };
 window.saveCoachNote=()=>window.saveCoachNoteForPlayer();
 
-function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="window.print()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Routes & Usage'],['tendencies','Coverage / Tendencies'],['games','Game Log'],['compare','Comparison'],['notes','Coach Notes']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):facet==='games'?games(p):facet==='compare'?comparison(p):coachNotes(p)}</div>`}
+function resolvedReportPlayer(v){
+ if(!v)return null;
+ if(typeof v==='object')return v;
+ return resolveRosterPlayer(v)||roster.find(p=>p.name===v)||null;
+}
+function addPlayerToReport(v){
+ let p=resolvedReportPlayer(v);
+ if(!p)return;
+ if(!reportQueue.includes(p.name))reportQueue.push(p.name);
+ renderReportQueue();
+}
+function removePlayerFromReport(name){
+ reportQueue=reportQueue.filter(x=>x!==name);
+ renderReportQueue();
+}
+function clearReportQueue(){reportQueue=[];renderReportQueue()}
+function addCurrentPlayerToReport(){addPlayerToReport(selected)}
+function addVisiblePlayersToReport(){
+ let list=page==='players'?filteredPlayers():offenseRoster();
+ list.forEach(p=>{if(!reportQueue.includes(p.name))reportQueue.push(p.name)});
+ renderReportQueue();
+}
+function renderReportQueue(){
+ let el=$('reportQueue');
+ if(!el)return;
+ el.innerHTML=reportQueue.length?reportQueue.map(n=>`<span class="report-chip">${esc(n)} <button onclick='removePlayerFromReport(${JSON.stringify(n)})'>×</button></span>`).join(''):'<span class="subtle">No players added yet.</span>';
+ [1,2,4,8].forEach(n=>{let b=$('pp'+n);if(b)b.classList.toggle('active',printProfilesPerPage===n)});
+}
+function setProfilesPerPage(n){printProfilesPerPage=n;renderReportQueue()}
+function openPrintCenter(){let el=$('printCenterOverlay');if(el){el.classList.add('open');renderReportQueue()}}
+function closePrintCenter(){let el=$('printCenterOverlay');if(el)el.classList.remove('open')}
+function printViewHeaderHTML(){
+ let titles={dashboard:'Dashboard',players:'Player Intelligence',personnel:'Personnel & Formations',run:'Run Game',pass:'Pass Game',heatmaps:'Passing Heat Maps',coverage:'Coverage Response',situations:'Situations',rushcount:'Rush Count',pressure:'Pressure Response'};
+ return `<div class="print-view-header"><div style="display:flex;align-items:center;gap:9px"><img src="ulm_avg_roundel_edge_star.png"><div><b>ULM DEFENSIVE INTELLIGENCE</b><div style="font-size:9px;color:#667085">Mississippi State · ${esc(titles[page]||'Scouting Report')}</div></div></div><div style="font-size:9px;font-weight:900">2026 OPPONENT SCOUTING</div></div>`;
+}
+function ensurePrintViewHeader(){
+ let app=$('app'); if(!app)return;
+ let old=$('printViewHeader'); if(old)old.remove();
+ app.insertAdjacentHTML('afterbegin',`<div id="printViewHeader">${printViewHeaderHTML()}</div>`);
+}
+function printCurrentView(){
+ closePrintCenter();
+ ensurePrintViewHeader();
+ document.body.classList.remove('print-profiles');
+ document.body.classList.add('print-view');
+ setTimeout(()=>window.print(),80);
+}
+function printNoteAuthor(row){
+ let c=String(row?.created_by||'').trim(),u=String(row?.updated_by||'').trim();
+ if(c&&u&&c!==u)return `${c} → ${u}`;
+ return u||c||'Staff';
+}
+async function fetchPlayerNotesForPrint(p){
+ let key=notePlayerKey(p);
+ if(Array.isArray(cloudNotes[key]))return cloudNotes[key];
+ try{
+   let q=`?select=*&team=eq.${encodeURIComponent(NOTES_TEAM)}&season=eq.${NOTES_SEASON}&player_name=eq.${encodeURIComponent(p.name)}&order=created_at.asc`;
+   let rows=await notesRequest(NOTES_API+q);
+   cloudNotes[key]=Array.isArray(rows)?rows:[];
+   return cloudNotes[key];
+ }catch{return []}
+}
+function printPlayerCardHTML(p,notes,perPage){
+ let stats=playerSeasonStats(p),dense=perPage>=8,medium=perPage>=4;
+ let statCount=dense?4:medium?6:9;
+ let games=relevantGameRows(p).sort((a,b)=>gameScore(p,b)-gameScore(p,a)).slice(0,dense?1:medium?2:3);
+ let noteCount=dense?1:medium?2:3,ns=(notes||[]).slice(-noteCount);
+ let pos=normPos(p.position);
+ let img=p.image?`<img src="${esc(p.image)}" alt="">`:`<div style="width:74px;height:84px;background:#eef1f4;border-radius:8px"></div>`;
+ let gameLines=games.map(g=>{
+   let production=pos==='QB'?`${g.passY+g.rushY} total yds · ${g.passTD} TD · ${g.int} INT`:pos==='RB'?`${g.rushY+g.recY} scrimmage yds · ${g.td} TD`:['WR','TE'].includes(pos)?`${g.rec}/${g.tgt} · ${g.recY} yds · ${g.td} TD`:`${g.plays} linked snaps`;
+   return `<div class="print-game-line"><b>vs ${esc(g.opp||'Opponent')}</b> · ${esc(String(g.date||''))}<br>${production}</div>`;
+ }).join('');
+ let noteLines=ns.map(n=>`<div class="print-note-line"><span class="print-note-author">${esc(printNoteAuthor(n))}</span> · ${esc(noteTime(n.updated_at||n.created_at))}<br>${esc(n.note||'')}</div>`).join('');
+ return `<article class="print-profile-card ${dense?'dense':''}">
+   <div class="print-profile-top">${img}<div><div class="print-profile-name">${esc(p.name)}</div><div class="print-profile-meta">${esc(p.position||'')} · #${esc(p.number||'—')}${p.class?` · ${esc(p.class)}`:''}${p.height?`<br>${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}</div></div></div>
+   <div class="print-profile-stats">${stats.slice(0,statCount).map(([l,v])=>`<div class="print-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div>
+   ${games.length?`<div class="print-profile-section"><h4>Top Production</h4>${gameLines}</div>`:''}
+   ${ns.length?`<div class="print-profile-section"><h4>Staff Notes</h4>${noteLines}</div>`:''}
+ </article>`;
+}
+async function printProfilePack(){
+ let players=reportQueue.map(resolvedReportPlayer).filter(Boolean);
+ if(!players.length){
+   let p=resolvedReportPlayer(selected);
+   if(p){players=[p];reportQueue=[p.name];renderReportQueue()}
+ }
+ if(!players.length){alert('Add at least one player to the report first.');return}
+ closePrintCenter();
+ let noteSets=await Promise.all(players.map(fetchPlayerNotesForPrint));
+ let cards=players.map((p,i)=>({p,notes:noteSets[i]}));
+ let sheets=[];
+ for(let i=0;i<cards.length;i+=printProfilesPerPage){
+   let group=cards.slice(i,i+printProfilesPerPage);
+   sheets.push(`<section class="print-sheet pp${printProfilesPerPage}">
+     ${group.map(x=>printPlayerCardHTML(x.p,x.notes,printProfilesPerPage)).join('')}
+   </section>`);
+ }
+ $('printReport').innerHTML=`<div class="print-report-head"><div class="print-report-brand"><img src="ulm_avg_roundel_edge_star.png"><div><h1>ULM Defensive Intelligence</h1><small>Mississippi State · Player Profile Pack</small></div></div><div style="font-size:9px;font-weight:900">2026 OPPONENT SCOUTING</div></div>${sheets.join('')}`;
+ document.body.classList.remove('print-view');
+ document.body.classList.add('print-profiles');
+ setTimeout(()=>window.print(),100);
+}
+window.addEventListener('afterprint',()=>{document.body.classList.remove('print-view','print-profiles')});
+
+
+function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="addPlayerToReport(selected);openPrintCenter()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Routes & Usage'],['tendencies','Coverage / Tendencies'],['games','Game Log'],['compare','Comparison'],['notes','Coach Notes']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):facet==='games'?games(p):facet==='compare'?comparison(p):coachNotes(p)}</div>`}
 
 function pffRowForPlayer(p){let pos=normPos(p.position);return pos==='QB'?findPlayerRow('qb',p.name):['WR','TE','RB'].includes(pos)?findPlayerRow('receiving',p.name):findPlayerRow('passBlocking',p.name)}
 function playerSeasonStats(p){
@@ -866,7 +1090,7 @@ function closeFAUProfile(){
 }
 function renderFAUDrawer(p){
  let pos=normPos(p.position),stats=playerSeasonStats(p),linked=playsForPlayer(p.name).length;
- $('fauDrawerBody').innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(pos)} · Mississippi State</div></div><div class="drawer-spacer"></div>${p.profile?`<button onclick='window.open(${JSON.stringify(p.profile)},"_blank")'>Official Bio ↗</button>`:''}<button onclick="window.print()">Add to Report</button></div><div class="fau-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="fau-hero-info"><div class="kicker">MISSISSIPPI STATE PLAYER INTELLIGENCE</div><div class="fau-hero-name">${esc(p.name)}</div><div class="fau-hero-pos">${esc(p.position||'')} · #${esc(p.number||'—')}</div><div class="fau-meta">${p.height?esc(p.height):''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.class?` · ${esc(p.class)}`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="season-title">2025 SEASON STATS</div><div class="fau-season-grid">${stats.slice(0,9).map(([l,v])=>`<div class="fau-season-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div><div class="sample-row"><span class="sample-badge">${linked>=30?'Large Sample':linked>=10?'Medium Sample':'Small Sample'}</span><span>${linked} matched historical play-feed events</span></div></div></div><div class="fau-tabs">${[['overview','Overview'],['passing','Passing'],['rushing','Rushing'],['routes','Routes'],['top','Top Games'],['targets','Targets'],['coverage','Vs Coverage'],['manzone','Man / Zone'],['games','Game Log'],['notes','Coach Notes']].map(([id,l])=>`<button class="fau-tab ${portalTab===id?'active':''}" onclick="setPortalTab('${id}')">${l}</button>`).join('')}</div><div id="fauPanel" class="fau-panel">${renderPortalTab(p)}</div>`;
+ $('fauDrawerBody').innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(pos)} · Mississippi State</div></div><div class="drawer-spacer"></div>${p.profile?`<button onclick='window.open(${JSON.stringify(p.profile)},"_blank")'>Official Bio ↗</button>`:''}<button onclick="addPlayerToReport(selected)">Add to Report</button></div><div class="fau-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="fau-hero-info"><div class="kicker">MISSISSIPPI STATE PLAYER INTELLIGENCE</div><div class="fau-hero-name">${esc(p.name)}</div><div class="fau-hero-pos">${esc(p.position||'')} · #${esc(p.number||'—')}</div><div class="fau-meta">${p.height?esc(p.height):''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.class?` · ${esc(p.class)}`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="season-title">2025 SEASON STATS</div><div class="fau-season-grid">${stats.slice(0,9).map(([l,v])=>`<div class="fau-season-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div><div class="sample-row"><span class="sample-badge">${linked>=30?'Large Sample':linked>=10?'Medium Sample':'Small Sample'}</span><span>${linked} matched historical play-feed events</span></div></div></div><div class="fau-tabs">${[['overview','Overview'],['passing','Passing'],['rushing','Rushing'],['routes','Routes'],['top','Top Games'],['targets','Targets'],['coverage','Vs Coverage'],['manzone','Man / Zone'],['games','Game Log'],['notes','Coach Notes']].map(([id,l])=>`<button class="fau-tab ${portalTab===id?'active':''}" onclick="setPortalTab('${id}')">${l}</button>`).join('')}</div><div id="fauPanel" class="fau-panel">${renderPortalTab(p)}</div>`;
 }
 window.setPortalTab=id=>{portalTab=id;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};
 window.setRouteFocus=r=>{routeFocus=r;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};
@@ -1222,7 +1446,7 @@ document.addEventListener('click',e=>{
  if(card && !e.target.closest('button,a')) openPlayerIndex(Number(card.dataset.playerIndex));
 });
 async function loadRoster(){let h=$('headerStatus');h.textContent='Loading Mississippi State roster + PFF…';let data=null;try{let r=await fetch('/api/roster?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}if(!data){try{let r=await fetch(STORAGE_ROSTER+'?v='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json()}catch(e){}}roster=Array.isArray(data)?data:Array.isArray(data?.players)?data.players:[];await Promise.all(Object.keys(FILES).map(fetchCSV));let ok=Object.values(loadState).filter(x=>x.ok).length;h.textContent=roster.length?`Supabase live • ${roster.length} roster players • ${ok}/${Object.keys(FILES).length} PFF files`:`Roster failed • ${ok}/${Object.keys(FILES).length} PFF files`;render()}
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{page=b.dataset.page;syncNav();render()});$('reloadBtn').onclick=loadRoster;$('printBtn').onclick=()=>window.print();render();loadRoster();
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{page=b.dataset.page;syncNav();render()});$('reloadBtn').onclick=loadRoster;$('printBtn').onclick=openPrintCenter;render();loadRoster();
 
 </script>
 
