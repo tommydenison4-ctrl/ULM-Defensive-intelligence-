@@ -31,7 +31,10 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .freq-cell{font-weight:900}.freq-cell small{display:block;font-weight:700;color:var(--muted);margin-top:2px}.freq-cell .primary-val{font-size:13px;color:var(--ink)}
 .heat-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 14px}.route-pill-wrap{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.route-pill-wrap button{white-space:nowrap}.heat-controls select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;font-weight:800}
 .heat-field{position:relative;background:linear-gradient(90deg,#edf6ee,#f7fbf7);border:3px solid #fff;outline:1px solid #cfd8cf;border-radius:12px;overflow:hidden;min-height:520px}.heat-field:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(10% - 1px),rgba(20,80,35,.12) calc(10% - 1px),rgba(20,80,35,.12) 10%);pointer-events:none}.heat-field:after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(20,80,35,.18);pointer-events:none}
-.heat-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);min-height:520px}.heat-cell{border-right:1px solid rgba(20,80,35,.11);border-bottom:1px solid rgba(20,80,35,.11);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;position:relative}.heat-cell b{font-size:25px;line-height:1}.heat-cell span{font-size:9px;font-weight:900;text-transform:uppercase;margin-top:4px}.heat-cell small{font-size:9px;margin-top:3px}.heat-cell.zero{opacity:.35}.heat-axis{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-weight:900;margin-top:5px}.heat-legend{font-size:10px;color:var(--muted);margin-top:8px}.heat-summary{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:10px 0}.heat-summary .metric{min-width:0}
+.heat-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);min-height:520px}
+.heat-grid-4{grid-template-rows:repeat(4,1fr);min-height:500px}
+.heat-qb-row{height:34px;position:relative;border-bottom:2px solid #0f172a;margin:0 0 2px}
+.heat-qb-marker{position:absolute;top:2px;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:11px;font-weight:950;border-radius:999px;padding:5px 9px;min-width:32px;text-align:center}.heat-cell{border-right:1px solid rgba(20,80,35,.11);border-bottom:1px solid rgba(20,80,35,.11);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5px;position:relative}.heat-cell b{font-size:25px;line-height:1}.heat-cell span{font-size:9px;font-weight:900;text-transform:uppercase;margin-top:4px}.heat-cell small{font-size:9px;margin-top:3px}.heat-cell.zero{opacity:.35}.heat-axis{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-weight:900;margin-top:5px}.heat-legend{font-size:10px;color:var(--muted);margin-top:8px}.heat-summary{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:10px 0}.heat-summary .metric{min-width:0}
 .player-drawer{border-top:5px solid var(--gold);box-shadow:0 12px 34px rgba(8,27,49,.13)}.compare-notes{display:grid;grid-template-columns:1fr 1fr;gap:12px}.coach-notes textarea{width:100%;min-height:130px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit}.profile-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.profile-tabs button.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
 @media(max-width:900px){.heat-summary{grid-template-columns:repeat(3,1fr)}.compare-notes{grid-template-columns:1fr}}@media(max-width:620px){.heat-grid{min-height:420px}.heat-summary{grid-template-columns:repeat(2,1fr)}}
 
@@ -116,7 +119,7 @@ const NOTES_TEAM='Mississippi State';
 const NOTES_SEASON=2026;
 let cloudNotes={};
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
-let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',dndFilter='ALL';
+let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',dndFilter='ALL';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const num=v=>{let n=parseFloat(String(v??'').replace(/[%,$]/g,''));return Number.isFinite(n)?n:0};
@@ -256,6 +259,11 @@ function heatFiltered(){
  if(heatScope==='man')rows=rows.filter(r=>isManCov(r.pff_PASS_COVERAGE_BASIC));
  if(heatScope==='zone')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC&&!isManCov(r.pff_PASS_COVERAGE_BASIC));
  if(heatScope==='coverage'&&heatCoverage!=='ALL')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC===heatCoverage);
+ if(heatHash!=='ALL')rows=rows.filter(r=>{
+   let h=String(r.pff_HASH||'').trim().toUpperCase();
+   let bucket=h.startsWith('L')?'L':h.startsWith('R')?'R':'C';
+   return bucket===heatHash;
+ });
  rows=rows.filter(dndMatches);
  return rows;
 }
@@ -276,12 +284,12 @@ function heatBin(r){
  }
  let offCol=Math.max(0,Math.min(4,Math.floor((w/53.34)*5)));
  let col=4-offCol;
- let row=d<-5?0:d<0?1:d<10?2:d<20?3:4;
+ let row=d<0?0:d<10?1:d<20?2:3;
  return [row,col];
 }
 function heatmapPage(){
  let base=heatFiltered(), attempts=base.filter(r=>heatMetricHit(r));
- let cells=Array.from({length:25},()=>({n:0,y:0,att:0,comp:0}));
+ let cells=Array.from({length:20},()=>({n:0,y:0,att:0,comp:0}));
  base.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc],res=String(r.pff_PASSRESULT||'').toUpperCase();c.att++;if(res==='COMPLETE')c.comp++;});
  attempts.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc];c.n++;c.y+=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)});
  let max=Math.max(1,...cells.map(c=>heatMetric==='yards'?c.y:c.n)),total=heatMetric==='yards'?cells.reduce((s,c)=>s+c.y,0):cells.reduce((s,c)=>s+c.n,0);
@@ -289,18 +297,20 @@ function heatmapPage(){
  let att=base.filter(r=>['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(String(r.pff_PASSRESULT||'').toUpperCase())).length;
  let comp=base.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
  let gains=base.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),expl=gains.filter(x=>x>=15).length,neg=gains.filter(x=>x<=0).length,td=base.filter(isPassTouchdown).length,ints=base.filter(isInterception).length;
- let labels=['<-5','-5–-1','0–9','10–19','20+'];
+ let labels=['Behind LOS','0–9','10–19','20+'];
  return `<div class="page-title"><h2>Passing Heat Maps</h2><p>Mississippi State target location by all throws, man/zone and every tagged coverage.</p></div>${dataStatus()}
  <div class="card">
    <div class="heat-controls">
     <div class="view-toggle">${[['all','ALL'],['man','MAN'],['zone','ZONE'],['coverage','COVERAGE']].map(([v,l])=>`<button class="${heatScope===v?'active':''}" onclick="setHeatScope('${v}')">${l}</button>`).join('')}</div>
     ${heatScope==='coverage'?`<select onchange="setHeatCoverage(this.value)"><option value="ALL">All coverages</option>${covs.map(c=>`<option ${heatCoverage===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`:''}
+    <select onchange="setHeatHash(this.value)"><option value="ALL" ${heatHash==='ALL'?'selected':''}>All Hashes</option><option value="L" ${heatHash==='L'?'selected':''}>Left Hash</option><option value="C" ${heatHash==='C'?'selected':''}>Middle</option><option value="R" ${heatHash==='R'?'selected':''}>Right Hash</option></select>
     <select onchange="setHeatMetric(this.value)">${[['attempts','Attempts'],['completions','Completions'],['explosives','Explosives 15+'],['td','Touchdowns'],['int','Interceptions'],['yards','Yards']].map(([v,l])=>`<option value="${v}" ${heatMetric===v?'selected':''}>${l}</option>`).join('')}</select>
     ${dndSelect()}
     ${freqToggle()}
    </div>
    <div class="heat-summary">${metric('Attempts',att)}${metric('Completions',comp)}${metric('Comp %',pct(100*comp/Math.max(1,att)))}${metric('YPP',fmt(avg(gains),2))}${metric('Median YPP',fmt(calcMedian(gains),1))}${metric('Explosives',expl)}${metric('Pass TD',td)}${metric('INT',ints)}</div>
-   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div></div>
+   <div class="heat-qb-row"><div class="heat-qb-marker" style="left:${heatHash==='R'?'22%':heatHash==='L'?'78%':'50%'}">QB</div></div>
+   <div class="heat-field"><div class="heat-grid heat-grid-4">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div></div>
    <div class="heat-axis"><span>OFFENSE RIGHT</span><span>DEFENSIVE VIEW</span><span>OFFENSE LEFT</span></div>
  </div>`;
 }
@@ -706,7 +716,7 @@ function targetsPanel(p){
  let total=cells.reduce((s,c)=>s+c.n,0),max=Math.max(1,...cells.map(c=>c.n));
  let comp=rows.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
  let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
- let labels=['<-5','-5–-1','0–9','10–19','20+'];
+ let labels=['Behind LOS','0–9','10–19','20+'];
  return `<div class="card">
    <div class="section-head"><div><h3>Targets</h3><small>Receiver target heat map by depth and width. Each square shows where this player is targeted most often.</small></div>${freqToggle()}</div>
    <div class="heat-summary">${metric('Targets',rows.length)}${metric('Catches',comp)}${metric('Catch %',pct(100*comp/Math.max(1,rows.length)))}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric(freqMode==='raw'?'Explosives':'Explosive %',freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,rows.length)))}${metric('TD',rows.filter(isPassTouchdown).length)}</div>
@@ -1156,7 +1166,7 @@ function pressurePage(){let prs=datasets.pressure||[],plays=(datasets.plays||[])
 function render(){let app=$('app');if(page==='players')app.innerHTML=playersPage();else if(page==='dashboard')app.innerHTML=dashboardPage();else if(page==='personnel')app.innerHTML=personnelPage();else if(page==='run')app.innerHTML=runPage();else if(page==='pass')app.innerHTML=passPage();else if(page==='heatmaps')app.innerHTML=heatmapPage();else if(page==='coverage')app.innerHTML=coveragePage();else if(page==='situations')app.innerHTML=situationsPage();else if(page==='rushcount')app.innerHTML=rushCountPage();else app.innerHTML=pressurePage()}
 function syncNav(){document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
 window.setGroup=id=>{group=id;selected=null;facet='overview';render()};window.openPlayer=name=>openFAUProfile(name);window.setFacet=id=>{facet=id;render()};
-window.setFreqMode=v=>{freqMode=v;render()};window.setDndFilter=v=>{dndFilter=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
+window.setFreqMode=v=>{freqMode=v;render()};window.setDndFilter=v=>{dndFilter=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setHeatHash=v=>{heatHash=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
 window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel')runPersonnelF=v;else if(kind==='formation')runFormationF=v;render()};
 window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';dndFilter='ALL';render()};
 document.addEventListener('click',e=>{

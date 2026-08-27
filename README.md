@@ -1,20 +1,19 @@
-# ULM Defensive Intelligence — Mississippi State v32
+# ULM Defensive Intelligence — Mississippi State v33
 
-True defensive viewing orientation.
-
-Run Game:
-- Offense is at the top.
-- Defense is at the bottom.
-- Run paths move top to bottom through the line of scrimmage.
-- Offensive left/right is mirrored for the defensive staff view.
-- Offensive Left D is visually on the defense's right side; Offensive Right D is on the defense's left side.
-
-Passing Heat Maps:
-- Behind-LOS / shortest throws are at the top.
-- Deep throws are at the bottom.
-- Horizontal field position is mirrored as well:
-  - offense right appears on the left side of the defensive view
-  - offense left appears on the right side
-- All existing filters, RAW/% controls and D&D filters remain unchanged.
-
-No underlying statistics were changed. This is display orientation only.
+Passing Heat Map update:
+- Added a QB marker at the top of the chart.
+- Added hash filter:
+  - All Hashes
+  - Left Hash
+  - Middle
+  - Right Hash
+- The QB marker moves left / middle / right based on the selected offensive hash in the defensive viewing orientation.
+- Offensive Left Hash appears on the defense's right side of the screen.
+- Offensive Right Hash appears on the defense's left side of the screen.
+- The two previous behind-the-line rows are combined into one `Behind LOS` row.
+- Heat map is now 4 depth rows:
+  - Behind LOS
+  - 0-9
+  - 10-19
+  - 20+
+- All existing D&D, coverage, man/zone, metric and RAW/% filters remain.
