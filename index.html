@@ -218,9 +218,9 @@ function dndDistanceBucket(dist){
  return'13+';
 }
 function dndLabel(r){
- let raw=String(r?.pff_DOWN??'').trim().toUpperCase(), dist=num(r?.pff_DISTANCE);
- if(raw==='P'||raw.startsWith('P '))return'P & 10';
- let down=Math.round(num(r?.pff_DOWN));
+ let dist=num(r?.pff_DISTANCE), down=Math.round(num(r?.pff_DOWN)), drivePlay=Math.round(num(r?.pff_DRIVEPLAY));
+ // P & 10 = first offensive play of a possession/drive with 10 to go.
+ if(drivePlay===1 && down===1 && dist===10)return'P & 10';
  if(down===1){
    if(dist>=15)return'1 & 15+';
    if(dist<=5)return'1 & 5';
