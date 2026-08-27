@@ -106,7 +106,7 @@ const NOTES_TEAM='Mississippi State';
 const NOTES_SEASON=2026;
 let cloudNotes={};
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
-let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runDownF='ALL',runDistF='ALL';
+let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',dndFilter='ALL';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const num=v=>{let n=parseFloat(String(v??'').replace(/[%,$]/g,''));return Number.isFinite(n)?n:0};
@@ -207,6 +207,38 @@ function countPctVal(total,percent,label='plays'){
    : `<div class="freq-cell"><span class="primary-val">${esc(p)}</span><small>${raw} ${esc(label)}</small></div>`;
 }
 function calcMedian(a){let x=a.map(num).filter(Number.isFinite).sort((a,b)=>a-b);if(!x.length)return 0;let m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
+
+function dndDistanceBucket(dist){
+ dist=num(dist);
+ if(dist<=2)return'1-2';
+ if(dist===3)return'3';
+ if(dist<=6)return'4-6';
+ if(dist<=9)return'7-9';
+ if(dist<=12)return'10-12';
+ return'13+';
+}
+function dndLabel(r){
+ let raw=String(r?.pff_DOWN??'').trim().toUpperCase(), dist=num(r?.pff_DISTANCE);
+ if(raw==='P'||raw.startsWith('P '))return'P & 10';
+ let down=Math.round(num(r?.pff_DOWN));
+ if(down===1){
+   if(dist>=15)return'1 & 15+';
+   if(dist<=5)return'1 & 5';
+   return'1 & 10';
+ }
+ if([2,3,4].includes(down))return `${down} & ${dndDistanceBucket(dist)}`;
+ return'';
+}
+function dndOptions(){
+ let a=[['ALL','All D&D'],['P & 10','P & 10'],['1 & 10','1 & 10'],['1 & 15+','1 & 15+'],['1 & 5','1 & 5']];
+ [2,3,4].forEach(d=>['1-2','3','4-6','7-9','10-12','13+'].forEach(x=>a.push([`${d} & ${x}`,`${d} & ${x}`])));
+ return a;
+}
+function dndSelect(onchange='setDndFilter(this.value)'){
+ return `<label>Down & Distance<select onchange="${onchange}">${dndOptions().map(([v,l])=>`<option value="${v}" ${dndFilter===v?'selected':''}>${l}</option>`).join('')}</select></label>`;
+}
+function dndMatches(r){return dndFilter==='ALL'||dndLabel(r)===dndFilter}
+
 function isManCov(c){c=String(c||'').toUpperCase();return c==='COVER 0'||c==='COVER 1'||c==='COVER 2 MAN'||c.includes('2 MAN')}
 function throwRows(){return (datasets.plays||[]).filter(r=>r.pff_RUNPASS==='P' && r.pff_PASSER && (r.pff_PASSDEPTH!==''||r.pff_PASSWIDTH!==''||r.pff_PASSZONE))}
 function heatFiltered(){
@@ -214,6 +246,7 @@ function heatFiltered(){
  if(heatScope==='man')rows=rows.filter(r=>isManCov(r.pff_PASS_COVERAGE_BASIC));
  if(heatScope==='zone')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC&&!isManCov(r.pff_PASS_COVERAGE_BASIC));
  if(heatScope==='coverage'&&heatCoverage!=='ALL')rows=rows.filter(r=>r.pff_PASS_COVERAGE_BASIC===heatCoverage);
+ rows=rows.filter(dndMatches);
  return rows;
 }
 function heatMetricHit(r){
@@ -252,6 +285,7 @@ function heatmapPage(){
     <div class="view-toggle">${[['all','ALL'],['man','MAN'],['zone','ZONE'],['coverage','COVERAGE']].map(([v,l])=>`<button class="${heatScope===v?'active':''}" onclick="setHeatScope('${v}')">${l}</button>`).join('')}</div>
     ${heatScope==='coverage'?`<select onchange="setHeatCoverage(this.value)"><option value="ALL">All coverages</option>${covs.map(c=>`<option ${heatCoverage===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`:''}
     <select onchange="setHeatMetric(this.value)">${[['attempts','Attempts'],['completions','Completions'],['explosives','Explosives 15+'],['td','Touchdowns'],['int','Interceptions'],['yards','Yards']].map(([v,l])=>`<option value="${v}" ${heatMetric===v?'selected':''}>${l}</option>`).join('')}</select>
+    ${dndSelect()}
     ${freqToggle()}
    </div>
    <div class="heat-summary">${metric('Attempts',att)}${metric('Completions',comp)}${metric('Comp %',pct(100*comp/Math.max(1,att)))}${metric('YPP',fmt(avg(gains),2))}${metric('Median YPP',fmt(calcMedian(gains),1))}${metric('Explosives',expl)}${metric('Pass TD',td)}${metric('INT',ints)}</div>
@@ -789,10 +823,7 @@ function normalizePOA(v){
  if(s.includes('RIGHT END')||s==='REND')return'RE';
  return '';
 }
-function runDistBucket(r){
- let d=num(r.pff_DISTANCE);
- if(d<=3)return'SHORT';if(d<=7)return'MED';return'LONG';
-}
+
 function selectedRunRows(concept){
  return (datasets.plays||[]).filter(r=>{
    if(!runConceptMatch(r,concept))return false;
@@ -800,8 +831,7 @@ function selectedRunRows(concept){
    if(runRBSideF!=='ALL'&&rbSideFromRow(r)!==runRBSideF)return false;
    if(runPersonnelF!=='ALL'&&String(r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'')!==runPersonnelF)return false;
    if(runFormationF!=='ALL'&&String(r.pff_OFFFORMATIONGROUP||'')!==runFormationF)return false;
-   if(runDownF!=='ALL'&&String(Math.round(num(r.pff_DOWN)))!==runDownF)return false;
-   if(runDistF!=='ALL'&&runDistBucket(r)!==runDistF)return false;
+   if(!dndMatches(r))return false;
    return true;
  });
 }
@@ -881,8 +911,7 @@ function runVisualizer(){
   <label>RB Side<select onchange="setRunFilter('rb',this.value)">${[['ALL','All RB Alignments'],['LEFT','RB Left'],['RIGHT','RB Right'],['CENTER','Pistol / Center'],['SPLIT','Split Backs'],['UNKNOWN','Unknown']].map(([v,l])=>`<option value="${v}" ${runRBSideF===v?'selected':''}>${l}</option>`).join('')}</select></label>
   <label>Personnel<select onchange="setRunFilter('personnel',this.value)">${personnel.map(v=>`<option value="${esc(v)}" ${runPersonnelF===v?'selected':''}>${v==='ALL'?'All Personnel':v}</option>`).join('')}</select></label>
   <label>Formation<select onchange="setRunFilter('formation',this.value)">${forms.map(v=>`<option value="${esc(v)}" ${runFormationF===v?'selected':''}>${v==='ALL'?'All Formations':v}</option>`).join('')}</select></label>
-  <label>Down<select onchange="setRunFilter('down',this.value)">${[['ALL','All Downs'],['1','1st Down'],['2','2nd Down'],['3','3rd Down'],['4','4th Down']].map(([v,l])=>`<option value="${v}" ${runDownF===v?'selected':''}>${l}</option>`).join('')}</select></label>
-  <label>Distance<select onchange="setRunFilter('distance',this.value)">${[['ALL','All Distances'],['SHORT','1–3'],['MED','4–7'],['LONG','8+']].map(([v,l])=>`<option value="${v}" ${runDistF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  ${dndSelect()}
   <div class="run-filter-actions"><button onclick="resetRunFilters()">Reset Run Filters</button></div>
  </div>
  <div class="kpis"><div class="kpi"><span>Filtered Runs</span><b>${total}</b><small>current view</small></div><div class="kpi"><span>YPP</span><b>${fmt(avg(gains),2)}</b><small>filtered plays</small></div><div class="kpi"><span>Median</span><b>${fmt(calcMedian(gains),1)}</b><small>yards</small></div><div class="kpi"><span>Explosives</span><b>${freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x>=15).length/Math.max(1,total)):`${gains.filter(x=>x>=15).length} plays`}</small></div><div class="kpi"><span>Negative Plays</span><b>${freqMode==='raw'?gains.filter(x=>x<=0).length:pct(100*gains.filter(x=>x<=0).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x<=0).length/Math.max(1,total)):`${gains.filter(x=>x<=0).length} plays`}</small></div></div>
@@ -975,14 +1004,14 @@ function runPage(){
 }
 
 function passPage(){let routes=datasets.routes||[],db=datasets.dropbacks||[];return `<div class="page-title"><h2>Pass Game</h2><p>Route results and dropback-type production.</p></div>${dataStatus()}<div class="card"><h3>Routes / Concepts</h3>${table(['Route','Off %','ATT','COMP%','Yards','YPA','TD','INT','BTT','TWP'],routes.map(r=>[esc(r.ROUTE),r['OFF%'],r.ATT,r['COMP%'],r['PASS YDS'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP]))}</div><div class="card"><h3>Dropback Type</h3>${table(['Type','Off %','DB','ATT','COMP%','YPA','TD','INT','Sacks','Scrambles'],db.map(r=>[esc(r['Dropback Type']),r['OFF%'],r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.SK,r.SCR]))}</div>`}
-function coveragePage(){let rows=coverageRows(datasets.plays||[]);let man=rows.filter(x=>/COVER 0|COVER 1|2 MAN/.test(x.cov)),zone=rows.filter(x=>!(/COVER 0|COVER 1|2 MAN/.test(x.cov)));let sm=arr=>{let n=arr.reduce((s,x)=>s+x.n,0),y=arr.reduce((s,x)=>s+x.yds,0),e=arr.reduce((s,x)=>s+x.expl,0),ne=arr.reduce((s,x)=>s+x.neg,0);return{n,ypp:y/Math.max(1,n),e:100*e/Math.max(1,n),ne:100*ne/Math.max(1,n)}};let a=sm(man),z=sm(zone);return `<div class="page-title"><h2>Coverage Response</h2><p>How Mississippi State's offense performed against the coverage families tagged in the play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><h3>Frequency View</h3>${freqToggle()}</div></div><div class="two"><div class="card"><h3>Man Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?a.n:pct(100*a.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(a.ypp,2))}${metric('Explosive %',pct(a.e))}${metric('Negative %',pct(a.ne))}</div></div><div class="card"><h3>Zone Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?z.n:pct(100*z.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(z.ypp,2))}${metric('Explosive %',pct(z.e))}${metric('Negative %',pct(z.ne))}</div></div></div><div class="card"><h3>Coverage Detail</h3>${coverageTable(rows)}</div>`}
+function coveragePage(){let rows=coverageRows((datasets.plays||[]).filter(dndMatches));let man=rows.filter(x=>/COVER 0|COVER 1|2 MAN/.test(x.cov)),zone=rows.filter(x=>!(/COVER 0|COVER 1|2 MAN/.test(x.cov)));let sm=arr=>{let n=arr.reduce((s,x)=>s+x.n,0),y=arr.reduce((s,x)=>s+x.yds,0),e=arr.reduce((s,x)=>s+x.expl,0),ne=arr.reduce((s,x)=>s+x.neg,0);return{n,ypp:y/Math.max(1,n),e:100*e/Math.max(1,n),ne:100*ne/Math.max(1,n)}};let a=sm(man),z=sm(zone);return `<div class="page-title"><h2>Coverage Response</h2><p>How Mississippi State's offense performed against the coverage families tagged in the play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><h3>Frequency View</h3><div style="display:flex;gap:10px;align-items:end">${dndSelect()}${freqToggle()}</div></div></div><div class="two"><div class="card"><h3>Man Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?a.n:pct(100*a.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(a.ypp,2))}${metric('Explosive %',pct(a.e))}${metric('Negative %',pct(a.ne))}</div></div><div class="card"><h3>Zone Family</h3><div class="metric-grid">${metric(freqMode==='raw'?'Pass Plays':'Pass Play %',freqMode==='raw'?z.n:pct(100*z.n/Math.max(1,a.n+z.n)))}${metric('YPP',fmt(z.ypp,2))}${metric('Explosive %',pct(z.e))}${metric('Negative %',pct(z.ne))}</div></div></div><div class="card"><h3>Coverage Detail</h3>${coverageTable(rows)}</div>`}
 function situationsPage(){
  let rows=(datasets.plays||[]).filter(r=>['P','R'].includes(r.pff_RUNPASS)),groups={};
- rows.forEach(r=>{let d=num(r.pff_DOWN),dist=num(r.pff_DISTANCE),k=d===1?'1st Down':d===2?'2nd Down':d===3?(dist<=3?'3rd 1-3':dist<=7?'3rd 4-7':'3rd 8+'):'4th Down';(groups[k]??=[]).push(r)});
- let order=['1st Down','2nd Down','3rd 1-3','3rd 4-7','3rd 8+','4th Down'];
+ rows.forEach(r=>{let k=dndLabel(r);if(k)(groups[k]??=[]).push(r)});
+ let order=dndOptions().slice(1).map(x=>x[0]);
  let hdr=freqMode==='raw'?['Situation','Plays','Runs','Passes','YPP','Explosives','Negative Plays']:['Situation','Plays','Run %','Pass %','YPP','Expl %','Negative %'];
  let data=order.filter(k=>groups[k]?.length).map(k=>{let a=groups[k],m=playMetrics(a),expl=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)>=15).length,neg=a.filter(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)<=0).length;return freqMode==='raw'?[k,m.plays,m.run,m.pass,fmt(m.ypp,2),expl,neg]:[k,m.plays,pct(100*m.run/Math.max(1,m.plays)),pct(100*m.pass/Math.max(1,m.plays)),fmt(m.ypp,2),pct(100*expl/Math.max(1,m.plays)),pct(100*neg/Math.max(1,m.plays))]});
- return `<div class="page-title"><h2>Situations</h2><p>Down-and-distance efficiency from the Mississippi State play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><div><h3>Situation View</h3><small>RAW changes tendency/outcome rates to actual play counts. % shows rate.</small></div>${freqToggle()}</div>${table(hdr,data)}</div>`;
+ return `<div class="page-title"><h2>Situations</h2><p>Down-and-distance efficiency from the Mississippi State play feed.</p></div>${dataStatus()}<div class="card"><div class="section-head"><div><h3>Situation View</h3></div>${freqToggle()}</div>${table(hdr,data)}</div>`;
 }
 
 function rushCountFromRow(r){
@@ -996,7 +1025,7 @@ function rushBucketLabel(n){
  return `Rush ${n}`;
 }
 function rushPassRows(){
- return (datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='P' && rushCountFromRow(r)!==null);
+ return (datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='P' && rushCountFromRow(r)!==null && dndMatches(r));
 }
 function rushCountStats(rows){
  let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),
@@ -1078,7 +1107,7 @@ function rushCountPage(){
  rows.forEach(r=>{let k=rushBucketLabel(rushCountFromRow(r));(groups[k]??=[]).push(r)});
  let labels=['Rush 3','Rush 4','Rush 5','Rush 6','Rush 7+'],total=rows.length;
  return `<div class="page-title"><h2>Rush Count</h2><p>Mississippi State passing production by number of pass rushers.</p></div>${dataStatus()}
- <div class="card"><div class="section-head"><div><h3>Rush Distribution</h3></div>${freqToggle()}</div>
+ <div class="card"><div class="section-head"><div><h3>Rush Distribution</h3></div><div style="display:flex;gap:10px;align-items:end">${dndSelect()}${freqToggle()}</div></div>
    <div class="rush-count-grid">${labels.filter(k=>groups[k]?.length).map(k=>{let s=rushCountStats(groups[k]);return `<div class="rush-count-card"><h3>${k}</h3><div class="big">${freqMode==='raw'?s.n:pct(100*s.n/Math.max(1,total))}</div><div class="sub">${freqMode==='raw'?`${pct(100*s.n/Math.max(1,total))} of pass plays`:`${s.n} pass plays`}</div><div class="mini-row" style="margin-top:10px"><div class="mini"><b>${fmt(s.ypp,2)}</b><span>YPP</span></div><div class="mini"><b>${pct(100*s.comp/Math.max(1,s.att))}</b><span>Comp %</span></div><div class="mini"><b>${s.scr}</b><span>QB Scrambles</span></div><div class="mini"><b>${pct(100*s.scr/Math.max(1,s.n))}</b><span>Scramble %</span></div></div><div class="mini-row" style="margin-top:8px"><div class="mini"><b>${freqMode==='raw'?s.expl:pct(100*s.expl/Math.max(1,s.n))}</b><span>Expl</span></div><div class="mini"><b>${freqMode==='raw'?s.neg:pct(100*s.neg/Math.max(1,s.n))}</b><span>Neg</span></div><div class="mini"><b>${s.sacks}</b><span>Sacks</span></div><div class="mini"><b>${pct(100*s.sacks/Math.max(1,s.n))}</b><span>Sack %</span></div></div></div>`}).join('')}</div>
  </div>
  <div class="card"><h3>Rush Count Detail</h3>${rushCountTable(groups,total)}</div>
@@ -1089,9 +1118,9 @@ function pressurePage(){let prs=datasets.pressure||[],plays=(datasets.plays||[])
 function render(){let app=$('app');if(page==='players')app.innerHTML=playersPage();else if(page==='dashboard')app.innerHTML=dashboardPage();else if(page==='personnel')app.innerHTML=personnelPage();else if(page==='run')app.innerHTML=runPage();else if(page==='pass')app.innerHTML=passPage();else if(page==='heatmaps')app.innerHTML=heatmapPage();else if(page==='coverage')app.innerHTML=coveragePage();else if(page==='situations')app.innerHTML=situationsPage();else if(page==='rushcount')app.innerHTML=rushCountPage();else app.innerHTML=pressurePage()}
 function syncNav(){document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
 window.setGroup=id=>{group=id;selected=null;facet='overview';render()};window.openPlayer=name=>openFAUProfile(name);window.setFacet=id=>{facet=id;render()};
-window.setFreqMode=v=>{freqMode=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
-window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel')runPersonnelF=v;else if(kind==='formation')runFormationF=v;else if(kind==='down')runDownF=v;else if(kind==='distance')runDistF=v;render()};
-window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';runDownF='ALL';runDistF='ALL';render()};
+window.setFreqMode=v=>{freqMode=v;render()};window.setDndFilter=v=>{dndFilter=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
+window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel')runPersonnelF=v;else if(kind==='formation')runFormationF=v;render()};
+window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';dndFilter='ALL';render()};
 document.addEventListener('click',e=>{
  let card=e.target.closest?.('.player-card[data-player-index]');
  if(card && !e.target.closest('button,a')) openPlayerIndex(Number(card.dataset.playerIndex));
