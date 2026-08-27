@@ -1,28 +1,20 @@
-# ULM Defensive Intelligence — Mississippi State v38
+# ULM Defensive Intelligence — Mississippi State v39
 
-## Coach Notes
-- Legacy edited notes now show both the original author and the last editor when those differ.
-- Example: `Tommy Denison · updated by Chris`.
-- New append-only notes still show the actual author normally.
-- Existing overwritten text cannot be reconstructed into separate historical entries, but future notes remain separate because the app now inserts a new row for every note.
+Manual Player Report Selection
 
-## Print / Save PDF overhaul
-The global Print / Save PDF button now opens a Print Center with two modes:
+Print Center changes:
+- Player Profile Pack now has a searchable manual player picker.
+- Every offensive player appears with:
+  - jersey number
+  - player name
+  - position
+- Check only the players you want on the report.
+- Selected players appear in a separate report queue.
+- Uncheck a player or click the X on their chip to remove them.
+- Search works by name, number, or position.
+- Select All is still available, but it is no longer automatic.
+- Clear Selection removes everyone.
+- Printing now uses only the players explicitly selected.
+- 1 / 2 / 4 / 8 profiles per page options remain.
 
-### Current Scouting View
-- Removes navigation and browser-only controls.
-- Adds a clean ULM / Mississippi State report header.
-- Keeps tables, charts, heat maps and run visuals presentation-ready.
-- Uses landscape letter formatting.
-
-### Player Profile Pack
-- `Add to Report` now actually adds that player to a report queue.
-- Choose:
-  - 1 profile per page
-  - 2 profiles per page
-  - 4 profiles per page
-  - 8 profiles per page
-- Can add the current player or all currently visible players.
-- Profiles automatically become denser as more are placed on a page.
-- Printed cards include player identity, position-specific season metrics, top production and recent staff notes.
-- Staff-note author attribution is included in printed player profiles.
+- Player picker is now grouped by position for easier report selection.

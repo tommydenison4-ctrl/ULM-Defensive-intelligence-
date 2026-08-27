@@ -31,6 +31,17 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .print-layouts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .print-layouts button.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
 .report-queue{display:flex;gap:7px;flex-wrap:wrap;min-height:42px;margin:10px 0}
+.report-player-picker{border:1px solid var(--line);border-radius:12px;padding:10px;margin:10px 0;max-height:300px;overflow:auto;background:#fafbfc}
+.report-player-search{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;font:inherit;margin-bottom:8px}
+.report-player-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.report-player-groups{display:flex;flex-direction:column;gap:12px}
+.report-player-group{border:1px solid #e7eaef;border-radius:12px;padding:10px;background:#fff}
+.report-player-group-title{font-size:12px;font-weight:900;color:#172033;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
+.report-player-choice{display:flex;align-items:center;gap:8px;border:1px solid #e2e6eb;border-radius:9px;padding:7px 8px;background:#fff;cursor:pointer}
+.report-player-choice input{margin:0}
+.report-player-choice .rp-main{font-size:11px;font-weight:900;color:#172033}
+.report-player-choice .rp-sub{font-size:9px;color:#667085}
+@media(max-width:760px){.report-player-list{grid-template-columns:1fr}}
 .report-chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#f7f8fa;font-size:11px;font-weight:800}
 .report-chip button{border:0;background:transparent;padding:0 2px;color:#b42318}
 .print-center-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
@@ -203,18 +214,20 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
       </div>
       <div class="print-option">
         <h3>Player Profile Pack</h3>
-        <div class="subtle">Add players to the report, choose how many profiles fit on each sheet, then print or save as PDF.</div>
+        <div class="subtle">Hand-select exactly which players go on the report, then choose how many profiles fit on each page.</div>
         <div class="print-layouts">
           <button id="pp1" onclick="setProfilesPerPage(1)">1 / page</button>
           <button id="pp2" onclick="setProfilesPerPage(2)">2 / page</button>
           <button id="pp4" class="active" onclick="setProfilesPerPage(4)">4 / page</button>
           <button id="pp8" onclick="setProfilesPerPage(8)">8 / page</button>
         </div>
+        <input id="reportPlayerSearch" class="report-player-search" placeholder="Search player name, number or position" oninput="renderReportPlayerPicker()">
+        <div id="reportPlayerPicker" class="report-player-picker"></div>
+        <div class="subtle" style="margin-top:8px">Selected for report</div>
         <div id="reportQueue" class="report-queue"></div>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button onclick="addCurrentPlayerToReport()">Add Current Player</button>
-          <button onclick="addVisiblePlayersToReport()">Add Visible Players</button>
-          <button onclick="clearReportQueue()">Clear</button>
+          <button onclick="selectAllReportPlayers()">Select All</button>
+          <button onclick="clearReportQueue()">Clear Selection</button>
         </div>
         <div style="margin-top:12px"><button class="primary" onclick="printProfilePack()">Print Profile Pack</button></div>
       </div>
@@ -653,12 +666,58 @@ function addVisiblePlayersToReport(){
 }
 function renderReportQueue(){
  let el=$('reportQueue');
- if(!el)return;
- el.innerHTML=reportQueue.length?reportQueue.map(n=>`<span class="report-chip">${esc(n)} <button onclick='removePlayerFromReport(${JSON.stringify(n)})'>×</button></span>`).join(''):'<span class="subtle">No players added yet.</span>';
+ if(el){
+   el.innerHTML=reportQueue.length
+     ? reportQueue.map(n=>`<span class="report-chip">${esc(n)} <button onclick='removePlayerFromReport(${JSON.stringify(n)})'>×</button></span>`).join('')
+     : '<span class="subtle">No players selected.</span>';
+ }
  [1,2,4,8].forEach(n=>{let b=$('pp'+n);if(b)b.classList.toggle('active',printProfilesPerPage===n)});
+ renderReportPlayerPicker();
+}
+function reportPickerPlayers(){
+ let q=String($('reportPlayerSearch')?.value||'').trim().toLowerCase();
+ let list=offenseRoster().slice().sort((a,b)=>{
+   let pa=normPos(a.position),pb=normPos(b.position);
+   const order={QB:1,RB:2,WR:3,TE:4,OL:5,OTHER:99};
+   return (order[pa]||50)-(order[pb]||50)||num(a.number)-num(b.number)||String(a.name).localeCompare(String(b.name));
+ });
+ if(!q)return list;
+ return list.filter(p=>`${p.name||''} ${p.number||''} ${p.position||''}`.toLowerCase().includes(q));
+}
+function renderReportPlayerPicker(){
+ let el=$('reportPlayerPicker');
+ if(!el)return;
+ let list=reportPickerPlayers();
+ if(!list.length){
+   el.innerHTML='<div class="subtle">No players match that search.</div>';
+   return;
+ }
+ const labelMap={QB:'Quarterbacks',RB:'Running Backs',WR:'Wide Receivers',TE:'Tight Ends',OL:'Offensive Line',OTHER:'Other'};
+ const order=['QB','RB','WR','TE','OL','OTHER'];
+ const groups={};
+ list.forEach(p=>{
+   const pos=normPos(p.position)||'OTHER';
+   (groups[pos]||(groups[pos]=[])).push(p);
+ });
+ el.innerHTML=`<div class="report-player-groups">${order.filter(pos=>groups[pos]?.length).map(pos=>`<div class="report-player-group"><div class="report-player-group-title">${labelMap[pos]||pos}</div><div class="report-player-list">${groups[pos].map(p=>{
+       let checked=reportQueue.includes(p.name);
+       return `<label class="report-player-choice"><input type="checkbox" ${checked?'checked':''} onchange='toggleReportPlayer(${JSON.stringify(p.name)},this.checked)'><div><div class="rp-main">#${esc(p.number||'—')} ${esc(p.name)}</div><div class="rp-sub">${esc(p.position||'')}</div></div></label>`;
+     }).join('')}</div></div>`).join('')}</div>`;
+}
+function toggleReportPlayer(name,checked){
+ if(checked){
+   if(!reportQueue.includes(name))reportQueue.push(name);
+ }else{
+   reportQueue=reportQueue.filter(x=>x!==name);
+ }
+ renderReportQueue();
+}
+function selectAllReportPlayers(){
+ reportQueue=offenseRoster().map(p=>p.name);
+ renderReportQueue();
 }
 function setProfilesPerPage(n){printProfilesPerPage=n;renderReportQueue()}
-function openPrintCenter(){let el=$('printCenterOverlay');if(el){el.classList.add('open');renderReportQueue()}}
+function openPrintCenter(){let el=$('printCenterOverlay');if(el){el.classList.add('open');renderReportQueue();renderReportPlayerPicker()}}
 function closePrintCenter(){let el=$('printCenterOverlay');if(el)el.classList.remove('open')}
 function printViewHeaderHTML(){
  let titles={dashboard:'Dashboard',players:'Player Intelligence',personnel:'Personnel & Formations',run:'Run Game',pass:'Pass Game',heatmaps:'Passing Heat Maps',coverage:'Coverage Response',situations:'Situations',rushcount:'Rush Count',pressure:'Pressure Response'};
@@ -712,11 +771,7 @@ function printPlayerCardHTML(p,notes,perPage){
 }
 async function printProfilePack(){
  let players=reportQueue.map(resolvedReportPlayer).filter(Boolean);
- if(!players.length){
-   let p=resolvedReportPlayer(selected);
-   if(p){players=[p];reportQueue=[p.name];renderReportQueue()}
- }
- if(!players.length){alert('Add at least one player to the report first.');return}
+ if(!players.length){alert('Select at least one player for the report first.');return}
  closePrintCenter();
  let noteSets=await Promise.all(players.map(fetchPlayerNotesForPrint));
  let cards=players.map((p,i)=>({p,notes:noteSets[i]}));
