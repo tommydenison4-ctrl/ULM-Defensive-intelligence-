@@ -94,6 +94,9 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .rush-split-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
 @media(max-width:1100px){.rush-count-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:720px){.rush-count-grid{grid-template-columns:repeat(2,1fr)}.rush-split-grid{grid-template-columns:1fr}}
 
+
+.defensive-field-svg .offense-geometry{transform-box:fill-box;transform-origin:center;transform:scaleY(-1)}
+.defensive-orientation-note{font-size:10px;color:var(--muted);font-weight:800;text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -271,8 +274,9 @@ function heatBin(r){
    let dir=String(r.pff_PASSDIRECTION||'').toUpperCase();
    w=dir==='L'?8:dir==='R'?45:26.5;
  }
- let col=Math.max(0,Math.min(4,Math.floor((w/53.34)*5)));
- let row=d>=20?0:d>=10?1:d>=0?2:d>=-5?3:4;
+ let offCol=Math.max(0,Math.min(4,Math.floor((w/53.34)*5)));
+ let col=4-offCol;
+ let row=d<-5?0:d<0?1:d<10?2:d<20?3:4;
  return [row,col];
 }
 function heatmapPage(){
@@ -285,7 +289,7 @@ function heatmapPage(){
  let att=base.filter(r=>['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(String(r.pff_PASSRESULT||'').toUpperCase())).length;
  let comp=base.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
  let gains=base.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),expl=gains.filter(x=>x>=15).length,neg=gains.filter(x=>x<=0).length,td=base.filter(isPassTouchdown).length,ints=base.filter(isInterception).length;
- let labels=['20+','10–19','0–9','-5–-1','<-5'];
+ let labels=['<-5','-5–-1','0–9','10–19','20+'];
  return `<div class="page-title"><h2>Passing Heat Maps</h2><p>Mississippi State target location by all throws, man/zone and every tagged coverage.</p></div>${dataStatus()}
  <div class="card">
    <div class="heat-controls">
@@ -296,9 +300,8 @@ function heatmapPage(){
     ${freqToggle()}
    </div>
    <div class="heat-summary">${metric('Attempts',att)}${metric('Completions',comp)}${metric('Comp %',pct(100*comp/Math.max(1,att)))}${metric('YPP',fmt(avg(gains),2))}${metric('Median YPP',fmt(calcMedian(gains),1))}${metric('Explosives',expl)}${metric('Pass TD',td)}${metric('INT',ints)}</div>
-   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['L sideline','L hash','Middle','R hash','R sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div></div>
-   <div class="heat-axis"><span>LEFT SIDELINE</span><span>FIELD WIDTH / PASSWIDTH</span><span>RIGHT SIDELINE</span></div>
-   <div class="heat-legend">Depth rows use PFF pass depth; horizontal location uses PFF pass width with direction fallback when width is unavailable.</div>
+   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let v=heatMetric==='yards'?c.y:c.n,p=100*v/Math.max(1,total),op=.08+.82*(v/max);return `<div class="heat-cell ${v?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?Math.round(v):fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${freqMode==='raw'?fmt(p,1)+'%':Math.round(v)+' raw'}</small></div>`}).join('')}</div></div>
+   <div class="heat-axis"><span>OFFENSE RIGHT</span><span>DEFENSIVE VIEW</span><span>OFFENSE LEFT</span></div>
  </div>`;
 }
 
@@ -703,12 +706,12 @@ function targetsPanel(p){
  let total=cells.reduce((s,c)=>s+c.n,0),max=Math.max(1,...cells.map(c=>c.n));
  let comp=rows.filter(r=>String(r.pff_PASSRESULT||'').toUpperCase()==='COMPLETE').length;
  let gains=rows.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
- let labels=['20+','10–19','0–9','-5–-1','<-5'];
+ let labels=['<-5','-5–-1','0–9','10–19','20+'];
  return `<div class="card">
    <div class="section-head"><div><h3>Targets</h3><small>Receiver target heat map by depth and width. Each square shows where this player is targeted most often.</small></div>${freqToggle()}</div>
    <div class="heat-summary">${metric('Targets',rows.length)}${metric('Catches',comp)}${metric('Catch %',pct(100*comp/Math.max(1,rows.length)))}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric(freqMode==='raw'?'Explosives':'Explosive %',freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,rows.length)))}${metric('TD',rows.filter(isPassTouchdown).length)}</div>
-   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let p=100*c.n/Math.max(1,total),op=.08+.82*(c.n/max);return `<div class="heat-cell ${c.n?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?c.n:fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['L sideline','L hash','Middle','R hash','R sideline'][i%5]}</span><small>${c.comp} catches · ${c.y} yds</small></div>`}).join('')}</div></div>
-   <div class="heat-axis"><span>LEFT SIDELINE</span><span>FIELD WIDTH / PASSWIDTH</span><span>RIGHT SIDELINE</span></div>
+   <div class="heat-field"><div class="heat-grid">${cells.map((c,i)=>{let p=100*c.n/Math.max(1,total),op=.08+.82*(c.n/max);return `<div class="heat-cell ${c.n?'':'zero'}" style="background:rgba(138,36,50,${op.toFixed(2)})"><b>${freqMode==='raw'?c.n:fmt(p,1)+'%'}</b><span>${labels[Math.floor(i/5)]} · ${['Off R sideline','Off R hash','Middle','Off L hash','Off L sideline'][i%5]}</span><small>${c.comp} catches · ${c.y} yds</small></div>`}).join('')}</div></div>
+   <div class="heat-axis"><span>OFFENSE RIGHT</span><span>DEFENSIVE VIEW</span><span>OFFENSE LEFT</span></div>
    
  </div>`;
 }
@@ -903,9 +906,31 @@ function runDiagramSVG(lanes){
 
 function filteredRunDiagram(selected,gaps,total){
  const lanes=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
- const xs=[70,145,220,295,405,480,555,630], maxN=Math.max(1,...lanes.map(([k])=>gaps[k].n));
- let arrows=lanes.map(([k,label],i)=>{let x=xs[i],g=gaps[k],ratio=g.n/maxN,width=6+24*ratio,op=.20+.78*ratio;return `<path d="M350 246 Q ${(350+x)/2} 195 ${x} 110" stroke="rgba(255,198,96,${op.toFixed(2)})" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/><circle cx="${x}" cy="110" r="${(14+17*ratio).toFixed(1)}" fill="rgba(127,17,40,${(.25+.72*ratio).toFixed(2)})"/><text x="${x}" y="106" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${freqMode==='raw'?g.n:pct(100*g.n/Math.max(1,total))}</text><text x="${x}" y="123" text-anchor="middle" font-size="9" font-weight="800" fill="#fff2c8">${g.n?fmt(g.ypp,1)+' YPP':'—'}</text><text x="${x}" y="72" text-anchor="middle" font-size="10" font-weight="900" fill="#ffe9a8">${label}</text>`}).join('');
- return `<div class="run-diagram"><svg viewBox="0 0 700 290" width="100%" height="290"><line x1="25" y1="110" x2="675" y2="110" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/><text x="34" y="102" fill="#e5f4e8" font-size="10" font-weight="900">LOS</text><circle cx="245" cy="110" r="11" fill="#f3f5f7"/><circle cx="290" cy="110" r="11" fill="#f3f5f7"/><circle cx="335" cy="110" r="11" fill="#f3f5f7"/><circle cx="380" cy="110" r="11" fill="#f3f5f7"/><circle cx="425" cy="110" r="11" fill="#f3f5f7"/><circle cx="350" cy="246" r="16" fill="#D3A83D" stroke="#fff4d2" stroke-width="2"/><text x="350" y="250" text-anchor="middle" fill="#53260c" font-size="11" font-weight="900">RB</text>${arrows}</svg></div>`;
+ // Defensive view: offensive left appears on the right side of the screen.
+ const xs=[630,555,480,405,295,220,145,70], maxN=Math.max(1,...lanes.map(([k])=>gaps[k].n));
+ let arrows=lanes.map(([k,label],i)=>{
+   let x=xs[i],g=gaps[k],ratio=g.n/maxN,width=6+24*ratio,op=.20+.78*ratio;
+   return `<path d="M350 48 Q ${(350+x)/2} 105 ${x} 205" stroke="rgba(255,198,96,${op.toFixed(2)})" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/>
+   <circle cx="${x}" cy="205" r="${(14+17*ratio).toFixed(1)}" fill="rgba(127,17,40,${(.25+.72*ratio).toFixed(2)})"/>
+   <text x="${x}" y="201" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${freqMode==='raw'?g.n:pct(100*g.n/Math.max(1,total))}</text>
+   <text x="${x}" y="218" text-anchor="middle" font-size="9" font-weight="800" fill="#fff2c8">${g.n?fmt(g.ypp,1)+' YPP':'—'}</text>
+   <text x="${x}" y="247" text-anchor="middle" font-size="10" font-weight="900" fill="#ffe9a8">${label}</text>`;
+ }).join('');
+ return `<div class="run-diagram"><svg viewBox="0 0 700 290" width="100%" height="290">
+   <text x="350" y="18" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">OFFENSE</text>
+   <circle cx="350" cy="48" r="16" fill="#D3A83D" stroke="#fff4d2" stroke-width="2"/>
+   <text x="350" y="52" text-anchor="middle" fill="#53260c" font-size="11" font-weight="900">RB</text>
+   <circle cx="425" cy="110" r="11" fill="#f3f5f7"/><circle cx="380" cy="110" r="11" fill="#f3f5f7"/><circle cx="335" cy="110" r="11" fill="#f3f5f7"/><circle cx="290" cy="110" r="11" fill="#f3f5f7"/><circle cx="245" cy="110" r="11" fill="#f3f5f7"/>
+   <text x="425" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LT</text>
+   <text x="380" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LG</text>
+   <text x="335" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">C</text>
+   <text x="290" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RG</text>
+   <text x="245" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RT</text>
+   <line x1="25" y1="125" x2="675" y2="125" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/>
+   <text x="34" y="120" fill="#e5f4e8" font-size="10" font-weight="900">LOS</text>
+   ${arrows}
+   <text x="350" y="275" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">DEFENSE</text>
+ </svg></div>`;
 }
 
 function runVisualizer(){
@@ -917,7 +942,7 @@ function runVisualizer(){
  let gains=selected.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)), gaps=gapPlayStats(current), hashes=hashRunStats(current), rb=rbSideStats(current);
  let gapOrder=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
  let primary=gapOrder.map(([k,l])=>[k,l,gaps[k]]).sort((a,b)=>b[2].n-a[2].n)[0];
- return `<div class="card"><div class="section-head"><div><h3>Run Game Explorer</h3><small>Change a filter and the entire run-path visual plus every number underneath recalculates.</small></div>${freqToggle()}</div>
+ return `<div class="card"><div class="section-head"><div><h3>Run Game Explorer</h3></div>${freqToggle()}</div>
  <div class="run-filter-bar">
   <label>Concept<select onchange="setRunFilter('concept',this.value)">${concepts.map(v=>`<option value="${esc(v)}" ${v===current?'selected':''}>${esc(v==='ALL'?'All Concepts':v)}</option>`).join('')}</select></label>
   <label>Hash<select onchange="setRunFilter('hash',this.value)">${[['ALL','All Hashes'],['L','Left Hash'],['C','Middle'],['R','Right Hash']].map(([v,l])=>`<option value="${v}" ${runHashF===v?'selected':''}>${l}</option>`).join('')}</select></label>

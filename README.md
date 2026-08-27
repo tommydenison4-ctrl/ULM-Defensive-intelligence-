@@ -1,15 +1,20 @@
-# ULM Defensive Intelligence — Mississippi State v30
+# ULM Defensive Intelligence — Mississippi State v32
 
-Coach Notes are now append-only history instead of one editable shared note.
+True defensive viewing orientation.
 
-What changed:
-- Every save creates a new Supabase row.
-- Existing notes are never overwritten by a later coach update.
-- All notes for the player load in chronological order.
-- Each entry shows the author and timestamp.
-- The text box is only for adding a new note.
-- The button now says `Add Note`.
-- After a note saves, the text box clears and the new note is added to the thread.
-- Notes remain shared across devices.
+Run Game:
+- Offense is at the top.
+- Defense is at the bottom.
+- Run paths move top to bottom through the line of scrimmage.
+- Offensive left/right is mirrored for the defensive staff view.
+- Offensive Left D is visually on the defense's right side; Offensive Right D is on the defense's left side.
 
-No database schema change is required. The existing `defensive_player_notes` table and current SELECT / INSERT policies are sufficient for adding and reading note history.
+Passing Heat Maps:
+- Behind-LOS / shortest throws are at the top.
+- Deep throws are at the bottom.
+- Horizontal field position is mirrored as well:
+  - offense right appears on the left side of the defensive view
+  - offense left appears on the right side
+- All existing filters, RAW/% controls and D&D filters remain unchanged.
+
+No underlying statistics were changed. This is display orientation only.
