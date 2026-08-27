@@ -1,19 +1,17 @@
-# ULM Defensive Intelligence — Mississippi State v33
+# ULM Defensive Intelligence — Mississippi State v34
 
-Passing Heat Map update:
-- Added a QB marker at the top of the chart.
-- Added hash filter:
-  - All Hashes
-  - Left Hash
-  - Middle
-  - Right Hash
-- The QB marker moves left / middle / right based on the selected offensive hash in the defensive viewing orientation.
-- Offensive Left Hash appears on the defense's right side of the screen.
-- Offensive Right Hash appears on the defense's left side of the screen.
-- The two previous behind-the-line rows are combined into one `Behind LOS` row.
-- Heat map is now 4 depth rows:
-  - Behind LOS
-  - 0-9
-  - 10-19
-  - 20+
-- All existing D&D, coverage, man/zone, metric and RAW/% filters remain.
+Passing Heat Map QB filter added.
+
+New control:
+- All QBs
+- Individual QB options by name + jersey number when the current roster can be matched
+- Historical PFF QB label / jersey number fallback when a current roster identity cannot be resolved
+
+The QB filter works together with:
+- hash
+- down & distance
+- man / zone / specific coverage
+- heat-map metric
+- RAW / %
+
+The moving QB field marker still follows the selected hash.
