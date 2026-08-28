@@ -45,6 +45,34 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 .report-chip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#f7f8fa;font-size:11px;font-weight:800}
 .report-chip button{border:0;background:transparent;padding:0 2px;color:#b42318}
 .print-center-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+.custom-report-builder{border-top:1px solid var(--line);margin-top:18px;padding-top:18px}
+.report-builder-grid{display:grid;grid-template-columns:minmax(260px,.9fr) minmax(320px,1.1fr);gap:14px}
+.report-library,.report-preview{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;min-width:0}
+.report-category{margin:0 0 14px}
+.report-category h4{margin:0 0 7px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#667085}
+.report-item-list{display:grid;grid-template-columns:1fr;gap:6px}
+.report-library-item{display:flex;align-items:center;gap:8px;border:1px solid #e3e7ec;border-radius:9px;padding:8px;background:#fafbfc}
+.report-library-item button{margin-left:auto;padding:5px 8px}
+.custom-report-items{display:flex;flex-direction:column;gap:7px;min-height:82px}
+.custom-report-item{display:grid;grid-template-columns:28px 1fr auto auto;gap:7px;align-items:center;border:1px solid #dde2e8;border-radius:9px;padding:8px;background:#fff}
+.custom-report-item .order{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:#f2f4f7;font-size:10px;font-weight:900}
+.custom-report-item small{display:block;color:#667085;font-size:9px}
+.custom-report-item button{padding:4px 7px}
+.custom-report-empty{font-size:11px;color:#667085;padding:14px;text-align:center;border:1px dashed #cdd4dd;border-radius:9px}
+.custom-report-summary{font-size:10px;color:#667085;margin:7px 0}
+.custom-report-print{display:none}
+.custom-section{page-break-inside:avoid;break-inside:avoid;margin:0 0 12px}
+.custom-section h2{font-size:16px;color:#8a2432;margin:0 0 7px;border-bottom:2px solid #d3a83d;padding-bottom:4px}
+.custom-section .card{box-shadow:none!important}
+.custom-player-print{border:1px solid #d6dbe2;border-radius:11px;overflow:hidden;margin-bottom:10px}
+.custom-player-print-head{display:grid;grid-template-columns:74px 1fr;gap:10px;padding:9px;background:#fbf8f0;border-bottom:2px solid #d3a83d}
+.custom-player-print-head img{width:74px;height:82px;object-fit:cover;object-position:top;border-radius:7px}
+.custom-player-print-name{font-size:17px;font-weight:950;color:#8a2432}
+.custom-chart-snapshot{border:1px solid #dde2e8;border-radius:10px;padding:10px;background:#fff}
+.custom-chart-snapshot .kpis,.custom-chart-snapshot .heat-summary{margin-top:6px}
+@media(max-width:800px){.report-builder-grid{grid-template-columns:1fr}}
+
 .print-only{display:none}
 #printReport{display:none}
 .print-report-head{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #8a2432;padding:0 0 8px;margin-bottom:10px}
@@ -91,6 +119,8 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
   .print-center-overlay,.profile-overlay,.fau-drawer{display:none!important}
   body.print-profiles header,body.print-profiles .shell{display:none!important}
   body.print-profiles #printReport{display:block!important}
+  body.print-custom header,body.print-custom .shell,body.print-custom #printCenterOverlay{display:none!important}
+  body.print-custom #customReportPrint{display:block!important}
   body.print-profiles .print-only{display:block!important}
   body.print-view header,body.print-view aside,body.print-view .opponent-banner,
   body.print-view .header-actions,body.print-view .toolbar,body.print-view .position-tabs,
@@ -232,10 +262,29 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
         <div style="margin-top:12px"><button class="primary" onclick="printProfilePack()">Print Profile Pack</button></div>
       </div>
     </div>
+    <div class="custom-report-builder">
+      <h3 style="margin:0">Build Your Own Scouting Report</h3>
+      <div class="subtle">Click anything you want. It appears in the report on the right in the order you add it.</div>
+      <div class="report-builder-grid" style="margin-top:12px">
+        <div class="report-library">
+          <input id="customReportSearch" class="report-player-search" placeholder="Search report items or players" oninput="renderCustomReportLibrary()">
+          <div id="customReportLibrary"></div>
+        </div>
+        <div class="report-preview">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+            <h3 style="margin:0">Report Contents</h3>
+            <button onclick="clearCustomReport()">Clear</button>
+          </div>
+          <div id="customReportSummary" class="custom-report-summary"></div>
+          <div id="customReportItems" class="custom-report-items"></div>
+          <div style="margin-top:12px"><button class="primary" onclick="printCustomScoutingReport()">Print Custom Report</button></div>
+        </div>
+      </div>
+    </div>
     <div class="print-center-actions"><button onclick="closePrintCenter()">Close</button></div>
   </div>
 </div>
-<div id="printReport" class="print-only"></div>
+<div id="printReport" class="print-only"></div><div id="customReportPrint" class="custom-report-print"></div>
 
 <script>
 
@@ -247,7 +296,7 @@ const SUPABASE_KEY='sb_publishable_FtmUeN1QkLlkRIqCIdQ5gw_KDbEFy1H';
 const NOTES_API=SUPABASE_URL+'/rest/v1/defensive_player_notes';
 const NOTES_TEAM='Mississippi State';
 const NOTES_SEASON=2026;
-let cloudNotes={}; let reportQueue=[]; let printProfilesPerPage=4;
+let cloudNotes={}; let reportQueue=[]; let printProfilesPerPage=4; let customReportItems=[];
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',heatQB='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',dndFilter='ALL';
 const $=id=>document.getElementById(id);
@@ -642,6 +691,105 @@ window.saveCoachNoteForPlayer=async()=>{
 };
 window.saveCoachNote=()=>window.saveCoachNoteForPlayer();
 
+
+function customReportCatalog(){
+ return [
+  {id:'dashboard',label:'Dashboard Overview',cat:'Scouting Views',type:'view'},
+  {id:'personnel',label:'Personnel & Formations',cat:'Scouting Views',type:'view'},
+  {id:'run',label:'Run Game Explorer',cat:'Charts & Diagrams',type:'view'},
+  {id:'heatmaps',label:'Passing Heat Map',cat:'Charts & Diagrams',type:'view'},
+  {id:'coverage',label:'Coverage Response',cat:'Scouting Views',type:'view'},
+  {id:'situations',label:'Situations / D&D',cat:'Scouting Views',type:'view'},
+  {id:'rushcount',label:'Rush Count',cat:'Charts & Diagrams',type:'view'},
+  {id:'pressure',label:'Pressure Response',cat:'Scouting Views',type:'view'}
+ ];
+}
+function customReportKey(item){return item.type==='player'?`player:${item.name}`:`view:${item.id}:${Date.now()}:${Math.random()}`}
+function addCustomReportView(id){
+ let c=customReportCatalog().find(x=>x.id===id); if(!c)return;
+ customReportItems.push({...c,key:customReportKey(c)});
+ renderCustomReportItems();
+}
+function addCustomReportPlayer(name){
+ let p=resolvedReportPlayer(name); if(!p)return;
+ customReportItems.push({type:'player',name:p.name,label:`#${p.number||'—'} ${p.name}`,cat:'Players',key:customReportKey({type:'player',name:p.name})});
+ renderCustomReportItems();
+}
+function removeCustomReportItem(key){customReportItems=customReportItems.filter(x=>x.key!==key);renderCustomReportItems()}
+function moveCustomReportItem(key,dir){
+ let i=customReportItems.findIndex(x=>x.key===key),j=i+dir;
+ if(i<0||j<0||j>=customReportItems.length)return;
+ [customReportItems[i],customReportItems[j]]=[customReportItems[j],customReportItems[i]];
+ renderCustomReportItems();
+}
+function clearCustomReport(){customReportItems=[];renderCustomReportItems()}
+function renderCustomReportLibrary(){
+ let el=$('customReportLibrary'); if(!el)return;
+ let q=String($('customReportSearch')?.value||'').trim().toLowerCase();
+ let catalog=customReportCatalog().filter(x=>!q||`${x.label} ${x.cat}`.toLowerCase().includes(q));
+ let players=offenseRoster().filter(p=>!q||`${p.name} ${p.number} ${p.position}`.toLowerCase().includes(q));
+ let posOrder=['QB','RB','WR','TE','OL','OTHER'];
+ let groups={}; players.forEach(p=>{let pos=normPos(p.position)||'OTHER';(groups[pos]||(groups[pos]=[])).push(p)});
+ let views=`<div class="report-category"><h4>Charts / Scouting Views</h4><div class="report-item-list">${catalog.map(x=>`<div class="report-library-item"><div><b>${esc(x.label)}</b><small>${esc(x.cat)}</small></div><button onclick="addCustomReportView('${x.id}')">Add</button></div>`).join('')||'<div class="subtle">No matching views.</div>'}</div></div>`;
+ let pl=posOrder.filter(pos=>groups[pos]?.length).map(pos=>{
+   let label={QB:'Quarterbacks',RB:'Running Backs',WR:'Wide Receivers',TE:'Tight Ends',OL:'Offensive Line',OTHER:'Other'}[pos]||pos;
+   return `<div class="report-category"><h4>${label}</h4><div class="report-item-list">${groups[pos].sort((a,b)=>num(a.number)-num(b.number)).map(p=>`<div class="report-library-item"><div><b>#${esc(p.number||'—')} ${esc(p.name)}</b><small>${esc(p.position||'')}</small></div><button onclick='addCustomReportPlayer(${JSON.stringify(p.name)})'>Add</button></div>`).join('')}</div></div>`;
+ }).join('');
+ el.innerHTML=views+pl;
+}
+function renderCustomReportItems(){
+ let el=$('customReportItems'),sum=$('customReportSummary');
+ if(!el)return;
+ if(sum)sum.textContent=customReportItems.length?`${customReportItems.length} item${customReportItems.length===1?'':'s'} selected`:'Nothing selected yet.';
+ el.innerHTML=customReportItems.length?customReportItems.map((x,i)=>`<div class="custom-report-item">
+   <div class="order">${i+1}</div>
+   <div><b>${esc(x.label)}</b><small>${esc(x.cat||x.type)}</small></div>
+   <div><button ${i===0?'disabled':''} onclick='moveCustomReportItem(${JSON.stringify(x.key)},-1)'>↑</button><button ${i===customReportItems.length-1?'disabled':''} onclick='moveCustomReportItem(${JSON.stringify(x.key)},1)'>↓</button></div>
+   <button onclick='removeCustomReportItem(${JSON.stringify(x.key)})'>×</button>
+ </div>`).join(''):'<div class="custom-report-empty">Click Add beside charts, scouting views, or players. They will appear here.</div>';
+}
+function customViewHTML(id){
+ if(id==='dashboard')return dashboardPage();
+ if(id==='personnel')return personnelPage();
+ if(id==='run')return `<div class="page-title"><h2>Run Game</h2></div>${runVisualizer()}`;
+ if(id==='heatmaps')return heatmapPage();
+ if(id==='coverage')return coveragePage();
+ if(id==='situations')return situationsPage();
+ if(id==='rushcount')return rushCountPage();
+ if(id==='pressure')return pressurePage();
+ return '';
+}
+function cleanCustomViewHTML(raw,label){
+ let wrap=document.createElement('div');wrap.innerHTML=raw;
+ wrap.querySelectorAll('.page-title,.data-status,.toolbar,.position-tabs,.view-toggle,.heat-controls,.run-filter-bar,.section-head button,.no-print,button,select,input').forEach(n=>n.remove());
+ return `<section class="custom-section"><h2>${esc(label)}</h2><div class="custom-chart-snapshot">${wrap.innerHTML}</div></section>`;
+}
+async function customPlayerHTML(name){
+ let p=resolvedReportPlayer(name); if(!p)return '';
+ let notes=await fetchPlayerNotesForPrint(p),stats=playerSeasonStats(p),games=relevantGameRows(p).sort((a,b)=>gameScore(p,b)-gameScore(p,a)).slice(0,3);
+ let img=p.image?`<img src="${esc(p.image)}" alt="">`:'';
+ let pos=normPos(p.position);
+ let gamesHTML=games.map(g=>{
+   let production=pos==='QB'?`${g.passY+g.rushY} total yds · ${g.passTD} TD · ${g.int} INT`:pos==='RB'?`${g.rushY+g.recY} scrimmage yds · ${g.td} TD`:['WR','TE'].includes(pos)?`${g.rec}/${g.tgt} · ${g.recY} yds · ${g.td} TD`:`${g.plays} linked snaps`;
+   return `<div class="print-game-line"><b>vs ${esc(g.opp||'Opponent')}</b> · ${esc(String(g.date||''))}<br>${production}</div>`;
+ }).join('');
+ let notesHTML=(notes||[]).slice(-3).map(n=>`<div class="print-note-line"><span class="print-note-author">${esc(printNoteAuthor(n))}</span> · ${esc(noteTime(n.updated_at||n.created_at))}<br>${esc(n.note||'')}</div>`).join('');
+ return `<section class="custom-section"><h2>Player Profile</h2><div class="custom-player-print"><div class="custom-player-print-head">${img}<div><div class="custom-player-print-name">${esc(p.name)}</div><div class="print-profile-meta">${esc(p.position||'')} · #${esc(p.number||'—')}${p.class?` · ${esc(p.class)}`:''}${p.height?`<br>${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}</div></div></div><div class="print-profile-stats">${stats.slice(0,9).map(([l,v])=>`<div class="print-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div>${gamesHTML?`<div class="print-profile-section"><h4>Top Production</h4>${gamesHTML}</div>`:''}${notesHTML?`<div class="print-profile-section"><h4>Staff Notes</h4>${notesHTML}</div>`:''}</div></section>`;
+}
+async function printCustomScoutingReport(){
+ if(!customReportItems.length){alert('Add at least one item to the custom report first.');return}
+ closePrintCenter();
+ let sections=[];
+ for(const item of customReportItems){
+   if(item.type==='player')sections.push(await customPlayerHTML(item.name));
+   else sections.push(cleanCustomViewHTML(customViewHTML(item.id),item.label));
+ }
+ $('customReportPrint').innerHTML=`<div class="print-report-head"><div class="print-report-brand"><img src="ulm_avg_roundel_edge_star.png"><div><h1>ULM Defensive Intelligence</h1><small>Mississippi State · Custom Scouting Report</small></div></div><div style="font-size:9px;font-weight:900">2026 OPPONENT SCOUTING</div></div>${sections.join('')}`;
+ document.body.classList.remove('print-view','print-profiles');
+ document.body.classList.add('print-custom');
+ setTimeout(()=>window.print(),120);
+}
+
 function resolvedReportPlayer(v){
  if(!v)return null;
  if(typeof v==='object')return v;
@@ -717,7 +865,7 @@ function selectAllReportPlayers(){
  renderReportQueue();
 }
 function setProfilesPerPage(n){printProfilesPerPage=n;renderReportQueue()}
-function openPrintCenter(){let el=$('printCenterOverlay');if(el){el.classList.add('open');renderReportQueue();renderReportPlayerPicker()}}
+function openPrintCenter(){let el=$('printCenterOverlay');if(el){el.classList.add('open');renderReportQueue();renderReportPlayerPicker();renderCustomReportLibrary();renderCustomReportItems()}}
 function closePrintCenter(){let el=$('printCenterOverlay');if(el)el.classList.remove('open')}
 function printViewHeaderHTML(){
  let titles={dashboard:'Dashboard',players:'Player Intelligence',personnel:'Personnel & Formations',run:'Run Game',pass:'Pass Game',heatmaps:'Passing Heat Maps',coverage:'Coverage Response',situations:'Situations',rushcount:'Rush Count',pressure:'Pressure Response'};
@@ -787,7 +935,7 @@ async function printProfilePack(){
  document.body.classList.add('print-profiles');
  setTimeout(()=>window.print(),100);
 }
-window.addEventListener('afterprint',()=>{document.body.classList.remove('print-view','print-profiles')});
+window.addEventListener('afterprint',()=>{document.body.classList.remove('print-view','print-profiles','print-custom')});
 
 
 function profile(p){return `<div class="card profile"><div class="player-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div><div class="kicker">Mississippi State Player Intelligence</div><div class="player-name">${esc(p.name)}</div><div class="profile-meta">${esc(p.position||'')}${p.class?` · ${esc(p.class)}`:''}${p.height?` · ${esc(p.height)}`:''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="profile-actions">${p.profile?`<a href="${esc(p.profile)}" target="_blank" rel="noopener">Official Bio ↗</a>`:''}<button class="primary" onclick="addPlayerToReport(selected);openPrintCenter()">Print Player Report</button></div></div></div><div class="facet-tabs no-print">${[['overview','Overview'],['usage','Routes & Usage'],['tendencies','Coverage / Tendencies'],['games','Game Log'],['compare','Comparison'],['notes','Coach Notes']].map(([id,l])=>`<button class="${facet===id?'active':''}" onclick="setFacet('${id}')">${l}</button>`).join('')}</div>${facet==='overview'?overview(p):facet==='usage'?usage(p):facet==='tendencies'?tendencies(p):facet==='games'?games(p):facet==='compare'?comparison(p):coachNotes(p)}</div>`}
@@ -1177,11 +1325,16 @@ function normalizePOA(v){
  return '';
 }
 
+function defRbToOffenseSide(v){
+ if(v==='LEFT')return 'RIGHT';
+ if(v==='RIGHT')return 'LEFT';
+ return v;
+}
 function selectedRunRows(concept){
  return (datasets.plays||[]).filter(r=>{
    if(!runConceptMatch(r,concept))return false;
    if(runHashF!=='ALL'&&normHash(r.pff_HASH)!==runHashF)return false;
-   if(runRBSideF!=='ALL'&&rbSideFromRow(r)!==runRBSideF)return false;
+   if(runRBSideF!=='ALL'&&rbSideFromRow(r)!==defRbToOffenseSide(runRBSideF))return false;
    if(runPersonnelF!=='ALL'&&String(r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'')!==runPersonnelF)return false;
    if(runFormationF!=='ALL'&&String(r.pff_OFFFORMATIONGROUP||'')!==runFormationF)return false;
    if(!dndMatches(r))return false;
@@ -1214,6 +1367,19 @@ function rbSideStats(concept){
  selectedRunRows(concept).forEach(r=>{let k=rbSideFromRow(r),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);o[k].n++;o[k].y+=g});
  Object.values(o).forEach(x=>x.ypp=x.n?x.y/x.n:0);return o;
 }
+function defRbLabel(v){
+ if(v==='LEFT')return 'Def RB Left';
+ if(v==='RIGHT')return 'Def RB Right';
+ if(v==='CENTER')return 'Pistol / Center';
+ if(v==='SPLIT')return 'Split Backs';
+ if(v==='UNKNOWN')return 'Unknown';
+ return v||'All RB Alignments';
+}
+function rbFilterValueFromDefenseLabel(v){
+ if(v==='LEFT')return 'RIGHT';
+ if(v==='RIGHT')return 'LEFT';
+ return v;
+}
 function contextTable(title, rows, total){
  return `<div class="run-context-card"><h4>${title}</h4><div class="run-context-row head"><span>Look</span><span>Plays</span><span>Share</span><span>YPP</span></div>${rows.filter(x=>x[1].n>0).map(([label,x])=>`<div class="run-context-row"><b>${label}</b><span>${x.n}</span><span>${pct(100*x.n/Math.max(1,total))}</span><span>${fmt(x.ypp,2)}</span></div>`).join('')||'<div class="empty">No tagged plays.</div>'}</div>`;
 }
@@ -1242,34 +1408,66 @@ function runDiagramSVG(lanes){
 }
 
 function filteredRunDiagram(selected,gaps,total){
- const lanes=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
- // Defensive view: offensive left appears on the right side of the screen.
- const xs=[630,555,480,405,295,220,145,70], maxN=Math.max(1,...lanes.map(([k])=>gaps[k].n));
+ const lanes=[['RE','Def Left D'],['RT','Def Left C'],['RG','Def Left B'],['MR','Def Left A'],['ML','Def Right A'],['LG','Def Right B'],['LT','Def Right C'],['LE','Def Right D']];
+ // Defensive view: left-to-right now follows the defense's perspective.
+ const xs=[70,145,220,295,405,480,555,630], maxN=Math.max(1,...lanes.map(([k])=>gaps[k].n));
+ const underCenter=/under/i.test(String(runFormationF||''));
+ const losY=148,lineY=130,ballY=224;
+ let qbX=350,qbY=underCenter?108:84;
+ let rbMarkers='';
+
+ if(runRBSideF==='SPLIT'){
+   const splitY=underCenter?70:52;
+   rbMarkers=`
+     <circle cx="305" cy="${splitY}" r="15" fill="#D3A83D" stroke="#0b1620" stroke-width="3"/>
+     <text x="305" y="${splitY+4}" text-anchor="middle" fill="#53260c" font-size="10" font-weight="950">RB</text>
+     <circle cx="395" cy="${splitY}" r="15" fill="#D3A83D" stroke="#0b1620" stroke-width="3"/>
+     <text x="395" y="${splitY+4}" text-anchor="middle" fill="#53260c" font-size="10" font-weight="950">RB</text>`;
+ }else{
+   let rbX=350,rbY=underCenter?68:48;
+   if(runRBSideF==='LEFT'){
+     rbX=305;
+     if(!underCenter){ qbX=343; qbY=56; }
+   }
+   else if(runRBSideF==='RIGHT'){
+     rbX=395;
+     if(!underCenter){ qbX=357; qbY=56; }
+   }
+   else if(runRBSideF==='CENTER'){
+     rbX=350;
+   }
+   rbMarkers=`
+     <circle cx="${rbX}" cy="${rbY}" r="15" fill="#D3A83D" stroke="#0b1620" stroke-width="3"/>
+     <text x="${rbX}" y="${rbY+4}" text-anchor="middle" fill="#53260c" font-size="10" font-weight="950">RB</text>`;
+ }
+
  let arrows=lanes.map(([k,label],i)=>{
    let x=xs[i],g=gaps[k],ratio=g.n/maxN,width=6+24*ratio,op=.20+.78*ratio;
-   return `<path d="M350 48 Q ${(350+x)/2} 105 ${x} 205" stroke="rgba(255,198,96,${op.toFixed(2)})" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/>
-   <circle cx="${x}" cy="205" r="${(14+17*ratio).toFixed(1)}" fill="rgba(127,17,40,${(.25+.72*ratio).toFixed(2)})"/>
-   <text x="${x}" y="201" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${freqMode==='raw'?g.n:pct(100*g.n/Math.max(1,total))}</text>
-   <text x="${x}" y="218" text-anchor="middle" font-size="9" font-weight="800" fill="#fff2c8">${g.n?fmt(g.ypp,1)+' YPP':'—'}</text>
-   <text x="${x}" y="247" text-anchor="middle" font-size="10" font-weight="900" fill="#ffe9a8">${label}</text>`;
+   return `<path d="M${qbX} ${qbY+6} Q ${(qbX+x)/2} 126 ${x} ${ballY}" stroke="rgba(255,198,96,${op.toFixed(2)})" stroke-width="${width.toFixed(1)}" fill="none" stroke-linecap="round"/>
+   <circle cx="${x}" cy="${ballY}" r="${(14+17*ratio).toFixed(1)}" fill="rgba(127,17,40,${(.25+.72*ratio).toFixed(2)})"/>
+   <text x="${x}" y="${ballY-4}" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${freqMode==='raw'?g.n:pct(100*g.n/Math.max(1,total))}</text>
+   <text x="${x}" y="${ballY+13}" text-anchor="middle" font-size="9" font-weight="800" fill="#fff2c8">${g.n?fmt(g.ypp,1)+' YPP':'—'}</text>
+   <text x="${x}" y="266" text-anchor="middle" font-size="10" font-weight="900" fill="#ffe9a8">${label}</text>`;
  }).join('');
- return `<div class="run-diagram"><svg viewBox="0 0 700 290" width="100%" height="290">
-   <text x="350" y="18" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">OFFENSE</text>
-   <circle cx="350" cy="48" r="16" fill="#D3A83D" stroke="#fff4d2" stroke-width="2"/>
-   <text x="350" y="52" text-anchor="middle" fill="#53260c" font-size="11" font-weight="900">RB</text>
-   <circle cx="425" cy="110" r="11" fill="#f3f5f7"/><circle cx="380" cy="110" r="11" fill="#f3f5f7"/><circle cx="335" cy="110" r="11" fill="#f3f5f7"/><circle cx="290" cy="110" r="11" fill="#f3f5f7"/><circle cx="245" cy="110" r="11" fill="#f3f5f7"/>
-   <text x="425" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LT</text>
-   <text x="380" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LG</text>
-   <text x="335" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">C</text>
-   <text x="290" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RG</text>
-   <text x="245" y="88" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RT</text>
-   <line x1="25" y1="125" x2="675" y2="125" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/>
-   <text x="34" y="120" fill="#e5f4e8" font-size="10" font-weight="900">LOS</text>
+
+ return `<div class="run-diagram"><svg viewBox="0 0 700 320" width="100%" height="320">
+   <text x="350" y="22" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">OFFENSE</text>
+   ${rbMarkers}
+   <circle cx="${qbX}" cy="${qbY}" r="15" fill="#7f1128" stroke="#D3A83D" stroke-width="3"/>
+   <text x="${qbX}" y="${qbY+4}" text-anchor="middle" fill="#fff" font-size="10" font-weight="950">QB</text>
+
+   <circle cx="425" cy="${lineY}" r="11" fill="#f3f5f7"/><circle cx="380" cy="${lineY}" r="11" fill="#f3f5f7"/><circle cx="335" cy="${lineY}" r="11" fill="#f3f5f7"/><circle cx="290" cy="${lineY}" r="11" fill="#f3f5f7"/><circle cx="245" cy="${lineY}" r="11" fill="#f3f5f7"/>
+   <text x="425" y="108" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LT</text>
+   <text x="380" y="108" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">LG</text>
+   <text x="335" y="108" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">C</text>
+   <text x="290" y="108" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RG</text>
+   <text x="245" y="108" text-anchor="middle" fill="#f4efe8" font-size="9" font-weight="800">RT</text>
+   <line x1="25" y1="${losY}" x2="675" y2="${losY}" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/>
+   <text x="34" y="${losY-5}" fill="#e5f4e8" font-size="10" font-weight="900">LOS</text>
    ${arrows}
-   <text x="350" y="275" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">DEFENSE</text>
+   <text x="350" y="305" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">DEFENSE</text>
  </svg></div>`;
 }
-
 function runVisualizer(){
  let allRuns=(datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R');
  let concepts=['ALL',...(datasets.runConcepts||[]).map(r=>r.RC).filter(Boolean)];
@@ -1277,23 +1475,23 @@ function runVisualizer(){
  let forms=['ALL',...[...new Set(allRuns.map(r=>String(r.pff_OFFFORMATIONGROUP||'')).filter(Boolean))].sort()];
  let current=concepts.includes(runConceptFocus)?runConceptFocus:'ALL', selected=selectedRunRows(current), total=selected.length;
  let gains=selected.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)), gaps=gapPlayStats(current), hashes=hashRunStats(current), rb=rbSideStats(current);
- let gapOrder=[['LE','Left D'],['LT','Left C'],['LG','Left B'],['ML','Left A'],['MR','Right A'],['RG','Right B'],['RT','Right C'],['RE','Right D']];
+ let gapOrder=[['RE','Def Left D'],['RT','Def Left C'],['RG','Def Left B'],['MR','Def Left A'],['ML','Def Right A'],['LG','Def Right B'],['LT','Def Right C'],['LE','Def Right D']];
  let primary=gapOrder.map(([k,l])=>[k,l,gaps[k]]).sort((a,b)=>b[2].n-a[2].n)[0];
  return `<div class="card"><div class="section-head"><div><h3>Run Game Explorer</h3></div>${freqToggle()}</div>
  <div class="run-filter-bar">
   <label>Concept<select onchange="setRunFilter('concept',this.value)">${concepts.map(v=>`<option value="${esc(v)}" ${v===current?'selected':''}>${esc(v==='ALL'?'All Concepts':v)}</option>`).join('')}</select></label>
   <label>Hash<select onchange="setRunFilter('hash',this.value)">${[['ALL','All Hashes'],['R','Def Left Hash'],['C','Middle'],['L','Def Right Hash']].map(([v,l])=>`<option value="${v}" ${runHashF===v?'selected':''}>${l}</option>`).join('')}</select></label>
-  <label>RB Side<select onchange="setRunFilter('rb',this.value)">${[['ALL','All RB Alignments'],['LEFT','RB Left'],['RIGHT','RB Right'],['CENTER','Pistol / Center'],['SPLIT','Split Backs'],['UNKNOWN','Unknown']].map(([v,l])=>`<option value="${v}" ${runRBSideF===v?'selected':''}>${l}</option>`).join('')}</select></label>
+  <label>RB Side<select onchange="setRunFilter('rb',this.value)">${[['ALL','All RB Alignments'],['LEFT','Def RB Left'],['RIGHT','Def RB Right'],['CENTER','Pistol / Center'],['SPLIT','Split Backs'],['UNKNOWN','Unknown']].map(([v,l])=>`<option value="${v}" ${runRBSideF===v?'selected':''}>${l}</option>`).join('')}</select></label>
   <label>Personnel<select onchange="setRunFilter('personnel',this.value)">${personnel.map(v=>`<option value="${esc(v)}" ${runPersonnelF===v?'selected':''}>${v==='ALL'?'All Personnel':v}</option>`).join('')}</select></label>
   <label>Formation<select onchange="setRunFilter('formation',this.value)">${forms.map(v=>`<option value="${esc(v)}" ${runFormationF===v?'selected':''}>${v==='ALL'?'All Formations':v}</option>`).join('')}</select></label>
   ${dndSelect()}
   <div class="run-filter-actions"><button onclick="resetRunFilters()">Reset Run Filters</button></div>
  </div>
  <div class="kpis"><div class="kpi"><span>Filtered Runs</span><b>${total}</b><small>current view</small></div><div class="kpi"><span>YPP</span><b>${fmt(avg(gains),2)}</b><small>filtered plays</small></div><div class="kpi"><span>Median</span><b>${fmt(calcMedian(gains),1)}</b><small>yards</small></div><div class="kpi"><span>Explosives</span><b>${freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x>=15).length/Math.max(1,total)):`${gains.filter(x=>x>=15).length} plays`}</small></div><div class="kpi"><span>Negative Plays</span><b>${freqMode==='raw'?gains.filter(x=>x<=0).length:pct(100*gains.filter(x=>x<=0).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x<=0).length/Math.max(1,total)):`${gains.filter(x=>x<=0).length} plays`}</small></div></div>
- <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':hashLabel(runHashF)} · ${runRBSideF==='ALL'?'all RB alignments':runRBSideF} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?'all formations':runFormationF}</div>
+ <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':hashLabel(runHashF)} · ${runRBSideF==='ALL'?'all RB alignments':defRbLabel(runRBSideF)} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?'all formations':runFormationF}</div>
  ${filteredRunDiagram(selected,gaps,total)}
  <div class="gap-strip">${gapOrder.map(([k,label])=>{let x=gaps[k],share=100*x.n/Math.max(1,total),hot=primary&&primary[0]===k;return `<div class="gap-box ${hot?'hot':''}"><div class="gap-name">${label}</div><div class="gap-count">${freqMode==='raw'?x.n:pct(share)}</div><div class="gap-ypp2">${x.n?fmt(x.ypp,2):'—'} YPP</div><div class="subtle">${x.n?`${fmt(x.med,1)} median`:''}</div></div>`}).join('')}</div>
- <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Def Left Hash',hashes.R],['Middle',hashes.C],['Def Right Hash',hashes.L],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['RB Left',rb.LEFT],['RB Right',rb.RIGHT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
+ <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Def Left Hash',hashes.R],['Middle',hashes.C],['Def Right Hash',hashes.L],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['Def RB Left',rb.RIGHT],['Def RB Right',rb.LEFT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
  ${runSurfacePanel(selected,total)}
  </div>`;
 }
