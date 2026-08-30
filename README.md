@@ -1,64 +1,79 @@
-# ULM Defensive Intelligence — Mississippi State v41
+# ULM Defensive Intelligence — Mississippi State v50
 
-Custom Scouting Report Builder
+Fixes the two issues seen in v49:
 
-The Print / Save PDF center now includes a third mode: Build Your Own Scouting Report.
+1. ULM Language showed red when opening index.html locally in Safari.
+   - The hybrid language is now embedded directly inside index.html.
+   - It no longer depends on Safari allowing a file:// page to fetch a sibling CSV.
 
-Workflow:
-- Click Add beside any scouting view, chart/diagram, or player.
-- The item immediately appears in Report Contents.
-- Items print in the exact order shown.
-- Use up/down arrows to reorder sections.
-- Remove individual sections with X.
-- Search the library by chart/view/player name, jersey number, or position.
-- Player choices are grouped by position.
+2. The v49 validation threshold rejected the real hybrid by a tiny margin.
+   - The old check included fields ULM manually re-charted (gain/down/hash).
+   - v50 validates only stable identifiers that match the source play feed:
+     run/pass, ball carrier, target, PFF personnel, PFF formation group.
+   - The hybrid must still clear a 97% stable-field match before ULM language is enabled.
 
-Available report sections:
-- Dashboard Overview
-- Personnel & Formations
-- Run Game Explorer
-- Passing Heat Map
-- Coverage Response
-- Situations / Down & Distance
-- Rush Count
-- Pressure Response
-- Any individual offensive player profile
+Personnel & Formations now shows the ULM terminology first:
+- Formation
+- Personnel
+- Backfield
+- Form Var
+- Motion
+- Y Location
 
-Custom player sections include:
-- player photo and identity
-- position-specific season metrics
-- top production
-- recent staff notes with author attribution
+The original PFF Personnel and Formation Groups remain below as reference.
 
-The generated report removes interactive controls and prints as a clean ULM-branded PDF/report.
+All v47/v49 features remain intact.
 
-Update in v42: RB Left / RB Right now use defensive perspective labels and filtering (Def RB Left / Def RB Right) across the run-game explorer and context tables.
+## v51 — Top 10 formation defensive-response charts
 
-v43 Run Visual update:
-- Kept the existing Run Game Explorer visual exactly as the base.
-- Added a QB marker in the backfield.
-- Added RB marker(s) into that same live SVG.
-- Def RB Left moves the RB to the defense's left.
-- Def RB Right moves the RB to the defense's right.
-- Pistol / Center puts the RB directly behind the QB.
-- Split Backs draws two RBs.
-- All RB Alignments remains neutral/centered.
-- Fixed RB-side filter state so the dropdown remains defense-centric after selection.
+Added to Personnel & Formations, directly beneath ULM Formation Language:
 
+- Top 10 ULM Formations by raw play volume
+- Rush Count Against Top 10 Formations
+  - Rush 3
+  - Rush 4
+  - Rush 5
+  - Rush 6
+  - Rush 7+
+- Top Coverages Against Top 10 Formations
+  - six most-used coverage families across the top formations
+  - raw volume stacked by formation
+- Top Coverage Calls by Formation
+  - top three coverage families for each formation
+- Man vs Zone Against Top 10 Formations
+  - pass plays only
+  - raw call volume
 
-v44 update:
-- Added more top field space in the Run Game Explorer visual.
-- Moved the QB and RB deeper into the backfield for a cleaner gun look.
-- Kept a simple under-center fallback when the selected formation label includes 'under'.
+The new formation-defense chart group is also selectable in the custom scouting report builder.
 
+All calculations are derived from the existing PFF play feed combined with the validated ULM Formation labels from the user's 999-play hybrid file.
 
-v45 update:
-- In the Run Game Explorer visual, QB now aligns right beside the RB when Def RB Left or Def RB Right is selected.
-- Center/All/Unknown views remain neutral.
-- Under-center fallback remains in place.
+## v52 — Results are YPP, not volume
 
+Clarification applied:
 
-v46 update:
-- Flipped run-gap labels on the Run Game visual into true defensive perspective.
-- The field visual now reads left-to-right as Def Left D through Def Right D.
-- The gap summary boxes underneath the visual now match that same defensive ordering.
+- The Top 10 ULM formations are still selected and ranked by total play volume.
+- Every defensive-response result below that ranking is now shown as offensive yards per play.
+
+Result charts:
+- YPP by Rush 3 / 4 / 5 / 6 / 7+ against each top formation
+- YPP versus the most-used coverage families against each top formation
+- Top three called coverages for each formation with their YPP result
+- Man YPP versus Zone YPP against each top formation
+
+The result charts no longer use raw call volume as the result measure.
+
+## v53 — formation charts moved to the correct football sections
+
+Personnel & Formations:
+- keeps only the Top 10 ULM Formations by raw play volume
+
+Rush Count:
+- contains YPP by Rush 3 / 4 / 5 / 6 / 7+ for those top 10 formations
+
+Pass Game:
+- contains Pass YPP vs the most-used coverage families for those top 10 formations
+- contains the Top 3 coverage-call YPP result cards by formation
+- contains a general Man vs Zone Pass YPP chart by formation
+
+The custom scouting report builder now has separate selectable items for each of those chart groups.
