@@ -136,3 +136,26 @@ Behavior:
 - if ULM Formation = All, the diagram uses the most common current formation in the filtered run sample
 - if a specific ULM Formation is selected, the run path and lane stats are based only on that formation
 - no second conventional RB is inferred from personnel
+
+## v62 — personnel-aware TE surface
+
+Corrected the surface drawing so the diagram cannot create more TEs than the tagged play data supports.
+
+- TE count is derived first from ULM `TE` / PFF `pff_TES`; personnel is fallback only.
+- 11 personnel / one tagged TE draws one TE marker.
+- 12 personnel / two tagged TEs can draw two TE markers.
+- 13 personnel can draw three.
+- `DUO YH OFF` with one tagged TE is drawn as one `Y/H OFF` player, not a generic attached TE plus a second H.
+- `TREY Y OFF` in 11 personnel draws one Y; if a filtered sample is actually 12 personnel with two tagged TEs, the second TE is then added.
+- `ACE YU OFF` in a two-TE sample draws Y + U.
+
+
+## v64
+Formation + personnel aware TE/H structure. Mixed-personnel formations receive a Structure Personnel selector; PRO - OPEN split-surface 12p can show one TE each side; CLOSED - CLOSED always splits its two TEs.
+
+
+## v65 — shell-aware Y/H logic
+- Treats Y and H as separate players when both appear in the formation name.
+- In 2x2 shells, explicit pairs like `YH OFF`, `YU OFF`, `Y OFF H HIP`, and `Y OFF U HIP` are split across the formation rather than stacked on one side.
+- Uses the formation shell (`2x2`, `3x1`, `2x1`, etc.) as the first guide, then personnel and ULM modifiers.
+- Structure card now shows tagged TE count versus named surface players shown.

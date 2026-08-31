@@ -365,6 +365,7 @@ const ULM_HYBRID_EMBED=[{"#":"1","Quarter":"1","Distance":"10","Personnel":"11",
 let cloudNotes={}; let reportQueue=[]; let printProfilesPerPage=4; let customReportItems=[]; let ulmPlayMap=new WeakMap(); let ulmHybridReady=false; let ulmHybridMatchRate=0;
 const FILES={plays:['play_feed-82.csv','play_feed-82(1).csv'],qb:'pff-data-92.csv',receiving:'pff-data-94.csv',routes:'pff-data-95.csv',dropbacks:'pff-data-96.csv',passOverall:'pff-data-97.csv',pressure:'pff-data-98.csv',runConcepts:'pff-data-99.csv',runDirections:'pff-data-100.csv',runBlocking:'pff-data-101.csv',passBlocking:'pff-data-102.csv',formations:'pff-data-103.csv',personnel:'pff-data-104.csv'};
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',heatQB='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runBackfieldF='ALL',runMotionF='ALL',dndFilter='ALL';
+let structurePersonnelF='AUTO';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const num=v=>{let n=parseFloat(String(v??'').replace(/[%,$]/g,''));return Number.isFinite(n)?n:0};
@@ -1812,22 +1813,183 @@ function filteredRunDiagram(selected,gaps,total){
 function isEmptyFormationName(form){
  return /\bEMPTY\b/i.test(String(form||''));
 }
-function formationStructureMarkers(form){
+function surfaceSideForFormation(form){
  let s=String(form||'').toUpperCase();
- let m=[];
- if(/\bYU OFF\b/.test(s)){m.push({label:'Y',align:'OFF',slot:0});m.push({label:'U',align:'OFF',slot:1})}
- else if(/\bYH OFF\b/.test(s)){m.push({label:'Y',align:'OFF',slot:0});m.push({label:'H',align:'OFF',slot:1})}
- else{
-   if(/\bY OFF\b/.test(s))m.push({label:'Y',align:'OFF',slot:0});
-   if(/\bY HIP\b/.test(s))m.push({label:'Y',align:'HIP',slot:0});
-   if(/\bU OFF\b/.test(s))m.push({label:'U',align:'OFF',slot:0});
-   if(/\bU HIP\b/.test(s))m.push({label:'U',align:'HIP',slot:0});
-   if(/\bU STING\b/.test(s))m.push({label:'U',align:'STING',slot:0});
-   if(/\bH OFF\b/.test(s))m.push({label:'H',align:'OFF',slot:0});
-   if(/\bH HIP\b/.test(s))m.push({label:'H',align:'HIP',slot:0});
-   if(/\bH STING\b/.test(s))m.push({label:'H',align:'STING',slot:0});
+ if(/\bBOUNDARY\b|\bLEFT\b/.test(s)) return 'LEFT';
+ if(/\bFIELD\b|\bRIGHT\b/.test(s)) return 'RIGHT';
+ // No side is tagged in most ULM names. Keep the normalized surface on the right.
+ return 'RIGHT';
+}
+function surfaceAlignY(align){
+ if(align==='ON') return 132;
+ if(align==='OFF') return 104;
+ if(align==='HIP') return 82;
+ if(align==='STING') return 61;
+ return 104;
+}
+function surfaceAnchorX(side,index){
+ let right=[470,520,570], left=[230,180,130];
+ let arr=side==='LEFT'?left:right;
+ return arr[Math.min(index,arr.length-1)];
+}
+function parseTaggedPlayerCount(v){
+ let s=String(v||'').trim();
+ if(!s)return 0;
+ return s.split(/[;,]/).map(x=>x.trim()).filter(Boolean).length;
+}
+function teCountBreakdown(rows){
+ let counts={}, total=0;
+ rows.forEach(r=>{
+   let raw=ulmField(r,'TE','')||r.pff_TES||'';
+   let n=parseTaggedPlayerCount(raw);
+   if(!n){
+     let p=String(ulmField(r,'Personnel','')||r.pff_OFFPERSONNELBASIC||'').match(/^(\d)(\d)/);
+     if(p)n=Number(p[2]);
+   }
+   if(n>0){counts[n]=(counts[n]||0)+1; total++;}
+ });
+ return {counts,total};
+}
+function dominantTECount(rows){
+ let counts=teCountBreakdown(rows).counts;
+ let e=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+ return e?Number(e[0]):0;
+}
+function representativeTECount(rows){
+ let stats=teCountBreakdown(rows), counts=stats.counts, total=stats.total||0;
+ let dominant=dominantTECount(rows);
+ let keys=Object.keys(counts).map(Number).sort((a,b)=>a-b);
+ if(!keys.length)return 0;
+ let maxKey=Math.max(...keys);
+ if(maxKey>dominant && total>0 && (counts[maxKey]||0)/total>=0.25)return maxKey;
+ return dominant||maxKey;
+}
+function dominantFormationGroup(rows){
+ let g={};
+ rows.forEach(r=>{let v=String(r.pff_OFFFORMATIONGROUP||'').trim(); if(v)g[v]=(g[v]||0)+1;});
+ let e=Object.entries(g).sort((a,b)=>b[1]-a[1])[0];
+ return e?e[0]:'';
+}
+
+function inferredFormationGroup(form){
+ let s=String(form||'').toUpperCase();
+ if(/EMPTY 4X1|QUADS/.test(s))return '4x1';
+ if(/EMPTY 3X2/.test(s))return '3x2';
+ if(/\bTREY\b|\bTRIPS\b/.test(s))return '3x1';
+ if(/\bPRO\b/.test(s)&&/\bOPEN\b/.test(s))return '2x1';
+ if(/\bDOUBLES\b|\bDUO\b|\bACE\b|\bTWINS\b/.test(s))return '2x2';
+ return '';
+}
+function shellForFormationRows(form,rows){
+ return dominantFormationGroup(rows||[])||inferredFormationGroup(form);
+}
+function parseSurfaceRoles(form){
+ let s=String(form||'').toUpperCase().replace(/\s+/g,' ').trim();
+ let roles=[];
+ const add=(label,align)=>roles.push({label,align});
+ if(/\bYH OFF\b/.test(s)){add('Y','OFF');add('H','OFF');return roles;}
+ if(/\bYU OFF\b/.test(s)){add('Y','OFF');add('U','OFF');return roles;}
+ if(/\bY OFF U HIP\b/.test(s)){add('Y','OFF');add('U','HIP');return roles;}
+ if(/\bY OFF U STING\b/.test(s)){add('Y','OFF');add('U','STING');return roles;}
+ if(/\bY OFF H HIP\b/.test(s)){add('Y','OFF');add('H','HIP');return roles;}
+ if(/\bY OFF H STING\b/.test(s)){add('Y','OFF');add('H','STING');return roles;}
+ if(/\bACE U OFF\/B STING\b/.test(s)){add('U','OFF');add('B','STING');return roles;}
+ if(/\bACE U OFF\/Z STING\b/.test(s)){add('U','OFF');add('Z','STING');return roles;}
+ if(/\bU OFF B HIP\b/.test(s)){add('U','OFF');add('B','HIP');return roles;}
+ // single explicit role families
+ if(/\bY OFF\b/.test(s))add('Y','OFF');
+ else if(/\bY HIP\b/.test(s))add('Y','HIP');
+ else if(/\bY STING\b/.test(s))add('Y','STING');
+ else if(/\bY\b/.test(s))add('Y','ON');
+
+ if(/\bU OFF\b/.test(s))add('U','OFF');
+ else if(/\bU HIP\b/.test(s))add('U','HIP');
+ else if(/\bU STING\b/.test(s))add('U','STING');
+
+ if(/\bH OFF\b/.test(s))add('H','OFF');
+ else if(/\bH HIP\b/.test(s))add('H','HIP');
+ else if(/\bH STING\b/.test(s))add('H','STING');
+
+ // de-dupe exact repeats but keep distinct players
+ let seen={};
+ return roles.filter(r=>{let k=r.label+'|'+r.align; if(seen[k])return false; seen[k]=1; return true;});
+}
+function displaySurfaceCount(form,teCount){
+ let explicit=parseSurfaceRoles(form).length;
+ return Math.max(teCount||0, explicit||0);
+}
+function splitSurfaceFormation(form,teCount,rows){
+ let s=String(form||'').toUpperCase().replace(/\s+/g,' ').trim(),grp=dominantFormationGroup(rows||[]);
+ if(teCount<2)return false;
+ if(/\bCLOSED\s*-\s*CLOSED\b/.test(s))return true;
+ if(/\bPRO\b/.test(s)&&/\bOPEN\b/.test(s))return true;
+ if(/^PRO$/.test(s)&&['1x2','2x1','2x2'].includes(grp))return true;
+ if(['1x2','2x1'].includes(grp)&&(/\bPRO\b/.test(s)||/\bOPEN\b/.test(s)))return true;
+ return false;
+}
+function formationTEBlueprint(form,teCount,rows){
+ let s=String(form||'').toUpperCase().replace(/\s+/g,' ').trim();
+ let side=surfaceSideForFormation(s), opp=side==='LEFT'?'RIGHT':'LEFT', out=[];
+ let shell=shellForFormationRows(s,rows||[]);
+ let roles=parseSurfaceRoles(s);
+ let displayCount=displaySurfaceCount(s,teCount);
+ let add=(label,align,index,forcedSide)=>{
+   let usedSide=forcedSide||side;
+   out.push({label,align,side:usedSide,x:surfaceAnchorX(usedSide,index),y:surfaceAlignY(align)});
+ };
+
+ if(isEmptyFormationName(s)||displayCount<=0)return out;
+
+ // CLOSED-CLOSED is the cleanest explicit opposite-surface two-TE picture.
+ if(/\bCLOSED\s*-\s*CLOSED\b/.test(s) && displayCount>=2){
+   add('TE','ON',0,side); add('TE','ON',0,opp);
+   while(out.length<displayCount)add('TE','ON',out.length>1?1:0,side);
+   return out.slice(0,displayCount);
  }
- return m;
+
+ // Core fix: in 2x2 families, if the formation name explicitly contains two separate role players
+ // (Y/H, Y/U, Y + H HIP, etc.), do not stack them on one side. Split them across the shell.
+ if(shell==='2x2' && roles.length>=2){
+   add(roles[0].label,roles[0].align,0,side);
+   add(roles[1].label,roles[1].align,0,opp);
+   for(let i=2;i<roles.length;i++) add(roles[i].label,roles[i].align,1,side);
+   while(out.length<displayCount){
+     // If there are extra true TEs beyond the explicit role names, keep the shell balanced.
+     let nextSide = out.filter(x=>x.side===side).length<=out.filter(x=>x.side===opp).length ? side : opp;
+     let nextIndex = out.filter(x=>x.side===nextSide).length;
+     add('TE','ON',nextIndex,nextSide);
+   }
+   return out.slice(0,displayCount);
+ }
+
+ // PRO-OPEN and similar split-surface families.
+ if(splitSurfaceFormation(s,displayCount,rows)){
+   if(roles.length>=1) add(roles[0].label,roles[0].align,0,side);
+   else add('TE','ON',0,side);
+   if(roles.length>=2) add(roles[1].label,roles[1].align,0,opp);
+   else add('TE','ON',0,opp);
+   for(let i=2;i<roles.length;i++) add(roles[i].label,roles[i].align,1,side);
+   while(out.length<displayCount)add('TE','ON',out.length>1?1:0,side);
+   return out.slice(0,displayCount);
+ }
+
+ // If two named roles exist outside 2x2, keep them split unless the formation shell clearly loads one side.
+ if(roles.length>=2 && ['1x2','2x1','1x1'].includes(shell)){
+   add(roles[0].label,roles[0].align,0,side);
+   add(roles[1].label,roles[1].align,0,opp);
+   for(let i=2;i<roles.length;i++) add(roles[i].label,roles[i].align,1,side);
+   while(out.length<displayCount)add('TE','ON',out.length,side);
+   return out.slice(0,displayCount);
+ }
+
+ // Default loaded-surface behavior.
+ if(roles.length){
+   roles.forEach((r,i)=>add(r.label,r.align,Math.min(i,2),side));
+ } else {
+   add('TE','ON',0,side);
+ }
+ while(out.length<displayCount)add('TE','ON',out.length,side);
+ return out.slice(0,displayCount);
 }
 function dominantValue(rows,field){
  let g={};
@@ -1882,40 +2044,37 @@ function runPathD(meta){
  let cy=Math.min(sy,ey)-35;
  return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
 }
-function literalFormationSVG(form,backfield,gapStats){
- let markers=formationStructureMarkers(form);
+function literalFormationSVG(form,backfield,gapStats,formationRows){
  let empty=isEmptyFormationName(form);
+ let teCount=representativeTECount(formationRows||[]);
+ let displayCount=displaySurfaceCount(form,teCount);
+ let markers=formationTEBlueprint(form,teCount,formationRows||[]);
  let markerSvg='';
- markers.forEach((m,i)=>{
-   let x=500+(m.slot||0)*54, y=130;
-   if(m.align==='OFF')y=106;
-   else if(m.align==='HIP')y=82;
-   else if(m.align==='STING')y=58;
-   markerSvg+=structureMarkerSVG(x,y,m.label,m.align,m.label==='Y'?'#173d5f':'#8a2432');
+ markers.forEach((m)=>{
+   let fill=m.label==='Y'?'#173d5f':(m.label==='Y/H'?'#173d5f':(m.label==='TE'?'#5f6b75':'#8a2432'));
+   markerSvg+=structureMarkerSVG(m.x,m.y,m.label,m.align,fill);
  });
 
  let s=String(form||'').toUpperCase();
- let underCenter=/UNDER|UC/.test(s)||/UNDER|UC/.test(String(backfield||'').toUpperCase());
- let qbX=350, qbY=underCenter?120:82;
- let rbX=350, rbY=underCenter?82:42;
+ let underCenter=/UNDER|\bUC\b/.test(s)||/UNDER|\bUC\b/.test(String(backfield||'').toUpperCase());
+ let qbX=350,qbY=underCenter?120:82;
+ let rbX=350,rbY=underCenter?82:42;
  let rb=empty?'':structureMarkerSVG(rbX,rbY,'RB',backfield||'BACK','#D3A83D');
+
  let baseShape='';
  if(/EMPTY 4X1|QUADS/.test(s))baseShape='4 × 1';
  else if(/EMPTY 3X2/.test(s))baseShape='3 × 2';
- else if(/TREY|TRIPS/.test(s))baseShape='3 × 1';
- else if(/DOUBLES|DUO|ACE/.test(s))baseShape='2 × 2';
- else if(/PRO/.test(s))baseShape='PRO';
+ else if(/\bTREY\b|\bTRIPS\b/.test(s))baseShape='3 × 1';
+ else if(/\bDOUBLES\b|\bDUO\b|\bACE\b/.test(s))baseShape='2 × 2';
+ else if(/\bPRO\b/.test(s))baseShape='PRO';
 
  let gaps=structureGapMap();
  let maxN=Math.max(1,...gaps.map(g=>(gapStats[g.raw]||{n:0}).n||0));
- let arrowOriginX=qbX, arrowOriginY=qbY+8;
- let gapVisuals=gaps.map((g,i)=>{
+ let arrowOriginX=qbX,arrowOriginY=qbY+8;
+ let gapVisuals=gaps.map((g)=>{
    let st=gapStats[g.raw]||{n:0,ypp:0,med:0};
-   let ratio=st.n/maxN;
-   let width=4+22*ratio;
-   let opacity=.18+.75*ratio;
-   let endX=g.x, endY=168;
-   let controlY=underCenter?146:132;
+   let ratio=st.n/maxN,width=4+22*ratio,opacity=.18+.75*ratio;
+   let endX=g.x,endY=168,controlY=underCenter?146:132;
    let path=`M ${arrowOriginX} ${arrowOriginY} Q ${(arrowOriginX+endX)/2} ${controlY} ${endX} ${endY}`;
    let r=11+14*ratio;
    return `<g>
@@ -1928,14 +2087,14 @@ function literalFormationSVG(form,backfield,gapStats){
  }).join('');
 
  return `<svg viewBox="0 0 700 245" width="100%" height="245" role="img" aria-label="${esc(form)} surface structure">
-   <text x="350" y="18" text-anchor="middle" fill="#fff2c8" font-size="9" font-weight="900">NORMALIZED ULM SURFACE + RUN DISTRIBUTION</text>
+   <text x="350" y="18" text-anchor="middle" fill="#fff2c8" font-size="9" font-weight="900">ULM SURFACE + RUN DISTRIBUTION</text>
+   <text x="350" y="31" text-anchor="middle" fill="#fff" font-size="8" font-weight="850">${teCount} tagged TE${teCount===1?'':'s'} · ${displayCount} named surface player${displayCount===1?'':'s'} shown</text>
    <line x1="35" y1="145" x2="665" y2="145" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/>
    <text x="44" y="139" fill="#e5f4e8" font-size="9" font-weight="900">LOS</text>
 
    <circle cx="425" cy="132" r="11" fill="#f3f5f7"/><circle cx="380" cy="132" r="11" fill="#f3f5f7"/>
    <circle cx="335" cy="132" r="11" fill="#f3f5f7"/><circle cx="290" cy="132" r="11" fill="#f3f5f7"/>
    <circle cx="245" cy="132" r="11" fill="#f3f5f7"/>
-   <text x="335" y="118" text-anchor="middle" fill="#0d2234" font-size="8" font-weight="900">OL</text>
 
    ${structureMarkerSVG(qbX,qbY,'QB',underCenter?'UC':'GN','#7f1128')}
    ${rb}
@@ -1944,7 +2103,7 @@ function literalFormationSVG(form,backfield,gapStats){
 
    ${baseShape?`<text x="110" y="72" text-anchor="middle" fill="#fff2c8" font-size="15" font-weight="950">${baseShape}</text>`:''}
    ${empty?`<text x="110" y="94" text-anchor="middle" fill="#fff" font-size="9" font-weight="900">EMPTY · NO RB</text>`:''}
-   <text x="350" y="230" text-anchor="middle" fill="#fff2c8" font-size="8" font-weight="850">All 8 defensive gaps are shown for the selected structure. Thicker bands = more runs.</text>
+   <text x="350" y="230" text-anchor="middle" fill="#fff2c8" font-size="8" font-weight="850">TE/H placement is based on the exact formation + personnel variant shown. Split-surface families such as PRO - OPEN can place a second TE opposite the first when the selected personnel has two tagged TEs.</text>
  </svg>`;
 }
 function structureGapCards(gapStats,total){
@@ -1954,40 +2113,26 @@ function structureGapCards(gapStats,total){
    return `<div class="structure-gap-card"><small>${g.label}</small><b>${lead}</b><span>${fmt(st.ypp,2)} YPP · ${fmt(st.med,1)} median</span></div>`;
  }).join('')}</div>`;
 }
+function personnelValue(r){
+ return String(ulmField(r,'Personnel','')||r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'').trim();
+}
+function personnelCounts(rows){let g={};rows.forEach(r=>{let p=personnelValue(r);if(p)g[p]=(g[p]||0)+1});return g;}
+function structurePersonnelOptions(rows){return Object.entries(personnelCounts(rows)).sort((a,b)=>b[1]-a[1]||String(a[0]).localeCompare(String(b[0]))).map(([p,n])=>({p,n}));}
+function autoStructurePersonnel(rows){
+ let opts=structurePersonnelOptions(rows);if(!opts.length)return'';
+ let ranked=[...opts].sort((a,b)=>{let ta=Number((String(a.p).match(/^(\d)(\d)/)||[])[2]||0),tb=Number((String(b.p).match(/^(\d)(\d)/)||[])[2]||0);let sa=(a.n/Math.max(1,rows.length)>=0.20?100:0)+ta*10+a.n,sb=(b.n/Math.max(1,rows.length)>=0.20?100:0)+tb*10+b.n;return sb-sa;});
+ return ranked[0].p;
+}
+function structureRowsForPersonnel(rows){let opts=structurePersonnelOptions(rows);if(!opts.length)return {rows,personnel:'',mixed:false};let selected=structurePersonnelF;if(selected==='AUTO'||!opts.some(x=>x.p===selected))selected=autoStructurePersonnel(rows);let filtered=rows.filter(r=>personnelValue(r)===selected);return {rows:filtered.length?filtered:rows,personnel:selected,mixed:opts.length>1};}
 function teHAlignmentVisual(rows,total){
  if(!ulmHybridReady||!rows?.length)return'';
-
- let form=currentStructureFormation(rows);
- if(!form)return'';
- let fr=rows.filter(r=>ulmField(r,'Formation','')===form);
- let back=dominantValue(fr,'Backfield');
- let yloc=dominantValue(fr,'Y Location');
- let motion=dominantValue(fr,'Motion');
- let varr=dominantValue(fr,'Form Var');
- let vals=fr.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
- let ypp=fr.length?avg(vals):0,med=fr.length?calcMedian(vals):0;
- let auto=runFormationF==='ALL';
- let gapStats=structureGapStats(fr);
- let topGap=topGapEntry(gapStats);
-
- return `<div class="surface-structure-wrap">
-   <div class="surface-structure-head">
-     <div>
-       <h3>TE / H Structure + Run Distribution</h3>
-       <div class="subtle">${auto?`Showing the most-used ULM formation in the current filtered run sample. Choose a specific ULM Formation above to lock the diagram.`:`Showing the selected ULM formation.`}</div>
-     </div>
-   </div>
-   <div class="surface-structure-stat" style="padding:0;overflow:hidden">
-     <div style="padding:10px 12px 7px">
-       <small>ULM FORMATION</small>
-       <b style="font-size:15px">${esc(form)}</b>
-       <span>${fr.length} plays · ${fmt(ypp,2)} YPP · ${fmt(med,1)} median${topGap?` · Top path ${topGap.meta.label}`:''}</span>
-       <span>${back?`Backfield ${esc(back)}`:''}${yloc?` · Y Location ${esc(yloc)}`:''}${varr?` · ${esc(varr)}`:''}${motion?` · Motion ${esc(motion)}`:''}</span>
-     </div>
-     <div class="surface-structure-visual" style="border-radius:0;border-left:0;border-right:0;border-bottom:0">${literalFormationSVG(form,back,gapStats)}</div>
-     <div style="padding:10px 12px 12px">${structureGapCards(gapStats,fr.length)}</div>
-   </div>
- </div>`;
+ let form=currentStructureFormation(rows);if(!form)return'';
+ let formationRows=rows.filter(r=>ulmField(r,'Formation','')===form);
+ let variant=structureRowsForPersonnel(formationRows),fr=variant.rows,structurePersonnel=variant.personnel;
+ let back=dominantValue(fr,'Backfield'),yloc=dominantValue(fr,'Y Location'),motion=dominantValue(fr,'Motion'),varr=dominantValue(fr,'Form Var'),group=dominantFormationGroup(fr);
+ let vals=fr.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS)),ypp=fr.length?avg(vals):0,med=fr.length?calcMedian(vals):0;
+ let auto=runFormationF==='ALL',gapStats=structureGapStats(fr),topGap=topGapEntry(gapStats),teCount=representativeTECount(fr),opts=structurePersonnelOptions(formationRows);
+ return `<div class="surface-structure-wrap"><div class="surface-structure-head"><div><h3>TE / H Structure + Run Distribution</h3><div class="subtle">${auto?`Showing the most-used ULM formation in the current filtered run sample.`:`Showing the selected ULM formation.`} Structure is based on formation + personnel, not formation name alone.</div></div></div>${opts.length>1?`<div class="run-filter-bar" style="margin:0 0 8px"><label>Structure Personnel<select onchange="setStructurePersonnel(this.value)"><option value="AUTO" ${structurePersonnelF==='AUTO'?'selected':''}>Auto</option>${opts.map(o=>`<option value="${esc(o.p)}" ${structurePersonnelF===o.p?'selected':''}>${esc(o.p)} personnel · ${o.n} plays</option>`).join('')}</select></label><div class="filter-result-note" style="align-self:end;margin:0">Drawing ${esc(structurePersonnel)} personnel · ${fr.length} plays</div></div>`:''}<div class="surface-structure-stat" style="padding:0;overflow:hidden"><div style="padding:10px 12px 7px"><small>ULM FORMATION + PERSONNEL</small><b style="font-size:15px">${esc(form)}${structurePersonnel?` · ${esc(structurePersonnel)}P`:''}</b><span>${fr.length} plays · ${fmt(ypp,2)} YPP · ${fmt(med,1)} median${topGap?` · Top path ${topGap.meta.label}`:''}</span><span>${back?`Backfield ${esc(back)}`:''}${yloc?` · Y Location ${esc(yloc)}`:''} · ${teCount} tagged TE${teCount===1?'':'s'}${group?` · Group ${esc(group)}`:''}${varr?` · ${esc(varr)}`:''}${motion?` · Motion ${esc(motion)}`:''}</span></div><div class="surface-structure-visual" style="border-radius:0;border-left:0;border-right:0;border-bottom:0">${literalFormationSVG(form,back,gapStats,fr)}</div><div style="padding:10px 12px 12px">${structureGapCards(gapStats,fr.length)}</div></div></div>`;
 }
 
 function runVisualizer(){
@@ -2225,8 +2370,9 @@ function render(){let app=$('app');if(page==='players')app.innerHTML=playersPage
 function syncNav(){document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
 window.setGroup=id=>{group=id;selected=null;facet='overview';render()};window.openPlayer=name=>openFAUProfile(name);window.setFacet=id=>{facet=id;render()};
 window.setFreqMode=v=>{freqMode=v;render()};window.setDndFilter=v=>{dndFilter=v;render()};window.setHeatScope=v=>{heatScope=v;if(v!=='coverage')heatCoverage='ALL';render()};window.setHeatMetric=v=>{heatMetric=v;render()};window.setHeatCoverage=v=>{heatCoverage=v;render()};window.setHeatHash=v=>{heatHash=v;render()};window.setHeatQB=v=>{heatQB=v;render()};window.setRunConceptFocus=v=>{runConceptFocus=v;render()};
-window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel')runPersonnelF=v;else if(kind==='formation')runFormationF=v;else if(kind==='backfield')runBackfieldF=v;else if(kind==='motion')runMotionF=v;render()};
-window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';runBackfieldF='ALL';runMotionF='ALL';dndFilter='ALL';render()};
+window.setStructurePersonnel=(v)=>{structurePersonnelF=v;render()};
+window.setRunFilter=(kind,v)=>{if(kind==='concept')runConceptFocus=v;else if(kind==='hash')runHashF=v;else if(kind==='rb')runRBSideF=v;else if(kind==='personnel'){runPersonnelF=v;structurePersonnelF='AUTO'}else if(kind==='formation'){runFormationF=v;structurePersonnelF='AUTO'}else if(kind==='backfield')runBackfieldF=v;else if(kind==='motion')runMotionF=v;render()};
+window.resetRunFilters=()=>{runConceptFocus='ALL';runHashF='ALL';runRBSideF='ALL';runPersonnelF='ALL';runFormationF='ALL';runBackfieldF='ALL';runMotionF='ALL';structurePersonnelF='AUTO';dndFilter='ALL';render()};
 document.addEventListener('click',e=>{
  let card=e.target.closest?.('.player-card[data-player-index]');
  if(card && !e.target.closest('button,a')) openPlayerIndex(Number(card.dataset.playerIndex));
