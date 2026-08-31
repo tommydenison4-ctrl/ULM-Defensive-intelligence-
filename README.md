@@ -77,3 +77,62 @@ Pass Game:
 - contains a general Man vs Zone Pass YPP chart by formation
 
 The custom scouting report builder now has separate selectable items for each of those chart groups.
+
+## v54 — TE / H Alignment Structure
+
+Added a second run-game visual directly under the existing Run Game Explorer diagram.
+
+The companion visual:
+- uses the same active run filters
+- keeps the defense-centric left/right view
+- plots TE/Y alignment by side using `pff_TEALIGNMENT`
+- plots H-back alignment using FB/H-back tags from `pff_RBALIGNMENT` / `pff_RBSINBACKFIELD`
+- shows raw alignment volume plus YPP inside each Y/H bubble
+- adds ULM `Y Location` cards underneath when the validated hybrid language is available
+- includes Y-location volume, YPP and median YPP
+
+The existing run-gap visual is unchanged.
+
+The TE / H Alignment Structure is also available as its own item in the custom scouting report builder.
+
+## v56 — ULM Surface Structure rebuild
+
+The prior TE/H alignment diagram was removed and rebuilt because it was inferring alignment from PFF RB/TE fields that are not present in the user-supplied hybrid.
+
+This version uses the ULM formation language itself.
+
+Rules:
+- Y/U/H markers are shown only when the ULM formation name explicitly contains those players and an alignment word such as OFF, HIP, STING or WING.
+- Examples supported directly from the file include Y OFF, YU OFF, YH OFF, U OFF, U HIP, U STING, H HIP and H OFF.
+- The diagram is normalized to one formation surface. It does not claim defense-left/defense-right or field/boundary side when the ULM source does not provide that.
+- EMPTY formations never draw an RB.
+- Personnel controls RB count for non-empty structures.
+- The card still displays ULM Y Location, Backfield and Motion as labels, but those fields are not converted into invented player coordinates.
+- When multiple formations are included by the active Run Game filters, the visual shows the top 10 formations in that filtered sample as separate structure cards rather than blending incompatible structures together.
+
+## v57 — simplified TE / H structure
+
+Corrected the v56 behavior:
+
+- There is now ONE companion TE/H diagram, not ten formation cards.
+- If ULM Formation is set to All, the diagram shows only the most-used formation in the current filtered run sample.
+- Selecting a specific ULM Formation in the existing Run Game filter changes the diagram to that formation.
+- The diagram never infers two conventional RBs from personnel count.
+- In 20/21-type structures, an H/U can be the second back in the personnel grouping, so drawing two RBs plus an H/U duplicated the structure. v57 prevents that.
+- Empty formations show no RB.
+- Y/U/H placement still comes only from explicit ULM formation-name language.
+
+## v58 — TE / H structure now shows where the run goes
+
+Added run-destination information to the companion TE / H structure diagram:
+
+- gold arrow shows the most-used run path for the current structure sample
+- bottom lane markers show all eight run lanes in defensive orientation
+- each lane shows filtered run volume
+- a summary grid below the diagram shows every lane with volume or percentage (toggle aware), plus YPP and median YPP
+
+Behavior:
+- still one structure diagram only
+- if ULM Formation = All, the diagram uses the most common current formation in the filtered run sample
+- if a specific ULM Formation is selected, the run path and lane stats are based only on that formation
+- no second conventional RB is inferred from personnel

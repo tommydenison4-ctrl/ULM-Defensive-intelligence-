@@ -202,6 +202,26 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 
 .run-context-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
 .run-context-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+
+.surface-structure-wrap{margin:14px 0}
+.surface-structure-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:8px}
+.surface-structure-head h3{margin:0}
+.surface-structure-visual{background:linear-gradient(180deg,#0e5137,#1f754f);border:1px solid #0d3e2a;border-radius:18px;padding:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.surface-structure-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.surface-structure-stat{border:1px solid #e1e6eb;border-radius:10px;padding:9px;background:#fff}
+.surface-structure-stat small{display:block;font-size:8px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+.surface-structure-stat b{display:block;font-size:15px;color:var(--maroon);margin-top:3px}
+.surface-structure-stat span{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+
+.structure-gap-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.structure-gap-card{border:1px solid #e1e6eb;border-radius:10px;padding:8px;background:#fff}
+.structure-gap-card small{display:block;font-size:8px;font-weight:900;text-transform:uppercase;color:var(--muted)}
+.structure-gap-card b{display:block;font-size:13px;color:var(--maroon);margin-top:3px}
+.structure-gap-card span{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+@media(max-width:760px){.structure-gap-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@media(max-width:760px){.surface-structure-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 .run-context-card h4{margin:0 0 8px}.run-context-row{display:grid;grid-template-columns:1.1fr .65fr .65fr .65fr;gap:8px;padding:8px 0;border-bottom:1px solid #edf0f3;align-items:center}.run-context-row:last-child{border-bottom:0}.run-context-row.head{font-size:9px;text-transform:uppercase;color:var(--muted);font-weight:900}.run-context-row b{font-size:13px}.gap-ypp{font-size:10px;margin-top:3px;color:#fff7d6;font-weight:900}.gap-sub{font-size:9px;margin-top:1px;color:#f7eaca}.run-data-note{font-size:10px;color:var(--muted);margin-top:9px}
 @media(max-width:850px){.run-context-grid{grid-template-columns:1fr}}
 
@@ -267,6 +287,8 @@ main{padding:20px 22px 50px;min-width:0}.opponent-banner{background:linear-gradi
 
 .defensive-field-svg .offense-geometry{transform-box:fill-box;transform-origin:center;transform:scaleY(-1)}
 .defensive-orientation-note{font-size:10px;color:var(--muted);font-weight:800;text-align:center;margin-top:6px}
+
+
 </style>
 </head>
 <body>
@@ -835,6 +857,7 @@ function customReportCatalog(){
   {id:'formation-rush-ypp',label:'Rush Count YPP by Formation',cat:'Charts & Diagrams',type:'view'},
   {id:'formation-pass-ypp',label:'Pass Defense YPP by Formation',cat:'Charts & Diagrams',type:'view'},
   {id:'run',label:'Run Game Explorer',cat:'Charts & Diagrams',type:'view'},
+  {id:'te-h-structure',label:'TE / H Alignment Structure',cat:'Charts & Diagrams',type:'view'},
   {id:'heatmaps',label:'Passing Heat Map',cat:'Charts & Diagrams',type:'view'},
   {id:'coverage',label:'Coverage Response',cat:'Scouting Views',type:'view'},
   {id:'situations',label:'Situations / D&D',cat:'Scouting Views',type:'view'},
@@ -893,6 +916,7 @@ function customViewHTML(id){
  if(id==='formation-rush-ypp')return `<div class="page-title"><h2>Rush Count YPP by Formation</h2></div>${rushCountFormationYPPCharts()}`;
  if(id==='formation-pass-ypp')return `<div class="page-title"><h2>Pass Defense YPP by Formation</h2></div>${passGameFormationYPPCharts()}`;
  if(id==='run')return `<div class="page-title"><h2>Run Game</h2></div>${runVisualizer()}`;
+ if(id==='te-h-structure'){let rows=selectedRunRows(runConceptFocus||'ALL');return `<div class="page-title"><h2>TE / H Alignment Structure</h2></div>${teHAlignmentVisual(rows,rows.length)}`;}
  if(id==='heatmaps')return heatmapPage();
  if(id==='coverage')return coveragePage();
  if(id==='situations')return situationsPage();
@@ -1781,6 +1805,191 @@ function filteredRunDiagram(selected,gaps,total){
    <text x="350" y="305" text-anchor="middle" fill="#fff2c8" font-size="10" font-weight="900">DEFENSE</text>
  </svg></div>`;
 }
+
+
+
+
+function isEmptyFormationName(form){
+ return /\bEMPTY\b/i.test(String(form||''));
+}
+function formationStructureMarkers(form){
+ let s=String(form||'').toUpperCase();
+ let m=[];
+ if(/\bYU OFF\b/.test(s)){m.push({label:'Y',align:'OFF',slot:0});m.push({label:'U',align:'OFF',slot:1})}
+ else if(/\bYH OFF\b/.test(s)){m.push({label:'Y',align:'OFF',slot:0});m.push({label:'H',align:'OFF',slot:1})}
+ else{
+   if(/\bY OFF\b/.test(s))m.push({label:'Y',align:'OFF',slot:0});
+   if(/\bY HIP\b/.test(s))m.push({label:'Y',align:'HIP',slot:0});
+   if(/\bU OFF\b/.test(s))m.push({label:'U',align:'OFF',slot:0});
+   if(/\bU HIP\b/.test(s))m.push({label:'U',align:'HIP',slot:0});
+   if(/\bU STING\b/.test(s))m.push({label:'U',align:'STING',slot:0});
+   if(/\bH OFF\b/.test(s))m.push({label:'H',align:'OFF',slot:0});
+   if(/\bH HIP\b/.test(s))m.push({label:'H',align:'HIP',slot:0});
+   if(/\bH STING\b/.test(s))m.push({label:'H',align:'STING',slot:0});
+ }
+ return m;
+}
+function dominantValue(rows,field){
+ let g={};
+ rows.forEach(r=>{let v=ulmField(r,field,'');if(v)g[v]=(g[v]||0)+1});
+ let e=Object.entries(g).sort((a,b)=>b[1]-a[1])[0];
+ return e?e[0]:'';
+}
+function structureMarkerSVG(x,y,label,sub,fill){
+ return `<g><circle cx="${x}" cy="${y}" r="18" fill="${fill}" stroke="#fff" stroke-width="2.5"/>
+ <text x="${x}" y="${y-1}" text-anchor="middle" fill="#fff" font-size="11" font-weight="950">${label}</text>
+ <text x="${x}" y="${y+11}" text-anchor="middle" fill="#fff5cf" font-size="7" font-weight="900">${sub}</text></g>`;
+}
+function currentStructureFormation(rows){
+ if(runFormationF&&runFormationF!=='ALL')return runFormationF;
+ let g={};
+ rows.forEach(r=>{let f=ulmField(r,'Formation','');if(f)g[f]=(g[f]||0)+1});
+ let e=Object.entries(g).sort((a,b)=>b[1]-a[1])[0];
+ return e?e[0]:'';
+}
+function structureGapMap(){
+ // Map raw POA keys into the DEFENSIVE visual orientation.
+ return [
+  {raw:'RE',label:'Def Left D',short:'LD',x:170},
+  {raw:'RT',label:'Def Left C',short:'LC',x:230},
+  {raw:'RG',label:'Def Left B',short:'LB',x:290},
+  {raw:'MR',label:'Def Left A',short:'LA',x:330},
+  {raw:'ML',label:'Def Right A',short:'RA',x:370},
+  {raw:'LG',label:'Def Right B',short:'RB',x:410},
+  {raw:'LT',label:'Def Right C',short:'RC',x:470},
+  {raw:'LE',label:'Def Right D',short:'RD',x:530}
+ ];
+}
+function structureGapStats(rows){
+ let out={};
+ structureGapMap().forEach(g=>out[g.raw]={n:0,y:0,vals:[]});
+ rows.forEach(r=>{
+   let k=normalizePOA(r.pff_POAACTUAL);
+   if(!k||!out[k])return;
+   let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);
+   out[k].n++; out[k].y+=gain; out[k].vals.push(gain);
+ });
+ Object.values(out).forEach(v=>{v.ypp=v.n?v.y/v.n:0; v.med=v.n?calcMedian(v.vals):0});
+ return out;
+}
+function topGapEntry(stats){
+ let best=structureGapMap().map(g=>({meta:g,...(stats[g.raw]||{n:0,ypp:0,med:0})})).sort((a,b)=>b.n-a.n)[0];
+ return best&&best.n?best:null;
+}
+function runPathD(meta){
+ let sx=350, sy=58, ex=meta.x, ey=145;
+ let cx=(sx+ex)/2;
+ let cy=Math.min(sy,ey)-35;
+ return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
+}
+function literalFormationSVG(form,backfield,gapStats){
+ let markers=formationStructureMarkers(form);
+ let empty=isEmptyFormationName(form);
+ let markerSvg='';
+ markers.forEach((m,i)=>{
+   let x=500+(m.slot||0)*54, y=130;
+   if(m.align==='OFF')y=106;
+   else if(m.align==='HIP')y=82;
+   else if(m.align==='STING')y=58;
+   markerSvg+=structureMarkerSVG(x,y,m.label,m.align,m.label==='Y'?'#173d5f':'#8a2432');
+ });
+
+ let s=String(form||'').toUpperCase();
+ let underCenter=/UNDER|UC/.test(s)||/UNDER|UC/.test(String(backfield||'').toUpperCase());
+ let qbX=350, qbY=underCenter?120:82;
+ let rbX=350, rbY=underCenter?82:42;
+ let rb=empty?'':structureMarkerSVG(rbX,rbY,'RB',backfield||'BACK','#D3A83D');
+ let baseShape='';
+ if(/EMPTY 4X1|QUADS/.test(s))baseShape='4 × 1';
+ else if(/EMPTY 3X2/.test(s))baseShape='3 × 2';
+ else if(/TREY|TRIPS/.test(s))baseShape='3 × 1';
+ else if(/DOUBLES|DUO|ACE/.test(s))baseShape='2 × 2';
+ else if(/PRO/.test(s))baseShape='PRO';
+
+ let gaps=structureGapMap();
+ let maxN=Math.max(1,...gaps.map(g=>(gapStats[g.raw]||{n:0}).n||0));
+ let arrowOriginX=qbX, arrowOriginY=qbY+8;
+ let gapVisuals=gaps.map((g,i)=>{
+   let st=gapStats[g.raw]||{n:0,ypp:0,med:0};
+   let ratio=st.n/maxN;
+   let width=4+22*ratio;
+   let opacity=.18+.75*ratio;
+   let endX=g.x, endY=168;
+   let controlY=underCenter?146:132;
+   let path=`M ${arrowOriginX} ${arrowOriginY} Q ${(arrowOriginX+endX)/2} ${controlY} ${endX} ${endY}`;
+   let r=11+14*ratio;
+   return `<g>
+      <path d="${path}" fill="none" stroke="rgba(255,198,96,${opacity.toFixed(2)})" stroke-width="${width.toFixed(1)}" stroke-linecap="round"/>
+      <circle cx="${endX}" cy="${endY}" r="${r.toFixed(1)}" fill="rgba(127,17,40,${(.28+.68*ratio).toFixed(2)})" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+      <text x="${endX}" y="${endY-4}" text-anchor="middle" fill="#fff" font-size="13" font-weight="950">${st.n||0}</text>
+      <text x="${endX}" y="${endY+12}" text-anchor="middle" fill="#fff2c8" font-size="8" font-weight="900">${st.n?fmt(st.ypp,1)+' YPP':'—'}</text>
+      <text x="${endX}" y="198" text-anchor="middle" fill="#ffe9a8" font-size="9" font-weight="900">${g.label}</text>
+    </g>`;
+ }).join('');
+
+ return `<svg viewBox="0 0 700 245" width="100%" height="245" role="img" aria-label="${esc(form)} surface structure">
+   <text x="350" y="18" text-anchor="middle" fill="#fff2c8" font-size="9" font-weight="900">NORMALIZED ULM SURFACE + RUN DISTRIBUTION</text>
+   <line x1="35" y1="145" x2="665" y2="145" stroke="#e5f4e8" stroke-width="3" stroke-dasharray="10 8"/>
+   <text x="44" y="139" fill="#e5f4e8" font-size="9" font-weight="900">LOS</text>
+
+   <circle cx="425" cy="132" r="11" fill="#f3f5f7"/><circle cx="380" cy="132" r="11" fill="#f3f5f7"/>
+   <circle cx="335" cy="132" r="11" fill="#f3f5f7"/><circle cx="290" cy="132" r="11" fill="#f3f5f7"/>
+   <circle cx="245" cy="132" r="11" fill="#f3f5f7"/>
+   <text x="335" y="118" text-anchor="middle" fill="#0d2234" font-size="8" font-weight="900">OL</text>
+
+   ${structureMarkerSVG(qbX,qbY,'QB',underCenter?'UC':'GN','#7f1128')}
+   ${rb}
+   ${markerSvg}
+   ${gapVisuals}
+
+   ${baseShape?`<text x="110" y="72" text-anchor="middle" fill="#fff2c8" font-size="15" font-weight="950">${baseShape}</text>`:''}
+   ${empty?`<text x="110" y="94" text-anchor="middle" fill="#fff" font-size="9" font-weight="900">EMPTY · NO RB</text>`:''}
+   <text x="350" y="230" text-anchor="middle" fill="#fff2c8" font-size="8" font-weight="850">All 8 defensive gaps are shown for the selected structure. Thicker bands = more runs.</text>
+ </svg>`;
+}
+function structureGapCards(gapStats,total){
+ return `<div class="structure-gap-grid">${structureGapMap().map(g=>{
+   let st=gapStats[g.raw]||{n:0,ypp:0,med:0};
+   let lead=freqMode==='raw'?st.n:pct(100*st.n/Math.max(1,total));
+   return `<div class="structure-gap-card"><small>${g.label}</small><b>${lead}</b><span>${fmt(st.ypp,2)} YPP · ${fmt(st.med,1)} median</span></div>`;
+ }).join('')}</div>`;
+}
+function teHAlignmentVisual(rows,total){
+ if(!ulmHybridReady||!rows?.length)return'';
+
+ let form=currentStructureFormation(rows);
+ if(!form)return'';
+ let fr=rows.filter(r=>ulmField(r,'Formation','')===form);
+ let back=dominantValue(fr,'Backfield');
+ let yloc=dominantValue(fr,'Y Location');
+ let motion=dominantValue(fr,'Motion');
+ let varr=dominantValue(fr,'Form Var');
+ let vals=fr.map(r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS));
+ let ypp=fr.length?avg(vals):0,med=fr.length?calcMedian(vals):0;
+ let auto=runFormationF==='ALL';
+ let gapStats=structureGapStats(fr);
+ let topGap=topGapEntry(gapStats);
+
+ return `<div class="surface-structure-wrap">
+   <div class="surface-structure-head">
+     <div>
+       <h3>TE / H Structure + Run Distribution</h3>
+       <div class="subtle">${auto?`Showing the most-used ULM formation in the current filtered run sample. Choose a specific ULM Formation above to lock the diagram.`:`Showing the selected ULM formation.`}</div>
+     </div>
+   </div>
+   <div class="surface-structure-stat" style="padding:0;overflow:hidden">
+     <div style="padding:10px 12px 7px">
+       <small>ULM FORMATION</small>
+       <b style="font-size:15px">${esc(form)}</b>
+       <span>${fr.length} plays · ${fmt(ypp,2)} YPP · ${fmt(med,1)} median${topGap?` · Top path ${topGap.meta.label}`:''}</span>
+       <span>${back?`Backfield ${esc(back)}`:''}${yloc?` · Y Location ${esc(yloc)}`:''}${varr?` · ${esc(varr)}`:''}${motion?` · Motion ${esc(motion)}`:''}</span>
+     </div>
+     <div class="surface-structure-visual" style="border-radius:0;border-left:0;border-right:0;border-bottom:0">${literalFormationSVG(form,back,gapStats)}</div>
+     <div style="padding:10px 12px 12px">${structureGapCards(gapStats,fr.length)}</div>
+   </div>
+ </div>`;
+}
+
 function runVisualizer(){
  let allRuns=(datasets.plays||[]).filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R');
  let concepts=['ALL',...(datasets.runConcepts||[]).map(r=>r.RC).filter(Boolean)];
@@ -1806,6 +2015,7 @@ function runVisualizer(){
  <div class="kpis"><div class="kpi"><span>Filtered Runs</span><b>${total}</b><small>current view</small></div><div class="kpi"><span>YPP</span><b>${fmt(avg(gains),2)}</b><small>filtered plays</small></div><div class="kpi"><span>Median</span><b>${fmt(calcMedian(gains),1)}</b><small>yards</small></div><div class="kpi"><span>Explosives</span><b>${freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x>=15).length/Math.max(1,total)):`${gains.filter(x=>x>=15).length} plays`}</small></div><div class="kpi"><span>Negative Plays</span><b>${freqMode==='raw'?gains.filter(x=>x<=0).length:pct(100*gains.filter(x=>x<=0).length/Math.max(1,total))}</b><small>${freqMode==='raw'?pct(100*gains.filter(x=>x<=0).length/Math.max(1,total)):`${gains.filter(x=>x<=0).length} plays`}</small></div></div>
  <div class="filter-result-note">${esc(current==='ALL'?'All concepts':current)} · ${runHashF==='ALL'?'all hashes':hashLabel(runHashF)} · ${runRBSideF==='ALL'?'all RB alignments':defRbLabel(runRBSideF)} · ${runPersonnelF==='ALL'?'all personnel':runPersonnelF} · ${runFormationF==='ALL'?(ulmHybridReady?'all ULM formations':'all formations'):runFormationF}${ulmHybridReady?` · ${runBackfieldF==='ALL'?'all backfields':runBackfieldF} · ${runMotionF==='ALL'?'all motion':runMotionF}`:''}</div>
  ${filteredRunDiagram(selected,gaps,total)}
+ ${teHAlignmentVisual(selected,total)}
  <div class="gap-strip">${gapOrder.map(([k,label])=>{let x=gaps[k],share=100*x.n/Math.max(1,total),hot=primary&&primary[0]===k;return `<div class="gap-box ${hot?'hot':''}"><div class="gap-name">${label}</div><div class="gap-count">${freqMode==='raw'?x.n:pct(share)}</div><div class="gap-ypp2">${x.n?fmt(x.ypp,2):'—'} YPP</div><div class="subtle">${x.n?`${fmt(x.med,1)} median`:''}</div></div>`}).join('')}</div>
  <div class="run-context-grid">${contextTable('Run Origin by Hash',[['Def Left Hash',hashes.R],['Middle',hashes.C],['Def Right Hash',hashes.L],['Unknown',hashes.UNK]],total)}${contextTable('RB Alignment to QB',[['Def RB Left',rb.RIGHT],['Def RB Right',rb.LEFT],['Pistol / Center',rb.CENTER],['Split Backs',rb.SPLIT],['Unknown',rb.UNKNOWN]],total)}</div>
  ${runSurfacePanel(selected,total)}
