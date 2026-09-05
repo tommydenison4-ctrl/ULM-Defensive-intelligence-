@@ -1,0 +1,149 @@
+{
+  "team": "UAB",
+  "season": 2026,
+  "offense": [
+    [
+      "WR-X",
+      [
+        "8",
+        "Kaleb Brown",
+        "RS SR/TR"
+      ],
+      [
+        "6",
+        "KJ Daniels",
+        "RS SO/TR"
+      ]
+    ],
+    [
+      "WR-Z",
+      [
+        "9",
+        "AJ Johnson",
+        "GR/TR"
+      ],
+      [
+        "14",
+        "Jailen Holmes",
+        "RS SR/TR"
+      ]
+    ],
+    [
+      "WR-SL",
+      [
+        "0",
+        "Ty Mims",
+        "RS SR/TR"
+      ],
+      [
+        "1",
+        "CJ Smith",
+        "RS SR/TR"
+      ]
+    ],
+    [
+      "LT",
+      [
+        "51",
+        "Payton Kirkland",
+        "RS JR/TR"
+      ],
+      [
+        "74",
+        "Barry Walker Jr",
+        "RS SO"
+      ]
+    ],
+    [
+      "LG",
+      [
+        "59",
+        "Jaden Ligon",
+        "RS SO"
+      ],
+      [
+        "66",
+        "Donovan Lawrence",
+        "RS FR"
+      ]
+    ],
+    [
+      "C",
+      [
+        "68",
+        "Adam Lepkowski",
+        "GR"
+      ],
+      [
+        "57",
+        "Aidan Platt",
+        "RS FR"
+      ]
+    ],
+    [
+      "RG",
+      [
+        "75",
+        "Calib Perez",
+        "RS SR/TR"
+      ],
+      [
+        "78",
+        "Nelson Ramirez",
+        "RS JR/TR"
+      ]
+    ],
+    [
+      "RT",
+      [
+        "55",
+        "Barrett Maddox",
+        "RS JR/TR"
+      ],
+      [
+        "71",
+        "Kyrik Mason",
+        "GR/TR"
+      ]
+    ],
+    [
+      "TE",
+      [
+        "85",
+        "Antonio Ferguson",
+        "RS JR/TR"
+      ],
+      [
+        "87",
+        "Sean Persson",
+        "RS SO/TR"
+      ]
+    ],
+    [
+      "QB",
+      [
+        "5",
+        "Ryder Burton",
+        "RS JR/TR"
+      ],
+      [
+        "16",
+        "Nate Rogers",
+        "RS SO"
+      ]
+    ],
+    [
+      "RB",
+      [
+        "2",
+        "Rod Robinson",
+        "RS JR/TR"
+      ],
+      [
+        "3",
+        "Bam McReynolds",
+        "RS SR/TR"
+      ]
+    ]
+  ]
+}
