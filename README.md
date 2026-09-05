@@ -96,3 +96,22 @@ The included `uab-player-image-manifest.csv` maps each current offensive player 
 - final Supabase public URL
 
 No Vercel image fallback is used.
+
+## v11 — Player Identity + Photo Fallback Fix
+
+- Fixes current 2026 UAB player-to-play matching in the raw PFF feed.
+- PFF raw play tokens use `ALBI ##` jersey tokens rather than names. For the Sept. 3, 2026 game only, the app now safely resolves those tokens to the current roster by jersey number.
+- Historical games remain conservative and are not assigned to current players by jersey number alone.
+- This fixes cases such as CJ Smith showing 5 targets / 57 yards in the PFF summary but `0 Week 1` matched plays.
+- Player photos now try the Supabase `player-images` object first and automatically fall back to the exact official UAB/Sidearm portrait URL if the Supabase image is missing or misnamed.
+- Removed stale `Weighted Week 2 Scout` and `2025 Season Snapshot` labels from UAB player profiles.
+- Team-level 50/50 weighting remains unchanged.
+
+## v12 — Direct Official UAB Images
+
+- Reverts the UAB photo layer to the same simple pattern used successfully for Mississippi State.
+- `roster.json` now points directly to each player's official UAB Athletics image URL.
+- No `player-images` Supabase folder is required for the app to show portraits.
+- The previous Supabase image path is preserved only as an optional backup.
+- Player data, PFF files, roster, and depth chart remain Supabase-driven.
+- Initials appear only if both the official UAB image and optional backup fail.
