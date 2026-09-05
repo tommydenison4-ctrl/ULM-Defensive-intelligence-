@@ -63,3 +63,36 @@ Added a dedicated Coach Jones Notes tab.
 - The visual follows the active ULM Formation filter.
 - If a formation is not explicitly selected, it uses the most common formation in the current filtered run sample.
 - Added a fallback so the second visual does not silently disappear if the primary structure renderer returns no markup.
+
+## v8 — UAB Player Photos + UI Cleanup
+- Populated all 54 current offensive roster records with exact official UAB profile links.
+- Populated official UAB Athletics/Sidearm player images; Vili Haapasalo currently uses UAB's own default-player image because the roster page has no player portrait.
+- Added aliases for roster/PFF naming differences (Nate/Nathan Rogers, Cam/Cameron Jennings, Rod Robinson II, CD Gill, etc.).
+- Week 2 sidebar now says `UAB 2 Deep` instead of `Mississippi State 2 Deep`.
+- Fixed Run Concepts and other `.data-table` rows for dark-mode readability.
+- App remains Supabase-first: upload the included `roster.json` over the current UAB roster object in Supabase.
+
+## v9 — Player Profile Data + Photo Fix
+
+- Player photos now use the direct official UAB Athletics CloudFront image URL rather than the Sidearm crop proxy.
+- Added `referrerpolicy="no-referrer"` and explicit image fallback handling.
+- Player game logs, Top Games, week-to-week charts, sample counts, and player-linked play views now use the 975 raw UAB play feed rather than the duplicated 50/50 weighted play-equivalent array.
+- This prevents the 2026 Illinois game from being multiplied roughly 10x in player charts.
+- Removed stale Mississippi State wording from UAB player profiles.
+- UAB player profiles now show raw Week 1 and historical matched-event counts separately.
+- Team-level 50/50 weighting remains intact for scouting tendency pages.
+
+## v10 — Supabase Player Images
+
+This matches the reliable Mississippi State pattern: the roster points to image assets controlled by the scouting package rather than hotlinking UAB/Sidearm at runtime.
+
+Week 2 UAB player portraits now resolve from:
+`Defensive Intelligence / Opponents / UAB / player-images`
+
+The included `roster.json` already contains those Supabase URLs.
+The included `uab-player-image-manifest.csv` maps each current offensive player to:
+- exact upload filename
+- official UAB source image URL
+- final Supabase public URL
+
+No Vercel image fallback is used.

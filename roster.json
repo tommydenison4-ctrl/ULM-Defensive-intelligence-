@@ -8,11 +8,17 @@
     "class": "R-Jr.",
     "hometown": "Springville, UT",
     "previousSchool": "BYU/West Virginia",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/ryder-burton/11984",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/ryder-burton.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Ryder Burton"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/2/20/Burton_Ryder.jpg",
+    "imageFilename": "ryder-burton.jpg"
   },
   {
     "number": "11",
@@ -23,11 +29,17 @@
     "class": "R-So.",
     "hometown": "Miami, FL",
     "previousSchool": "Miami Northwestern",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/adrian-posse/12067",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/adrian-posse.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Adrian Posse"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2024/3/6/Posse_Adrian.jpg",
+    "imageFilename": "adrian-posse.jpg"
   },
   {
     "number": "16",
@@ -38,11 +50,18 @@
     "class": "R-So.",
     "hometown": "Wetumpka, AL",
     "previousSchool": "Wetumpka",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/nate-rogers/12071",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/nathan-rogers.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Nate Rogers",
+      "Nathan Rogers"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/10/2/060A4621.jpg",
+    "imageFilename": "nathan-rogers.jpg"
   },
   {
     "number": "18",
@@ -53,11 +72,18 @@
     "class": "R-So.",
     "hometown": "Birmingham, AL",
     "previousSchool": "Parker",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/cam-jennings/12023",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/cameron-jennings.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Cam Jennings",
+      "Cameron Jennings"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/4/27/060A7893_ebAM1.jpg",
+    "imageFilename": "cameron-jennings.jpg"
   },
   {
     "number": "2",
@@ -68,11 +94,18 @@
     "class": "R-Jr.",
     "hometown": "San Diego, CA",
     "previousSchool": "Georgia",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/rod-robinson-ii/12156",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/rod-robinson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Rod Robinson II",
+      "Rod Robinson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/4/15/060A8023_DxISk.jpg",
+    "imageFilename": "rod-robinson.jpg"
   },
   {
     "number": "3",
@@ -83,26 +116,38 @@
     "class": "R-Sr.",
     "hometown": "Mobile, AL",
     "previousSchool": "South Alabama/ULM",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/bam-mcreynolds/12159",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/bam-mcreynolds.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Bam McReynolds"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Braylon__BAM__McReynolds_5BrxC.jpg",
+    "imageFilename": "bam-mcreynolds.jpg"
   },
   {
     "number": "7",
-    "name": "Ja\u2019Vin Simpkins",
+    "name": "Ja’Vin Simpkins",
     "position": "RB",
     "height": "5-9",
     "weight": "185",
     "class": "R-Jr.",
     "hometown": "Miami, FL",
     "previousSchool": "Coastal Carolina",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/javin-simpkins/12165",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/ja-vin-simpkins.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Ja’Vin Simpkins"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Ja_Vin_Simpkins_mC9sI.jpg",
+    "imageFilename": "ja-vin-simpkins.jpg"
   },
   {
     "number": "10",
@@ -113,11 +158,17 @@
     "class": "R-Jr.",
     "hometown": "College Station, TX",
     "previousSchool": "Duke",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/marquise-collins/11989",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/marquise-collins.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Marquise Collins"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Collins_Marquise_5PBXA.jpg",
+    "imageFilename": "marquise-collins.jpg"
   },
   {
     "number": "20",
@@ -128,11 +179,17 @@
     "class": "Fr.",
     "hometown": "San Diego, CA",
     "previousSchool": "Lincoln",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/rashad-robinson/12261",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/rashad-robinson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Rashad Robinson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Robinson_Rashad_FYG2y.jpg",
+    "imageFilename": "rashad-robinson.jpg"
   },
   {
     "number": "21",
@@ -143,11 +200,17 @@
     "class": "Fr.",
     "hometown": "Florence, AL",
     "previousSchool": "Mars Hill Bible School",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/hudson-higgins/12177",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/hudson-higgins.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Hudson Higgins"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Hudson_Higgins_iceSa.jpg",
+    "imageFilename": "hudson-higgins.jpg"
   },
   {
     "number": "22",
@@ -158,11 +221,18 @@
     "class": "R-Fr.",
     "hometown": "Nashville, TN",
     "previousSchool": "Lipscomb Academy",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/drew-patterson/12062",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/drew-patterson-jr.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Drew Patterson",
+      "Drew Patterson Jr"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/6/6/060A8031_bmgY6.jpg",
+    "imageFilename": "drew-patterson-jr.jpg"
   },
   {
     "number": "26",
@@ -173,11 +243,17 @@
     "class": "Fr.",
     "hometown": "Bixby, OK",
     "previousSchool": "Bixby",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jayson-moll/12262",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jayson-moll.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Jayson Moll"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Moll_Jayson_WK06r.jpg",
+    "imageFilename": "jayson-moll.jpg"
   },
   {
     "number": "28",
@@ -188,11 +264,17 @@
     "class": "Fr.",
     "hometown": "Hoover, AL",
     "previousSchool": "Hoover",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jr-mosley/12183",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jr-mosley.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "JR Mosley"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Jabari__JR__Mosley_ijWUz.jpg",
+    "imageFilename": "jr-mosley.jpg"
   },
   {
     "number": "30",
@@ -203,11 +285,17 @@
     "class": "R-So.",
     "hometown": "Birmingham , AL",
     "previousSchool": "Parker",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/amari-brundidge/11981",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/amari-brundidge.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Amari Brundidge"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/2/20/Brundidge_Amari.jpg",
+    "imageFilename": "amari-brundidge.jpg"
   },
   {
     "number": "19",
@@ -218,11 +306,17 @@
     "class": "R-Fr.",
     "hometown": "Opa Locka, FL",
     "previousSchool": "Monsignor Pace",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/gabriel-cline/11988",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/gabriel-cline.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Gabriel Cline"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Cline_Gabriel_z1D9s.jpg",
+    "imageFilename": "gabriel-cline.jpg"
   },
   {
     "number": "40",
@@ -233,11 +327,17 @@
     "class": "R-So.",
     "hometown": "Elba, AL",
     "previousSchool": "Elba",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/brayden-johnson/12025",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/brayden-johnson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Brayden Johnson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2024/6/12/Johnson_Brayden.jpg",
+    "imageFilename": "brayden-johnson.jpg"
   },
   {
     "number": "44",
@@ -248,11 +348,17 @@
     "class": "R-Sr.",
     "hometown": "Metairie, LA",
     "previousSchool": "Florida",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/scott-isacks/12187",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/scott-isacks.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Scott Isacks"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Isacks_nbyOn.jpg",
+    "imageFilename": "scott-isacks.jpg"
   },
   {
     "number": "48",
@@ -263,11 +369,17 @@
     "class": "R-Sr.",
     "hometown": "Luverne, AL",
     "previousSchool": "Troy/Central Oklahoma",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/gage-messick/12049",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/gage-messick.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Gage Messick"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/4/24/FB_Gage_Messick_wp921.jpg",
+    "imageFilename": "gage-messick.jpg"
   },
   {
     "number": "85",
@@ -278,11 +390,17 @@
     "class": "R-Jr.",
     "hometown": "Apopka, FL",
     "previousSchool": "East Carolina/FIU",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/antonio-ferguson/12002",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/antonio-ferguson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Antonio Ferguson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/11/4/060A8217_large.jpg",
+    "imageFilename": "antonio-ferguson.jpg"
   },
   {
     "number": "86",
@@ -293,11 +411,17 @@
     "class": "Fr.",
     "hometown": "Lahti, Finland",
     "previousSchool": "International School (IN)",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/vili-haapasalo/12362",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/vili-haapasalo.png",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Vili Haapasalo"
+    ],
+    "officialImageSource": "https://ss-dummy-data.s3.us-east-1.amazonaws.com/images/person-default.png",
+    "imageFilename": "vili-haapasalo.png"
   },
   {
     "number": "87",
@@ -308,11 +432,17 @@
     "class": "R-So.",
     "hometown": "Spanish Fork, UT",
     "previousSchool": "Citrus CC/Toledo",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/sean-persson/12196",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/sean-persson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Sean Persson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Persson_Sean_DMG8M.jpg",
+    "imageFilename": "sean-persson.jpg"
   },
   {
     "number": "88",
@@ -323,11 +453,17 @@
     "class": "Fr.",
     "hometown": "Montgomery, AL",
     "previousSchool": "LAMP",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/braden-teague/12269",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/braden-teague.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Braden Teague"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Teague_Braden_hLAoU.jpg",
+    "imageFilename": "braden-teague.jpg"
   },
   {
     "number": "0",
@@ -338,11 +474,17 @@
     "class": "R-Sr.",
     "hometown": "Bay Minette, AL",
     "previousSchool": "Southern Miss/Texas State",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/ty-mims/12152",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/ty-mims.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Ty Mims"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Mims_Ty_vJ9JO.jpg",
+    "imageFilename": "ty-mims.jpg"
   },
   {
     "number": "1",
@@ -353,11 +495,17 @@
     "class": "R-Sr.",
     "hometown": "Apopka, FL",
     "previousSchool": "Georgia/Purdue/Memphis",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/cj-smith/12154",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/cj-smith.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "CJ Smith"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/CJ_MpaHI.jpg",
+    "imageFilename": "cj-smith.jpg"
   },
   {
     "number": "4",
@@ -368,11 +516,17 @@
     "class": "R-So.",
     "hometown": "Woodbridge, VA",
     "previousSchool": "Wake Forest",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/ej-reid/12161",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/ej-reid.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "EJ Reid"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/EJ_Reid_cx5Hc.jpg",
+    "imageFilename": "ej-reid.jpg"
   },
   {
     "number": "6",
@@ -383,11 +537,17 @@
     "class": "R-So.",
     "hometown": "Franklinton, LA",
     "previousSchool": "Oklahoma",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/kj-daniels/12166",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/kj-daniels.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "KJ Daniels"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/4/15/060A8054_eiXFY.jpg",
+    "imageFilename": "kj-daniels.jpg"
   },
   {
     "number": "8",
@@ -398,11 +558,17 @@
     "class": "R-Sr.",
     "hometown": "Chicago, IL",
     "previousSchool": "Ohio State/Iowa",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/kaleb-brown/11979",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/kaleb-brown.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Kaleb Brown"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/2/20/Brown_Kaleb.jpg",
+    "imageFilename": "kaleb-brown.jpg"
   },
   {
     "number": "9",
@@ -413,11 +579,17 @@
     "class": "Gr.",
     "hometown": "New Orleans, LA",
     "previousSchool": "Gardner-Webb/ETSU",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/aj-johnson/12024",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/aj-johnson.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "AJ Johnson"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/A_Johnson_vhwQy.jpg",
+    "imageFilename": "aj-johnson.jpg"
   },
   {
     "number": "12",
@@ -428,11 +600,17 @@
     "class": "So.",
     "hometown": "Madison, GA",
     "previousSchool": "Morgan County",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jaylen-elder/12000",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jaylen-elder.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Jaylen Elder"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/6/11/Elder_Jaylen.jpg",
+    "imageFilename": "jaylen-elder.jpg"
   },
   {
     "number": "13",
@@ -443,11 +621,18 @@
     "class": "R-Fr.",
     "hometown": "Saraland, AL",
     "previousSchool": "Saraland",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/cd-gill/12009",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/carson-gill.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "CD Gill",
+      "Carson Gill"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/8/20/Gill_CD.jpg",
+    "imageFilename": "carson-gill.jpg"
   },
   {
     "number": "14",
@@ -458,11 +643,17 @@
     "class": "R-Sr.",
     "hometown": "Madison, AL",
     "previousSchool": "Independence/Oregon State",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jailen-holmes/12017",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jailen-holmes.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Jailen Holmes"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/7/10/Holmes_Jailen.jpg",
+    "imageFilename": "jailen-holmes.jpg"
   },
   {
     "number": "15",
@@ -473,11 +664,17 @@
     "class": "Fr.",
     "hometown": "Thomaston, GA",
     "previousSchool": "Upson-Lee",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jayden-skelton/12260",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jayden-skelton.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Jayden Skelton"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Skelton_Jayden_s3j3c.jpg",
+    "imageFilename": "jayden-skelton.jpg"
   },
   {
     "number": "17",
@@ -488,11 +685,17 @@
     "class": "Fr.",
     "hometown": "Melbourne, FL",
     "previousSchool": "Melbourne Central Catholic",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/brogan-mcnab/12175",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/brogan-mcnab.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Brogan McNab"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Brogan._sty3t.jpg",
+    "imageFilename": "brogan-mcnab.jpg"
   },
   {
     "number": "80",
@@ -503,11 +706,17 @@
     "class": "R-So.",
     "hometown": "Birmingham , AL",
     "previousSchool": "Parker",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/malik-muhammad/12058",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/malik-muhammad.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Malik Muhammad"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2024/3/6/Muhammad_Malik.jpg",
+    "imageFilename": "malik-muhammad.jpg"
   },
   {
     "number": "81",
@@ -518,11 +727,17 @@
     "class": "Fr.",
     "hometown": "Helena, AL",
     "previousSchool": "Helena",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/bradley-wainwright/12268",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/bradley-wainwright.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Bradley Wainwright"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/7/Wainwright_Bradley_IBjD8.jpg",
+    "imageFilename": "bradley-wainwright.jpg"
   },
   {
     "number": "83",
@@ -533,11 +748,17 @@
     "class": "R-Fr.",
     "hometown": "Littleton, CO",
     "previousSchool": "Arapahoe",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/levi-brayton/11976",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/levi-brayton.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Levi Brayton"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/8/20/Brayton_Levi.jpg",
+    "imageFilename": "levi-brayton.jpg"
   },
   {
     "number": "84",
@@ -548,11 +769,18 @@
     "class": "R-So.",
     "hometown": "Suwanee, GA",
     "previousSchool": "Peachtree Ridge",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/lamar-white/12093",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/lamar-white-jr.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Lamar White",
+      "Lamar White Jr"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/9/4/060A1519.jpg",
+    "imageFilename": "lamar-white-jr.jpg"
   },
   {
     "number": "51",
@@ -563,11 +791,17 @@
     "class": "R-Jr.",
     "hometown": "Orlando, FL",
     "previousSchool": "Texas/Colorado",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/payton-kirkland/12030",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/payton-kirkland.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Payton Kirkland"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Kirkland_Payton_gDAjS.jpg",
+    "imageFilename": "payton-kirkland.jpg"
   },
   {
     "number": "52",
@@ -578,11 +812,17 @@
     "class": "Fr.",
     "hometown": "Hoover, AL",
     "previousSchool": "Spain Park",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/hudson-reed/12188",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/hudson-reed.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Hudson Reed"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Hudson_Reed_dzcfE.jpg",
+    "imageFilename": "hudson-reed.jpg"
   },
   {
     "number": "55",
@@ -593,11 +833,17 @@
     "class": "Jr.",
     "hometown": "Clinton, TN",
     "previousSchool": "Vanderbilt/Marshall/Itawamba CC",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/barrett-maddox/12190",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/barrett-maddox.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Barrett Maddox"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Barrett_Maddox_nLH2H.jpg",
+    "imageFilename": "barrett-maddox.jpg"
   },
   {
     "number": "57",
@@ -608,11 +854,17 @@
     "class": "R-Fr.",
     "hometown": "Auburn, AL",
     "previousSchool": "Auburn",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/aidan-platt/12191",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/aidan-platt.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Aidan Platt"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/6/11/Platt_Aidan.jpg",
+    "imageFilename": "aidan-platt.jpg"
   },
   {
     "number": "59",
@@ -623,11 +875,17 @@
     "class": "R-So.",
     "hometown": "LaGrange, GA",
     "previousSchool": "LaGrange",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/jaden-ligon/12037",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/jaden-ligon.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Jaden Ligon"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2024/6/13/Ligon_Jaden.jpg",
+    "imageFilename": "jaden-ligon.jpg"
   },
   {
     "number": "64",
@@ -638,11 +896,17 @@
     "class": "R-Jr.",
     "hometown": "Downingtown, PA",
     "previousSchool": "West Virginia",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/cooper-young/12192",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/cooper-young.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Cooper Young"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Cooper_55pfk.jpg",
+    "imageFilename": "cooper-young.jpg"
   },
   {
     "number": "66",
@@ -653,11 +917,17 @@
     "class": "So.",
     "hometown": "Dacula, GA",
     "previousSchool": "Dacula",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/donovan-lawrence/12034",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/donovan-lawrence.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Donovan Lawrence"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/6/11/Lawrence_Donovan.jpg",
+    "imageFilename": "donovan-lawrence.jpg"
   },
   {
     "number": "67",
@@ -668,11 +938,17 @@
     "class": "Fr.",
     "hometown": "Smithville, MS",
     "previousSchool": "Smithville",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/wes-wiggins/12193",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/wes-wiggins.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Wes Wiggins"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Wes_Wiggins_scvCR.jpg",
+    "imageFilename": "wes-wiggins.jpg"
   },
   {
     "number": "68",
@@ -683,11 +959,17 @@
     "class": "Gr.",
     "hometown": "Hoover, AL",
     "previousSchool": "Hoover",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/adam-lepkowski/12036",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/adam-lepkowski.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Adam Lepkowski"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/3/27/A7400860.jpg",
+    "imageFilename": "adam-lepkowski.jpg"
   },
   {
     "number": "69",
@@ -698,11 +980,17 @@
     "class": "R-So.",
     "hometown": "Trussville, AL",
     "previousSchool": "Hewitt-Trussville",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/kade-martin/12039",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/kade-martin.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Kade Martin"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2024/3/6/Martin_Kade.jpg",
+    "imageFilename": "kade-martin.jpg"
   },
   {
     "number": "70",
@@ -713,11 +1001,17 @@
     "class": "R-So.",
     "hometown": "Santa Clara, CA",
     "previousSchool": "USC/Kansas State",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/amos-talalele/12267",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/amos-talalele.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Amos Talalele"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/7/9/Talalele_cmr6l.jpg",
+    "imageFilename": "amos-talalele.jpg"
   },
   {
     "number": "71",
@@ -728,11 +1022,17 @@
     "class": "Gr.",
     "hometown": "Washington, DC",
     "previousSchool": "Monmouth/Georgia State",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/kyrik-mason/12043",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/kyrik-mason.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Kyrik Mason"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/6/11/Mason_Kyrik.jpg",
+    "imageFilename": "kyrik-mason.jpg"
   },
   {
     "number": "74",
@@ -743,11 +1043,18 @@
     "class": "R-So.",
     "hometown": "Cordele, GA",
     "previousSchool": "Crisp County",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/barry-walker/12089",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/barry-walker-jr.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": false
+    "pffMatched": false,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Barry Walker",
+      "Barry Walker Jr"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/9/4/060A1188.jpg",
+    "imageFilename": "barry-walker-jr.jpg"
   },
   {
     "number": "75",
@@ -758,11 +1065,17 @@
     "class": "Gr.",
     "hometown": "Pearland, TX",
     "previousSchool": "Duke",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/calib-perez/12063",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/calib-perez.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Calib Perez"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/4/8/060A3041.jpg",
+    "imageFilename": "calib-perez.jpg"
   },
   {
     "number": "77",
@@ -773,11 +1086,17 @@
     "class": "R-Jr.",
     "hometown": "Phenix City, AL",
     "previousSchool": "UCF/Oregon State",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/keyon-cox/12194",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/keyon-cox.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Keyon Cox"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Keyon_Cox_PhJOc.jpg",
+    "imageFilename": "keyon-cox.jpg"
   },
   {
     "number": "78",
@@ -788,11 +1107,17 @@
     "class": "Sr.",
     "hometown": "Newman, GA",
     "previousSchool": "College of San Mateo",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/nelson-ramirez/12068",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/nelson-ramirez.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Nelson Ramirez"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2025/6/11/Ramirez_Nelson.jpg",
+    "imageFilename": "nelson-ramirez.jpg"
   },
   {
     "number": "79",
@@ -803,10 +1128,16 @@
     "class": "R-So.",
     "hometown": "North Charleston, SC",
     "previousSchool": "East Carolina",
-    "profile": "https://uabsports.com/sports/football/roster",
-    "image": "",
+    "profile": "https://uabsports.com/sports/football/roster/samuel-riddy/12195",
+    "image": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/UAB/player-images/samuel-riddy.jpg",
     "bio": "",
     "source": "UAB 2026 Game Notes / Official Roster",
-    "pffMatched": true
+    "pffMatched": true,
+    "imageSource": "Supabase Storage",
+    "aliases": [
+      "Samuel Riddy"
+    ],
+    "officialImageSource": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/uabsports.com/images/2026/5/7/Samuel_eFNZ2.jpg",
+    "imageFilename": "samuel-riddy.jpg"
   }
 ]
