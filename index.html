@@ -423,6 +423,31 @@ a{color:#9fd3ff}
  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center top!important;display:block;
 }
 
+
+.player-season-tabs{display:flex;gap:7px;align-items:center;margin:17px 0 5px;flex-wrap:wrap}
+.player-season-tabs button{background:#eef3f7!important;color:#21364a!important;border:1px solid #c9d5df!important;padding:7px 12px!important;font-size:10px!important;font-weight:950!important;border-radius:999px!important}
+.player-season-tabs button.active{background:#8A2432!important;color:#fff!important;border-color:#EBA800!important}
+
+
+/* v16 Player Intelligence hero stat contrast */
+.fau-hero-info .season-title{color:#71869a!important}
+.fau-season-stat{
+  background:#f5f8fb!important;
+  border-color:#d5dee7!important;
+  color:#183047!important;
+}
+.fau-season-stat small{
+  color:#6e8295!important;
+}
+.fau-season-stat b{
+  color:#183047!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+.fau-meta{color:#8398ab!important}
+.fau-hero-pos{color:#c8d5df!important}
+.sample-row>span:not(.sample-badge){color:#7f93a5!important}
+
 </style>
 </head>
 <body>
@@ -530,8 +555,10 @@ const UAB_FILES={
 };
 let FILES=MSST_FILES;
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',heatQB='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runBackfieldF='ALL',runMotionF='ALL',dndFilter='ALL';
+const UAB_2025_CURRENT_PLAYER_MAP={"Ryder Burton":{"number":"15","position":"QB"},"Nathan Rogers":{"number":"16","position":"QB","rosterName":"Nate Rogers"},"Cameron Jennings":{"number":"10","position":"QB","rosterName":"Cam Jennings"},"Adrian Posse":{"number":"11","position":"QB"},"Marquise Collins":{"number":"10","position":"RB"},"Drew Patterson Jr":{"number":"22","position":"RB","rosterName":"Drew Patterson"},"Amari Brundidge":{"number":"30","position":"RB"},"Kaleb Brown":{"number":"5","position":"WR"},"AJ Johnson":{"number":"2","position":"WR"},"Jaylen Elder":{"number":"12","position":"WR"},"Carson Gill":{"number":"13","position":"WR","rosterName":"CD Gill"},"Jailen Holmes":{"number":"14","position":"WR"},"Malik Muhammad":{"number":"80","position":"WR"},"Levi Brayton":{"number":"83","position":"WR"},"Lamar White Jr":{"number":"84","position":"WR","rosterName":"Lamar White"},"Gabriel Cline":{"number":"19","position":"TE"},"Brayden Johnson":{"number":"40","position":"TE"},"Antonio Ferguson":{"number":"85","position":"TE"},"Gage Messick":{"number":"26","position":"LB","note":"2025 UAB rostered on defense"},"Payton Kirkland":{"number":"51","position":"OL"},"Aidan Platt":{"number":"57","position":"OL"},"Jaden Ligon":{"number":"59","position":"OL"},"Donovan Lawrence":{"number":"66","position":"OL"},"Adam Lepkowski":{"number":"68","position":"OL"},"Kade Martin":{"number":"69","position":"OL"},"Kyrik Mason":{"number":"71","position":"OL"},"Barry Walker Jr":{"number":"74","position":"OL","rosterName":"Barry Walker"},"Calib Perez":{"number":"75","position":"OL"},"Nelson Ramirez":{"number":"78","position":"OL"}};
 let prepWeek=localStorage.getItem('ulmDefPrepWeekV1')||'W2';
 let analysisMode=localStorage.getItem('ulmDefUABAnalysisModeV1')||'weighted';
+let playerSeasonView='2026';
 let rawPlayRows=[];
 
 let jonesNotesView='text';
@@ -1383,73 +1410,118 @@ function profile(p){return `<div class="card profile"><div class="player-hero"><
 
 function pffRowForPlayer(p){let pos=normPos(p.position);return pos==='QB'?findPlayerRow('qb',p.name):['WR','TE','RB'].includes(pos)?findPlayerRow('receiving',p.name):findPlayerRow('passBlocking',p.name)}
 
-function profilePlaySource(){return rawPlayRows?.length?rawPlayRows:(datasets.plays||[])}
-function rawPlaysForPlayer(value){
- let p=resolvePlayer(value);if(!p)return[];
- return profilePlaySource().filter(r=>
-   playerTokenMatchRow(r,r.pff_PASSER,p,'QB')||
-   playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')||
-   playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET')
- );
-}
-function currentUABPlayerRows(p){
- return profilePlaySource().filter(r=>uabIsCurrentRow(r)&&(
-   playerTokenMatchRow(r,r.pff_PASSER,p,'QB')||
-   playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')||
-   playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET')
- ));
-}
-function historicalUABPlayerRows(p){
- return profilePlaySource().filter(r=>!uabIsCurrentRow(r)&&(
-   playerTokenMatch(r.pff_PASSER,p,'QB')||
-   playerTokenMatch(r.pff_BALLCARRIER,p,'CARRIER')||
-   playerTokenMatch(r.pff_PASSRECEIVERTARGET,p,'TARGET')
- ));
-}
 
-
-function playerWeek1Stats(p){
- let pos=normPos(p.position),rows=currentUABPlayerRows(p),gain=r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);
- if(!rows.length)return null;
-
- if(pos==='QB'){
-   let pass=profilePlaySource().filter(r=>uabIsCurrentRow(r)&&String(r.pff_RUNPASS||'').toUpperCase()==='P'&&playerTokenMatchRow(r,r.pff_PASSER,p,'QB'));
-   let attempts=pass.filter(r=>['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(passResult(r)));
-   let comp=attempts.filter(r=>passResult(r)==='COMPLETE');
-   let passY=comp.reduce((s,r)=>s+gain(r),0);
-   let rush=playerRushRows(p).filter(uabIsCurrentRow);
-   let rushY=rush.reduce((s,r)=>s+gain(r),0);
-   return [
-     ['CMP %',pct(100*comp.length/Math.max(1,attempts.length))],
-     ['PASS YDS',passY],
-     ['YDS/ATT',fmt(passY/Math.max(1,attempts.length),1)],
-     ['TD',pass.filter(isPassTouchdown).length],
-     ['INT',pass.filter(isInterception).length],
-     ['ATT',attempts.length],
-     ['COMP',comp.length],
-     ['RUSH YDS',rushY],
-     ['SCRAMBLES',rush.length]
-   ];
+function seasonYear(r){return String(r?.pff_GAMEDATE||r?.pff_GAMESEASON||'').slice(0,4)}
+function player2025Identity(p){return p?UAB_2025_CURRENT_PLAYER_MAP[p.name]||null:null}
+function playerHas2025UAB(p){return !!player2025Identity(p)}
+function playerSeasonRowsSource(season=playerSeasonView){
+ let y=String(season||'2026');
+ return (rawPlayRows?.length?rawPlayRows:(datasets.plays||[])).filter(r=>seasonYear(r)===y);
+}
+function seasonPlayerJersey(p,season=playerSeasonView){
+ if(String(season)==='2025'){
+   let x=player2025Identity(p); return x?jerseyNum(x.number):'';
  }
- if(['WR','TE','RB'].includes(pos)){
-   let tgt=profilePlaySource().filter(r=>uabIsCurrentRow(r)&&playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET'));
-   let rec=tgt.filter(r=>passResult(r)==='COMPLETE'),recY=rec.reduce((s,r)=>s+gain(r),0);
-   if(pos==='RB'){
-     let rush=profilePlaySource().filter(r=>uabIsCurrentRow(r)&&String(r.pff_RUNPASS||'').toUpperCase()==='R'&&playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER'));
-     let rushY=rush.reduce((s,r)=>s+gain(r),0);
-     return [['RUSH',rush.length],['RUSH YDS',rushY],['YPC',fmt(rushY/Math.max(1,rush.length),1)],['TARGETS',tgt.length],['REC',rec.length],['REC YDS',recY],['YPR',fmt(recY/Math.max(1,rec.length),1)],['TD',tgt.filter(isPassTouchdown).length+rush.filter(isRushTouchdown).length],['SCRIM YDS',rushY+recY]];
-   }
-   return [['TARGETS',tgt.length],['REC',rec.length],['REC YDS',recY],['YPR',fmt(recY/Math.max(1,rec.length),1)],['CATCH %',pct(100*rec.length/Math.max(1,tgt.length))],['TD',tgt.filter(isPassTouchdown).length],['EXPLOSIVES',rec.filter(r=>gain(r)>=15).length],['LONG',rec.length?Math.max(...rec.map(gain)):0],['1ST DOWNS',rec.filter(r=>String(r.pff_FIRSTDOWN||'').toUpperCase()==='1').length]];
+ return jerseyNum(p?.number);
+}
+function seasonTokenMatchRow(r,token,p,expectedPos='',season=playerSeasonView){
+ if(!r||!token||!p||seasonYear(r)!==String(season))return false;
+ if(cleanName(token)===cleanName(p.name))return true;
+ let pj=seasonPlayerJersey(p,season),tj=uabTokenJersey(token);
+ if(!pj||!tj||pj!==tj)return false;
+ let pos=normPos(p.position),t=String(token).toUpperCase();
+ if(expectedPos==='QB')return pos==='QB'&&t.includes('(QB)');
+ if(expectedPos==='TARGET')return ['WR','TE','RB'].includes(pos);
+ if(expectedPos==='CARRIER')return ['RB','QB','WR'].includes(pos);
+ return true;
+}
+function seasonOffPlayerMatch(r,p,season=playerSeasonView){
+ if(!r||!p||seasonYear(r)!==String(season))return false;
+ let j=seasonPlayerJersey(p,season);if(!j)return false;
+ let s=String(r.pff_OFFPLAYERS||'').toUpperCase();
+ return new RegExp('(?:^|;\\s*)ALBI\\s+0*'+j+'\\s*\\(').test(s);
+}
+function seasonRowsForPlayer(p,season=playerSeasonView){
+ let rows=playerSeasonRowsSource(season),pos=normPos(p.position);
+ if(pos==='QB')return rows.filter(r=>seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',season)||seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',season));
+ if(['WR','TE'].includes(pos))return rows.filter(r=>seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',season));
+ if(pos==='RB')return rows.filter(r=>seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',season)||seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',season));
+ if(pos==='OL')return rows.filter(r=>seasonOffPlayerMatch(r,p,season));
+ return [];
+}
+function seasonFirstDown(r){
+ let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS),dist=num(r.pff_DISTANCE);
+ return dist>0&&gain>=dist;
+}
+function playerSeasonRawStats(p,season=playerSeasonView){
+ let pos=normPos(p.position),source=playerSeasonRowsSource(season),gain=r=>num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);
+ if(pos==='QB'){
+   let pass=source.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='P'&&seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',season));
+   let att=pass.filter(r=>['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(passResult(r)));
+   let comp=att.filter(r=>passResult(r)==='COMPLETE');
+   let passY=comp.reduce((s,r)=>s+gain(r),0);
+   let rush=source.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R'&&seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',season));
+   let rushY=rush.reduce((s,r)=>s+gain(r),0);
+   if(!pass.length&&!rush.length)return null;
+   return [['ATT',att.length],['COMP',comp.length],['CMP %',pct(100*comp.length/Math.max(1,att.length))],['PASS YDS',passY],['YDS/ATT',fmt(passY/Math.max(1,att.length),1)],['PASS TD',pass.filter(isPassTouchdown).length],['INT',pass.filter(isInterception).length],['RUSH YDS',rushY],['TOTAL YDS',passY+rushY]];
+ }
+ if(['WR','TE'].includes(pos)){
+   let tgt=source.filter(r=>seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',season));
+   if(!tgt.length)return null;
+   let rec=tgt.filter(r=>passResult(r)==='COMPLETE'),yds=rec.reduce((s,r)=>s+gain(r),0);
+   return [['TARGETS',tgt.length],['REC',rec.length],['REC YDS',yds],['YPR',fmt(yds/Math.max(1,rec.length),1)],['CATCH %',pct(100*rec.length/Math.max(1,tgt.length))],['TD',tgt.filter(isPassTouchdown).length],['EXPLOSIVES',rec.filter(r=>gain(r)>=15).length],['LONG',rec.length?Math.max(...rec.map(gain)):0],['1ST DOWNS',rec.filter(seasonFirstDown).length]];
+ }
+ if(pos==='RB'){
+   let rush=source.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R'&&seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',season));
+   let tgt=source.filter(r=>seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',season));
+   if(!rush.length&&!tgt.length)return null;
+   let rec=tgt.filter(r=>passResult(r)==='COMPLETE'),rushY=rush.reduce((s,r)=>s+gain(r),0),recY=rec.reduce((s,r)=>s+gain(r),0);
+   return [['RUSH',rush.length],['RUSH YDS',rushY],['YPC',fmt(rushY/Math.max(1,rush.length),1)],['TARGETS',tgt.length],['REC',rec.length],['REC YDS',recY],['SCRIM YDS',rushY+recY],['TD',rush.filter(isRushTouchdown).length+tgt.filter(isPassTouchdown).length],['1ST DOWNS',rush.concat(rec).filter(seasonFirstDown).length]];
+ }
+ if(pos==='OL'){
+   let snaps=source.filter(r=>seasonOffPlayerMatch(r,p,season));
+   if(!snaps.length)return null;
+   let pass=snaps.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='P'),run=snaps.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R');
+   let games=new Set(snaps.map(r=>r.pff_GAMEID||r.pff_GAMEDATE).filter(Boolean));
+   return [['OFF SNAPS',snaps.length],['PASS SNAPS',pass.length],['RUN SNAPS',run.length],['GAMES',games.size],['PASS %',pct(100*pass.length/Math.max(1,snaps.length))],['RUN %',pct(100*run.length/Math.max(1,snaps.length))]];
  }
  return null;
 }
-function playerDisplayStats(p){
- let w1=prepWeek==='W2'?playerWeek1Stats(p):null;
- return w1||playerSeasonStats(p);
+function seasonLabel(){return playerSeasonView==='2025'?'2025 UAB':'2026 UAB'}
+function playerSeasonTabs(p){
+ let tabs=[['2026','2026 UAB']];
+ if(playerHas2025UAB(p))tabs.push(['2025','2025 UAB']);
+ return `<div class="player-season-tabs">${tabs.map(([id,l])=>`<button class="${playerSeasonView===id?'active':''}" onclick="setPlayerSeasonView('${id}')">${l}</button>`).join('')}</div>`;
 }
-function playerDisplayTitle(p){
- return prepWeek==='W2'&&currentUABPlayerRows(p).length?'2026 WEEK 1':'UAB PFF FULL SAMPLE';
+window.setPlayerSeasonView=v=>{
+ let p=resolvePlayer(selected);
+ if(!p)return;
+ playerSeasonView=(v==='2025'&&playerHas2025UAB(p))?'2025':'2026';
+ routeFocus='ALL';
+ renderFAUDrawer(p);
+};
+function playerSeasonSampleNote(p){
+ let rows=seasonRowsForPlayer(p,playerSeasonView);
+ if(playerSeasonView==='2025'&&playerHas2025UAB(p)&&!rows.length){
+   let x=player2025Identity(p);
+   return x?.note||'2025 UAB roster member; no offensive play-level sample matched in the loaded feed.';
+ }
+ return `${rows.length} matched ${seasonLabel()} raw play-feed events`;
 }
+function availablePFFStats(stats){return (stats||[]).filter(([l,v])=>v!==undefined&&v!==null&&String(v).trim()!==''&&String(v)!=='—'&&String(v).toLowerCase()!=='nan')}
+
+function profilePlaySource(){return rawPlayRows?.length?rawPlayRows:(datasets.plays||[])}
+function rawPlaysForPlayer(value){
+ let p=resolvePlayer(value);if(!p)return[];
+ return ['2026','2025'].flatMap(season=>season==='2025'&&!playerHas2025UAB(p)?[]:seasonRowsForPlayer(p,season));
+}
+function currentUABPlayerRows(p){return seasonRowsForPlayer(p,'2026')}
+function historicalUABPlayerRows(p){return playerHas2025UAB(p)?seasonRowsForPlayer(p,'2025'):[]}
+
+
+function playerWeek1Stats(p){return playerSeasonRawStats(p,'2026')}
+function playerDisplayStats(p){return playerSeasonRawStats(p,playerSeasonView)||[]}
+function playerDisplayTitle(p){return playerSeasonView==='2025'?'2025 UAB':'2026 UAB'}
 
 function playerSeasonStats(p){
  let pos=normPos(p.position),q=findPlayerRow('qb',p.name),rec=findPlayerRow('receiving',p.name),pb=findPlayerRow('passBlocking',p.name),rb=findPlayerRow('runBlocking',p.name);
@@ -1459,20 +1531,19 @@ function playerSeasonStats(p){
  return [['LINKED PLAYS',playsForPlayer(p.name).length],['NUMBER',p.number],['POSITION',p.position],['CLASS',p.class]];
 }
 function relevantGameRows(p){
- let pos=normPos(p.position),rows=profilePlaySource(),games={};
+ let pos=normPos(p.position),rows=playerSeasonRowsSource(playerSeasonView),games={};
  rows.forEach(r=>{
    let linked=false;
-   if(pos==='QB')linked=playerTokenMatchRow(r,r.pff_PASSER,p,'QB')||playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')||isQBRunRow(r,p);
-   else if(['WR','TE'].includes(pos))linked=playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');
-   else if(pos==='RB')linked=playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')||playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');
-   else if(pos==='OL')linked=false;
+   if(pos==='QB')linked=seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView)||seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView);
+   else if(['WR','TE'].includes(pos))linked=seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView);
+   else if(pos==='RB')linked=seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView)||seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView);
+   else if(pos==='OL')linked=seasonOffPlayerMatch(r,p,playerSeasonView);
    if(!linked)return;
-   let id=r.pff_GAMEID||r.pff_GAMEDATE||'Unknown',g=games[id]||(games[id]={id,date:r.pff_GAMEDATE||'',opp:r.pff_DEFTEAM||'',plays:0,att:0,comp:0,passY:0,passTD:0,int:0,rush:0,rushY:0,tgt:0,rec:0,recY:0,td:0,expl:0,gradeVals:[]});
-   g.plays++; let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS),res=String(r.pff_PASSRESULT||'').toUpperCase();
-   if(gain>=15)g.expl++;
-   if(pos==='QB'&&playerTokenMatchRow(r,r.pff_PASSER,p,'QB')){if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(res))g.att++;if(res==='COMPLETE')g.comp++;g.passY+=gain;if(isInterception(r))g.int++;if(isPassTouchdown(r))g.passTD++}
-   if((pos==='RB'&&playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')&&r.pff_RUNPASS==='R')||(pos==='QB'&&isQBRunRow(r,p))){g.rush++;g.rushY+=gain;if(isRushTouchdown(r))g.td++}
-   if(['WR','TE','RB'].includes(pos)&&playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET')){g.tgt++;if(res==='COMPLETE'){g.rec++;g.recY+=gain}if(isPassTouchdown(r))g.td++}
+   let id=r.pff_GAMEID||r.pff_GAMEDATE||'Unknown',g=games[id]||(games[id]={id,date:r.pff_GAMEDATE||'',opp:r.pff_DEFTEAM||'',plays:0,att:0,comp:0,passY:0,passTD:0,int:0,rush:0,rushY:0,tgt:0,rec:0,recY:0,td:0,expl:0});
+   g.plays++;let gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS),res=String(r.pff_PASSRESULT||'').toUpperCase();if(gain>=15)g.expl++;
+   if(pos==='QB'&&seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView)){if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(res))g.att++;if(res==='COMPLETE'){g.comp++;g.passY+=gain}if(isInterception(r))g.int++;if(isPassTouchdown(r))g.passTD++}
+   if((pos==='RB'&&seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView)&&r.pff_RUNPASS==='R')||(pos==='QB'&&seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView)&&r.pff_RUNPASS==='R')){g.rush++;g.rushY+=gain;if(isRushTouchdown(r))g.td++}
+   if(['WR','TE','RB'].includes(pos)&&seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView)){g.tgt++;if(res==='COMPLETE'){g.rec++;g.recY+=gain}if(isPassTouchdown(r))g.td++}
  });
  return Object.values(games);
 }
@@ -1503,13 +1574,13 @@ function weeklyProductionChart(p){
  let path=pts.map((pt,i)=>(i?'L':'M')+pt.x.toFixed(1)+' '+pt.y.toFixed(1)).join(' ');
  let grid=[0,.25,.5,.75,1].map(f=>{let y=top+ih-f*ih;return `<line class="weekly-grid-line" x1="${left}" y1="${y}" x2="${W-right}" y2="${y}"/><text class="weekly-axis-text" x="${left-7}" y="${y+3}" text-anchor="end">${Math.round(max*f)}</text>`}).join('');
  let dots=pts.map(pt=>`<circle class="weekly-dot" cx="${pt.x}" cy="${pt.y}" r="5"/><text class="weekly-label" x="${pt.x}" y="${Math.max(12,pt.y-9)}" text-anchor="middle">${pt.v}</text><text class="weekly-opponent" x="${pt.x}" y="${H-28}" text-anchor="middle">vs ${esc(pt.g.opp||'—')}</text><text class="weekly-opponent" x="${pt.x}" y="${H-14}" text-anchor="middle">${esc(String(pt.g.date||'').slice(5))}</text>`).join('');
- return `<div class="weekly-chart-card"><div class="weekly-chart-head"><div><h3>Week-to-Week Production</h3><div class="subtle">${productionLabel(p)} · raw UAB game-by-game production</div></div></div><svg class="weekly-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${grid}<path class="weekly-line" d="${path}"/>${dots}</svg></div>`;
+ return `<div class="weekly-chart-card"><div class="weekly-chart-head"><div><h3>Week-to-Week Production</h3><div class="subtle">${productionLabel(p)} · ${seasonLabel()} game-by-game production</div></div></div><svg class="weekly-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${grid}<path class="weekly-line" d="${path}"/>${dots}</svg></div>`;
 }
 
 function topGamesPanel(p){
  let all=relevantGameRows(p),games=[...all].sort((a,b)=>gameScore(p,b)-gameScore(p,a)).slice(0,3),pos=normPos(p.position);
  if(!games.length)return `${weeklyProductionChart(p)}<div class="card"><div class="empty">No game-by-game PFF plays matched ${esc(p.name)}.</div></div>`;
- return `${weeklyProductionChart(p)}<div class="card"><div class="section-head"><div><h3>Top 3 Performances</h3><small>Best three games from the matched UAB play sample.</small></div></div><div class="top-games">${games.map((g,i)=>`<div class="top-game"><div class="rank">#${i+1}</div><h4>vs ${esc(g.opp||'Opponent')}</h4><div class="subtle">${esc(g.date||'Game')}</div><div class="big">${pos==='QB'?`${g.passY+g.rushY} yds`:pos==='OL'?`${g.plays} snaps`:`${g.rushY+g.recY} yds`}</div><div class="line">${pos==='QB'?`${g.comp}/${g.att} · ${g.passY} pass · ${g.rushY} rush · ${g.passTD} TD · ${g.int} INT`:pos==='RB'?`${g.rush} rush · ${g.rushY} rush yds · ${g.rec}/${g.tgt} rec · ${g.recY} rec yds · ${g.td} TD`:['WR','TE'].includes(pos)?`${g.rec}/${g.tgt} rec · ${g.recY} yds · ${g.td} TD · ${g.expl} explosives`:`${g.plays} linked offensive snaps`}</div></div>`).join('')}</div></div>`;
+ return `${weeklyProductionChart(p)}<div class="card"><div class="section-head"><div><h3>Top 3 Performances</h3><small>Best three games from the selected ${seasonLabel()} sample.</small></div></div><div class="top-games">${games.map((g,i)=>`<div class="top-game"><div class="rank">#${i+1}</div><h4>vs ${esc(g.opp||'Opponent')}</h4><div class="subtle">${esc(g.date||'Game')}</div><div class="big">${pos==='QB'?`${g.passY+g.rushY} yds`:pos==='OL'?`${g.plays} snaps`:`${g.rushY+g.recY} yds`}</div><div class="line">${pos==='QB'?`${g.comp}/${g.att} · ${g.passY} pass · ${g.rushY} rush · ${g.passTD} TD · ${g.int} INT`:pos==='RB'?`${g.rush} rush · ${g.rushY} rush yds · ${g.rec}/${g.tgt} rec · ${g.recY} rec yds · ${g.td} TD`:['WR','TE'].includes(pos)?`${g.rec}/${g.tgt} rec · ${g.recY} yds · ${g.td} TD · ${g.expl} explosives`:`${g.plays} linked offensive snaps`}</div></div>`).join('')}</div></div>`;
 }
 
 
@@ -1615,9 +1686,9 @@ function routePathFor(family, depth){
 }
 function playerTargetRoutes(p){
  let pos=normPos(p.position),g={};
- let rows=(datasets.plays||[]).filter(r=>{
-   if(pos==='QB') return playerTokenMatchRow(r,r.pff_PASSER,p,'QB')&&String(r.pff_RUNPASS||'').toUpperCase()==='P';
-   if(['WR','TE','RB'].includes(pos)) return playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');
+ let rows=playerSeasonRowsSource(playerSeasonView).filter(r=>{
+   if(pos==='QB') return seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView)&&String(r.pff_RUNPASS||'').toUpperCase()==='P';
+   if(['WR','TE','RB'].includes(pos)) return seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView);
    return false;
  });
  rows.forEach(r=>{
@@ -1694,11 +1765,11 @@ function routeTreePanel(p){
  </div>`;
 }
 function targetsPanel(p){
- let pos=normPos(p.position),rows=profilePlaySource().filter(r=>{
-   if(pos==='QB')return String(r.pff_RUNPASS||'').toUpperCase()==='P'&&playerTokenMatchRow(r,r.pff_PASSER,p,'QB');
-   return playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');
+ let pos=normPos(p.position),rows=playerSeasonRowsSource(playerSeasonView).filter(r=>{
+   if(pos==='QB')return String(r.pff_RUNPASS||'').toUpperCase()==='P'&&seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView);
+   return seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView);
  });
- if(!rows.length) return `<div class="card"><h3>Targets</h3><div class="empty">No target locations matched.</div></div>`;
+ if(!rows.length) return `<div class="card"><h3>Targets · ${seasonLabel()}</h3><div class="empty">No target locations matched.</div></div>`;
  let cells=Array.from({length:25},()=>({n:0,comp:0,y:0,td:0,expl:0}));
  rows.forEach(r=>{let [rr,cc]=heatBin(r),c=cells[rr*5+cc],res=String(r.pff_PASSRESULT||'').toUpperCase(),g=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);c.n++;if(res==='COMPLETE')c.comp++;c.y+=g;if(isPassTouchdown(r))c.td++;if(g>=15)c.expl++;});
  let total=cells.reduce((s,c)=>s+c.n,0),max=Math.max(1,...cells.map(c=>c.n));
@@ -1707,7 +1778,7 @@ function targetsPanel(p){
  let labels=['Behind LOS','0–9','10–19','20+'];
  let qbLeft=qbLeftFromRows(rows);
  return `<div class="card">
-   <div class="section-head"><div><h3>Targets</h3><small>${pos==='QB'?'QB pass target heat map by depth and width.':'Receiver target heat map by depth and width.'}</small></div>${freqToggle()}</div>
+   <div class="section-head"><div><h3>Targets · ${seasonLabel()}</h3><small>${pos==='QB'?'QB pass target heat map by depth and width.':'Receiver target heat map by depth and width.'}</small></div>${freqToggle()}</div>
    <div class="heat-summary">${metric('Targets',rows.length)}${metric('Catches',comp)}${metric('Catch %',pct(100*comp/Math.max(1,rows.length)))}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric(freqMode==='raw'?'Explosives':'Explosive %',freqMode==='raw'?gains.filter(x=>x>=15).length:pct(100*gains.filter(x=>x>=15).length/Math.max(1,rows.length)))}${metric('TD',rows.filter(isPassTouchdown).length)}</div>
    <div class="heat-field">
      <div class="heat-los">
@@ -1720,22 +1791,22 @@ function targetsPanel(p){
  </div>`;
 }
 function coveragePlayerPanel(p,manZoneOnly=false){
- let pos=normPos(p.position),rows=profilePlaySource().filter(r=>{if(r.pff_RUNPASS!=='P')return false;if(pos==='QB')return playerTokenMatchRow(r,r.pff_PASSER,p,'QB');if(['WR','TE','RB'].includes(pos))return playerTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');return false}),g={};
+ let pos=normPos(p.position),rows=playerSeasonRowsSource(playerSeasonView).filter(r=>{if(r.pff_RUNPASS!=='P')return false;if(pos==='QB')return seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView);if(['WR','TE','RB'].includes(pos))return seasonTokenMatchRow(r,r.pff_PASSRECEIVERTARGET,p,'TARGET',playerSeasonView);return false}),g={};
  rows.forEach(r=>{let raw=r.pff_PASS_COVERAGE_BASIC||'Unknown',k=manZoneOnly?(isManCov(raw)?'MAN':'ZONE'):raw,x=g[k]||(g[k]={n:0,att:0,comp:0,y:0,td:0,int:0,expl:0});x.n++;let res=String(r.pff_PASSRESULT||'').toUpperCase(),gain=num(r.pff_GAINLOSSNET||r.pff_GAINLOSS);if(['COMPLETE','INCOMPLETE','INTERCEPTION','THROWN AWAY','HIT AS THREW','BATTED PASS'].includes(res))x.att++;if(res==='COMPLETE')x.comp++;if(isInterception(r))x.int++;x.y+=gain;if(gain>=15)x.expl++;if(isPassTouchdown(r))x.td++});
- return `<div class="card"><h3>${manZoneOnly?'Man / Zone':'Vs Coverage'}</h3><div class="coverage-grid-v6">${Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>`<div class="coverage-card-v6"><h4>${esc(k)}</h4><div class="big">${x.n} plays</div><div class="metric-grid">${metric('C/A',`${x.comp}/${x.att}`)}${metric('YPP',fmt(x.y/Math.max(1,x.n),2))}${metric('Expl',x.expl)}${metric('TD / INT',`${x.td} / ${x.int}`)}</div></div>`).join('')||'<div class="empty">No coverage-linked data matched this player.</div>'}</div></div>`;
+ return `<div class="card"><h3>${manZoneOnly?'Man / Zone':'Vs Coverage'} · ${seasonLabel()}</h3><div class="coverage-grid-v6">${Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>`<div class="coverage-card-v6"><h4>${esc(k)}</h4><div class="big">${x.n} plays</div><div class="metric-grid">${metric('C/A',`${x.comp}/${x.att}`)}${metric('YPP',fmt(x.y/Math.max(1,x.n),2))}${metric('Expl',x.expl)}${metric('TD / INT',`${x.td} / ${x.int}`)}</div></div>`).join('')||'<div class="empty">No coverage-linked data matched this player.</div>'}</div></div>`;
 }
 function passingPanel(p){
  if(normPos(p.position)!=='QB')return `<div class="card"><div class="empty">Passing view applies to quarterbacks.</div></div>`;
- let q=findPlayerRow('qb',p.name),pr=findPlayerRows('pressure',p.name),w1=playerWeek1Stats(p);
- return `${w1?`<div class="card"><h3>2026 Week 1 Passing</h3><div class="metric-grid">${w1.map(([l,v])=>metric(l,v)).join('')}</div></div>`:''}
- ${q?`<div class="card"><h3>PFF Full Sample</h3><div class="metric-grid">${playerSeasonStats(p).map(([l,v])=>metric(l,v)).join('')}</div></div>`:''}
- ${pr.length?`<div class="card"><h3>Pressure Splits</h3>${table(['Look','DB','ATT','COMP%','YPA','TD','INT','BTT','TWP','SCR'],pr.map(r=>[r['PRESS PLAY'],r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP,r.SCR]))}</div>`:''}`;
+ let raw=playerSeasonRawStats(p,playerSeasonView),q=availablePFFStats(playerSeasonStats(p)),pr=findPlayerRows('pressure',p.name);
+ return `${raw?`<div class="card"><h3>${seasonLabel()} Passing</h3><div class="metric-grid">${raw.map(([l,v])=>metric(l,v)).join('')}</div></div>`:`<div class="card"><div class="empty">No ${seasonLabel()} passing sample matched.</div></div>`}
+ ${q.length?`<div class="card"><h3>All Loaded PFF Summary</h3><div class="subtle">Aggregate PFF export across the loaded UAB sample; not used as a season total.</div><div class="metric-grid">${q.map(([l,v])=>metric(l,v)).join('')}</div></div>`:''}
+ ${pr.length?`<div class="card"><h3>All Loaded PFF Pressure Splits</h3><div class="subtle">PFF export is not season-separated.</div>${table(['Look','DB','ATT','COMP%','YPA','TD','INT','BTT','TWP','SCR'],pr.map(r=>[r['PRESS PLAY'],r.DB,r.ATT,r['COMP%'],r['PASS YPA'],r['PASS TD'],r.INT,r.BTT,r.TWP,r.SCR]))}</div>`:''}`;
 }
 
 function isQBRunRow(r,p){
  if(normPos(p.position)!=='QB')return false;
- if(playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER')&&String(r.pff_RUNPASS||'').toUpperCase()==='R')return true;
- if(!playerTokenMatchRow(r,r.pff_PASSER,p,'QB'))return false;
+ if(seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView)&&String(r.pff_RUNPASS||'').toUpperCase()==='R')return true;
+ if(!seasonTokenMatchRow(r,r.pff_PASSER,p,'QB',playerSeasonView))return false;
  let qbs=String(r.pff_QBSCRAMBLE||'').trim().toUpperCase(), pr=passResult(r), rp=String(r.pff_RUNPASS||'').toUpperCase();
  if(nonEmpty(r.pff_QBSCRAMBLE)&&!['0','FALSE','N','NO'].includes(qbs))return true;
  if(pr==='RUN')return true;
@@ -1744,9 +1815,9 @@ function isQBRunRow(r,p){
  return false;
 }
 function playerRushRows(p){
- let pos=normPos(p.position);
- if(pos==='QB')return profilePlaySource().filter(r=>isQBRunRow(r,p));
- return profilePlaySource().filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R'&&playerTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER'));
+ let pos=normPos(p.position),source=playerSeasonRowsSource(playerSeasonView);
+ if(pos==='QB')return source.filter(r=>isQBRunRow(r,p));
+ return source.filter(r=>String(r.pff_RUNPASS||'').toUpperCase()==='R'&&seasonTokenMatchRow(r,r.pff_BALLCARRIER,p,'CARRIER',playerSeasonView));
 }
 function countPctMetric(label,count,total){
  return metric(label,freqMode==='raw'?count:pct(100*count/Math.max(1,total)),freqMode==='raw'?pct(100*count/Math.max(1,total)):`${count} plays`);
@@ -1760,12 +1831,17 @@ function rushingPanel(p){
  return `<div class="card"><div class="section-head"><div><h3>Rushing</h3><small>${normPos(p.position)==='QB'?'Includes PFF QB scrambles / off-script runs plus tagged designed runs.':'Player rushing sample.'}</small></div>${freqToggle()}</div><div class="metric-grid">${metric('Runs',rows.length)}${metric('Yards',gains.reduce((a,b)=>a+b,0))}${metric('YPP',fmt(avg(gains),2))}${metric('Median',fmt(calcMedian(gains),1))}${countPctMetric('Explosive 15+',expl,rows.length)}${countPctMetric('Negative',neg,rows.length)}</div></div><div class="card"><h3>Run Type / Concept</h3>${table(['Concept','Runs','Yards','YPP','Median','Explosive','Negative'],Object.entries(byConcept).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>{let e=x.vals.filter(v=>v>=15).length,n=x.vals.filter(v=>v<=0).length;return[esc(k),x.n,x.y,fmt(x.y/Math.max(1,x.n),2),fmt(calcMedian(x.vals),1),freqMode==='raw'?e:pct(100*e/Math.max(1,x.n)),freqMode==='raw'?n:pct(100*n/Math.max(1,x.n))]}))}</div>`;
 }
 function overviewFAU(p){
- let stats=playerSeasonStats(p),named=hasNamedPFFIdentity(p);
- return `${!named?`<div class="no-sample-banner">This current roster player does not have a named UAB PFF player row. Historical play-feed stats are not being attached by jersey number alone.</div>`:''}<div class="card"><h3>Player Intelligence Snapshot</h3><div class="metric-grid">${stats.map(([l,v])=>metric(l,v)).join('')}</div></div>${topGamesPanel(p)}`;
+ let raw=playerSeasonRawStats(p,playerSeasonView),full=availablePFFStats(playerSeasonStats(p));
+ let emptyMsg=playerSeasonView==='2025'&&playerHas2025UAB(p)
+   ?`<div class="no-sample-banner">${esc(playerSeasonSampleNote(p))}</div>`
+   :`<div class="no-sample-banner">No ${seasonLabel()} offensive play-level sample matched this player.</div>`;
+ return `${raw?`<div class="card"><h3>${seasonLabel()} Snapshot</h3><div class="metric-grid">${raw.map(([l,v])=>metric(l,v)).join('')}</div></div>`:emptyMsg}
+ ${full.length?`<div class="card"><h3>All Loaded PFF Summary</h3><div class="subtle">Useful supplemental PFF fields. This export spans the loaded UAB package, so it is kept separate from the season totals above.</div><div class="metric-grid">${full.map(([l,v])=>metric(l,v)).join('')}</div></div>`:''}
+ ${topGamesPanel(p)}`;
 }
 function gameLogFAU(p){
  let pos=normPos(p.position),games=relevantGameRows(p).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
- return `<div class="card"><h3>Game Log</h3>${games.length?table(['Date','Opponent','Plays','Pass C/A','Pass Yds','Rush Yds','Rec/Tgt','Rec Yds','TD','Expl'],games.map(g=>[g.date,g.opp,g.plays,g.att?`${g.comp}/${g.att}`:'—',g.att?g.passY:'—',g.rush?g.rushY:'—',g.tgt?`${g.rec}/${g.tgt}`:'—',g.tgt?g.recY:'—',g.passTD+g.td,g.expl])):'<div class="empty">No game log matched.</div>'}</div>`;
+ return `<div class="card"><h3>Game Log · ${seasonLabel()}</h3>${games.length?table(['Date','Opponent','Plays','Pass C/A','Pass Yds','Rush Yds','Rec/Tgt','Rec Yds','TD','Expl'],games.map(g=>[g.date,g.opp,g.plays,g.att?`${g.comp}/${g.att}`:'—',g.att?g.passY:'—',g.rush?g.rushY:'—',g.tgt?`${g.rec}/${g.tgt}`:'—',g.tgt?g.recY:'—',g.passTD+g.td,g.expl])):'<div class="empty">No game log matched.</div>'}</div>`;
 }
 function coachNotesFAU(p){
  setTimeout(()=>loadCoachNoteForPlayer(p),0);
@@ -1814,7 +1890,7 @@ function closeFAUProfile(){
 }
 function renderFAUDrawer(p){
  let pos=normPos(p.position),stats=playerDisplayStats(p),linked=playsForPlayer(p.name).length;
- $('fauDrawerBody').innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(pos)} · ${activeOpponentName()}</div></div><div class="drawer-spacer"></div>${p.profile?`<button onclick='window.open(${JSON.stringify(p.profile)},"_blank")'>Official Bio ↗</button>`:''}<button onclick="addPlayerToReport(selected)">Add to Report</button></div><div class="fau-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="fau-hero-info"><div class="kicker">${prepWeek==='W2'?'UAB WEEK 2 PLAYER INTELLIGENCE':'MISSISSIPPI STATE PLAYER INTELLIGENCE'}</div><div class="fau-hero-name">${esc(p.name)}</div><div class="fau-hero-pos">${esc(p.position||'')} · #${esc(p.number||'—')}</div><div class="fau-meta">${p.height?esc(p.height):''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.class?` · ${esc(p.class)}`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div><div class="season-title">${prepWeek==='W2'?playerDisplayTitle(p):'2025 SEASON STATS'}</div><div class="fau-season-grid">${stats.slice(0,9).map(([l,v])=>`<div class="fau-season-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div><div class="sample-row"><span class="sample-badge">${linked>=30?'Large Sample':linked>=10?'Medium Sample':'Small Sample'}</span><span>${linked} matched raw UAB play-feed events</span>${prepWeek==='W2'?`<span class="sample-badge">${currentUABPlayerRows(p).length} Week 1</span><span class="sample-badge">${historicalUABPlayerRows(p).length} historical</span>`:''}</div></div></div><div class="fau-tabs">${[['overview','Overview'],['passing','Passing'],['rushing','Rushing'],['routes','Routes'],['top','Top Games'],['targets','Targets'],['coverage','Vs Coverage'],['manzone','Man / Zone'],['games','Game Log'],['notes','Coach Notes']].map(([id,l])=>`<button class="fau-tab ${portalTab===id?'active':''}" onclick="setPortalTab('${id}')">${l}</button>`).join('')}</div><div id="fauPanel" class="fau-panel">${renderPortalTab(p)}</div>`;
+ $('fauDrawerBody').innerHTML=`<div class="drawer-top"><button class="back" onclick="closeFAUProfile()">← Back</button><div><div class="drawer-player">${esc(p.name)}</div><div class="drawer-pos">${esc(pos)} · ${activeOpponentName()}</div></div><div class="drawer-spacer"></div>${p.profile?`<button onclick='window.open(${JSON.stringify(p.profile)},"_blank")'>Official Bio ↗</button>`:''}<button onclick="addPlayerToReport(selected)">Add to Report</button></div><div class="fau-hero"><div class="player-photo">${photo(p)}<div class="player-no">#${esc(p.number||'—')}</div></div><div class="fau-hero-info"><div class="kicker">${prepWeek==='W2'?'UAB WEEK 2 PLAYER INTELLIGENCE':'MISSISSIPPI STATE PLAYER INTELLIGENCE'}</div><div class="fau-hero-name">${esc(p.name)}</div><div class="fau-hero-pos">${esc(p.position||'')} · #${esc(p.number||'—')}</div><div class="fau-meta">${p.height?esc(p.height):''}${p.weight?` · ${esc(p.weight)} lbs`:''}${p.class?` · ${esc(p.class)}`:''}${p.hometown?`<br>${esc(p.hometown)}`:''}${p.previousSchool?`<br>Previous: ${esc(p.previousSchool)}`:''}</div>${prepWeek==='W2'?playerSeasonTabs(p):''}<div class="season-title">${prepWeek==='W2'?playerDisplayTitle(p):'2025 SEASON STATS'}</div><div class="fau-season-grid">${availablePFFStats(stats).slice(0,9).map(([l,v])=>`<div class="fau-season-stat"><small>${esc(l)}</small><b>${esc(value(v))}</b></div>`).join('')}</div><div class="sample-row"><span class="sample-badge">${linked>=30?'Large Sample':linked>=10?'Medium Sample':'Small Sample'}</span><span>${esc(playerSeasonSampleNote(p))}</span>${playerSeasonView==='2025'&&playerHas2025UAB(p)?`<span class="sample-badge">2025 #${esc(player2025Identity(p).number)}</span>`:''}</div></div></div><div class="fau-tabs">${[['overview','Overview'],['passing','Passing'],['rushing','Rushing'],['routes','Routes'],['top','Top Games'],['targets','Targets'],['coverage','Vs Coverage'],['manzone','Man / Zone'],['games','Game Log'],['notes','Coach Notes']].map(([id,l])=>`<button class="fau-tab ${portalTab===id?'active':''}" onclick="setPortalTab('${id}')">${l}</button>`).join('')}</div><div id="fauPanel" class="fau-panel">${renderPortalTab(p)}</div>`;
 }
 window.setPortalTab=id=>{portalTab=id;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};
 window.setRouteFocus=r=>{routeFocus=r;let p=roster.find(x=>x.name===selected);if(p)renderFAUDrawer(p)};

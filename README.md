@@ -135,3 +135,23 @@ No Vercel image fallback is used.
 - QB Targets now shows where that quarterback threw the ball rather than looking for the QB as a receiver.
 - Routes, coverage splits, game logs, Top Games, rushing, and target heat maps now use the raw 975-play UAB source.
 - Team-level 50/50 weighting is unchanged and remains separate from individual player production.
+
+## v15 — Season-Separated Player Intelligence
+
+- Player Intelligence now separates actual UAB seasons instead of blending them.
+- Every current player gets a `2026 UAB` tab.
+- A `2025 UAB` tab appears only for current players who were on UAB's official 2025 roster.
+- 2025 identity uses the player's verified 2025 UAB jersey number, so number changes are handled correctly (for example Ryder Burton: #15 in 2025, #5 in 2026).
+- Season totals, game logs, Top Games, routes, targets, rushing, passing, and coverage views are calculated from that season's raw play feed only.
+- Transfers who were not at UAB in 2025 do not get a fake 2025 analytics tab.
+- PFF summary exports that are not season-separated are retained in a clearly labeled `All Loaded PFF Summary` card and are not presented as 2025 or 2026 season totals.
+- Blank PFF values are hidden instead of displaying empty metric boxes.
+- Offensive-line season views use raw `pff_OFFPLAYERS` participation to show actual offensive, pass, and run snaps by season.
+
+## v16 — Season Toggle + Hero Stat Contrast Fix
+
+- Fixed the 2025 / 2026 player-season buttons. v15 was calling a nonexistent profile renderer after the click; the toggle now rerenders the existing player drawer directly.
+- The selected season remains active while changing Player Intelligence sub-tabs.
+- Fixed the washed-out hero metric cards caused by dark-mode variables bleeding into the light player-profile panel.
+- Hero stat labels and values now use explicit dark text on the light cards.
+- No player-data math or season-identification logic was changed from v15.
