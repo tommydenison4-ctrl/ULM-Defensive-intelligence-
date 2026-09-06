@@ -124,3 +124,14 @@ No Vercel image fallback is used.
   `50% current-season metric + 50% historical metric`.
 - Dashboard YPP, explosive %, negative %, run %, pass YPP, and run YPP use the blended cohort math.
 - Visible play counts remain literal.
+
+## v14 — Player Intelligence Data Fix
+
+- Fixed the core mismatch between UAB's raw play-feed tokens (`ALBI ##`) and the current roster.
+- All Player Intelligence subpages now use the row-aware current-season resolver, not the old name-only/MSST token matcher.
+- Fixes Week 1 receiving/rushing/passing game logs showing zero production despite correct PFF summary totals.
+- Week 2 player hero cards now prioritize actual 2026 Week 1 raw-play stats when the player appeared.
+- PFF full-sample aggregate stats remain available as a secondary view.
+- QB Targets now shows where that quarterback threw the ball rather than looking for the QB as a receiver.
+- Routes, coverage splits, game logs, Top Games, rushing, and target heat maps now use the raw 975-play UAB source.
+- Team-level 50/50 weighting is unchanged and remains separate from individual player production.
