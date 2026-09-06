@@ -155,3 +155,29 @@ No Vercel image fallback is used.
 - Fixed the washed-out hero metric cards caused by dark-mode variables bleeding into the light player-profile panel.
 - Hero stat labels and values now use explicit dark text on the light cards.
 - No player-data math or season-identification logic was changed from v15.
+
+## v17 — UAB 2 Deep Dark-Mode Fix
+
+- Removed the white alternating rows from the UAB 2 Deep table.
+- Position labels, player names, and backup names remain readable in dark mode.
+- Jersey numbers retain the ULM maroon accent.
+- Class/year text uses a muted gray treatment.
+- Hover states remain visible without washing out the row.
+- No depth-chart data or Player Intelligence logic changed.
+
+## v18 — Refined UAB Depth-Chart Colors
+
+- Reworked the depth-chart palette for stronger contrast and a cleaner staff-dashboard look.
+- Alternating rows now use two close dark navy tones instead of black/white contrast.
+- Position labels use ULM gold.
+- Player names stay bright white.
+- Jersey numbers use a brighter maroon/red accent so they remain legible on dark rows.
+- Class/year text remains muted blue-gray.
+- Table header now uses gold labels on navy for clearer hierarchy.
+
+## v19 — Single-Color Depth Chart
+
+- Removed alternating depth-chart rows completely.
+- Every body row now uses the same dark navy background.
+- Position = gold, player name = white, jersey = bright maroon/red, class/year = muted gray.
+- Hover uses one subtle darker/lighter navy state only.
