@@ -115,3 +115,12 @@ No Vercel image fallback is used.
 - The previous Supabase image path is preserved only as an optional backup.
 - Player data, PFF files, roster, and depth chart remain Supabase-driven.
 - Initials appear only if both the official UAB image and optional backup fail.
+
+## v13 — True Counts + Weighted Rates
+
+- Weighted 50/50 mode no longer creates duplicate/synthetic plays.
+- UAB always shows the real play count: 975 total, with 86 current-season and 889 historical.
+- In Weighted mode, rates/efficiency are blended behind the scenes:
+  `50% current-season metric + 50% historical metric`.
+- Dashboard YPP, explosive %, negative %, run %, pass YPP, and run YPP use the blended cohort math.
+- Visible play counts remain literal.
