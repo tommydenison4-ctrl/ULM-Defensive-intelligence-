@@ -730,7 +730,7 @@ let FILES=MSST_FILES;
 let roster=[],datasets={},loadState={},page='players',group='ALL',selected=null,facet='overview',freqMode='raw',heatScope='all',heatMetric='attempts',heatCoverage='ALL',heatHash='ALL',heatQB='ALL',portalTab='overview',routeFocus='ALL',runConceptFocus='ALL',runHashF='ALL',runRBSideF='ALL',runPersonnelF='ALL',runFormationF='ALL',runBackfieldF='ALL',runMotionF='ALL',dndFilter='ALL';
 const UAB_2025_CURRENT_PLAYER_MAP={"Ryder Burton":{"number":"15","position":"QB"},"Nathan Rogers":{"number":"16","position":"QB","rosterName":"Nate Rogers"},"Cameron Jennings":{"number":"10","position":"QB","rosterName":"Cam Jennings"},"Adrian Posse":{"number":"11","position":"QB"},"Marquise Collins":{"number":"10","position":"RB"},"Drew Patterson Jr":{"number":"22","position":"RB","rosterName":"Drew Patterson"},"Amari Brundidge":{"number":"30","position":"RB"},"Kaleb Brown":{"number":"5","position":"WR"},"AJ Johnson":{"number":"2","position":"WR"},"Jaylen Elder":{"number":"12","position":"WR"},"Carson Gill":{"number":"13","position":"WR","rosterName":"CD Gill"},"Jailen Holmes":{"number":"14","position":"WR"},"Malik Muhammad":{"number":"80","position":"WR"},"Levi Brayton":{"number":"83","position":"WR"},"Lamar White Jr":{"number":"84","position":"WR","rosterName":"Lamar White"},"Gabriel Cline":{"number":"19","position":"TE"},"Brayden Johnson":{"number":"40","position":"TE"},"Antonio Ferguson":{"number":"85","position":"TE"},"Gage Messick":{"number":"26","position":"LB","note":"2025 UAB rostered on defense"},"Payton Kirkland":{"number":"51","position":"OL"},"Aidan Platt":{"number":"57","position":"OL"},"Jaden Ligon":{"number":"59","position":"OL"},"Donovan Lawrence":{"number":"66","position":"OL"},"Adam Lepkowski":{"number":"68","position":"OL"},"Kade Martin":{"number":"69","position":"OL"},"Kyrik Mason":{"number":"71","position":"OL"},"Barry Walker Jr":{"number":"74","position":"OL","rosterName":"Barry Walker"},"Calib Perez":{"number":"75","position":"OL"},"Nelson Ramirez":{"number":"78","position":"OL"}};
 let prepWeek=localStorage.getItem('ulmDefPrepWeekV1')||'W2';
-let analysisMode=localStorage.getItem('ulmDefUABAnalysisModeV1')||'weighted';
+let analysisMode=['weighted','current','historical'].includes(localStorage.getItem('ulmDefUABAnalysisModeV1'))?localStorage.getItem('ulmDefUABAnalysisModeV1'):'weighted';
 let playerSeasonView='2026';
 let rawPlayRows=[];
 
@@ -815,6 +815,20 @@ function positionGroups(){return[['ALL','All Offense'],['QB','QB'],['RB','RB'],[
 function offenseRoster(){return roster.filter(p=>['QB','RB','WR','TE','OL'].includes(normPos(p.position)))}
 function filteredPlayers(){let q=($('playerSearch')?.value||'').toLowerCase().trim(),sort=$('playerSort')?.value||'number';let a=offenseRoster().filter(p=>(group==='ALL'||normPos(p.position)===group)&&(!q||[p.name,p.number,p.position,p.hometown,p.previousSchool].some(x=>String(x||'').toLowerCase().includes(q))));a.sort((a,b)=>sort==='name'?String(a.name).localeCompare(String(b.name)):sort==='position'?normPos(a.position).localeCompare(normPos(b.position))||(+a.number||999)-(+b.number||999):(+a.number||999)-(+b.number||999));return a}
 function parseCSV(text){let rows=[],row=[],cell='',q=false;for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];if(q){if(c==='"'&&n==='"'){cell+='"';i++;}else if(c==='"')q=false;else cell+=c}else if(c==='"')q=true;else if(c===','){row.push(cell);cell=''}else if(c==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell=''}else cell+=c}if(cell.length||row.length){row.push(cell.replace(/\r$/,''));rows.push(row)}if(!rows.length)return[];let headers=rows.shift().map(h=>h.trim());return rows.filter(r=>r.some(x=>String(x).trim()!=='')).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]??''])))}
+const UAB_MORTENSEN_2025_OPPONENTS=new Set(['MEMPHIS','UCONN','CONNECTICUT','RICE','NORTH TEXAS','FLORIDA STATE','TULSA']);
+function uabMortensenEraRow(r){
+ let date=String(r?.pff_GAMEDATE||r?.pff_GAMESEASON||'').trim();
+ let name=String(r?.Name||'');
+ let year=(date.match(/^(20\d{2})/)||name.match(/^(20\d{2})\b/)||[])[1]||'';
+ if(year&&year!=='2025')return true;
+ let opponent=String(r?.pff_DEFTEAM||r?.pff_OPPONENT||'').trim().toUpperCase();
+ if(!opponent){let m=name.match(/\bUAB\s+O\s+vs\s+(.+?),\s*PFF/i);opponent=m?m[1].trim().toUpperCase():''}
+ if(year==='2025'){
+   if(/^2025-\d{2}-\d{2}/.test(date))return date.slice(0,10)>='2025-10-18';
+   return UAB_MORTENSEN_2025_OPPONENTS.has(opponent);
+ }
+ return true;
+}
 async function fetchCSV(key){
  let candidates=Array.isArray(FILES[key])?FILES[key]:[FILES[key]];
  let lastErr='';
@@ -824,6 +838,7 @@ async function fetchCSV(key){
      let r=await fetch(url+'?v='+Date.now(),{cache:'no-store'});
      if(!r.ok){lastErr='HTTP '+r.status;continue}
      let data=parseCSV(await r.text());
+     if(prepWeek==='W2'&&key==='plays')data=data.filter(uabMortensenEraRow);
      datasets[key]=data;
      loadState[key]={ok:true,n:data.length,file};
      return data
@@ -983,15 +998,14 @@ function analysisModeHTML(){
  if(prepWeek!=='W2')return '';
  let raw=rawPlayRows||[],cur=raw.filter(uabIsCurrentRow).length,hist=raw.length-cur;
  let note=analysisMode==='weighted'
-   ? `${raw.length} actual plays. Percentages and efficiency rates are blended 50% from 2026 Week 1 (${cur}) and 50% from historical (${hist}); counts stay literal.`
-   : analysisMode==='current'?`Only UAB's September 3, 2026 game (${cur} plays).`
-   : analysisMode==='historical'?`Historical UAB sample only (${hist} plays).`
-   : `All ${raw.length} UAB plays with no weighting.`;
+   ? `${raw.length} actual plays. Percentages and efficiency rates are blended 50% from 2026 (${cur}) and 50% from the Mortensen-only 2025 sample (${hist}); counts stay literal.`
+   : analysisMode==='current'?`2026 UAB data only (${cur} plays).`
+   : `2025 UAB data only: Memphis through Tulsa under Alex Mortensen (${hist} plays).`;
  return `<div class="analysis-mode-bar no-print"><div class="analysis-mode-left"><span class="lbl">DATA VIEW</span>
-   ${[['weighted','Weighted 50/50'],['current','2026 Week 1'],['historical','Historical'],['all','All Raw']].map(([id,l])=>`<button class="${analysisMode===id?'active':''}" onclick="setAnalysisMode('${id}')">${l}</button>`).join('')}
+   ${[['historical','2025'],['current','2026'],['weighted','Weighted 50/50']].map(([id,l])=>`<button class="${analysisMode===id?'active':''}" onclick="setAnalysisMode('${id}')">${l}</button>`).join('')}
    <span class="uab-live-badge">UAB LIVE FROM SUPABASE</span></div><div class="analysis-mode-note">${note}</div></div>`;
 }
-window.setAnalysisMode=v=>{analysisMode=['weighted','current','historical','all'].includes(v)?v:'weighted';localStorage.setItem('ulmDefUABAnalysisModeV1',analysisMode);applyAnalysisMode();render()};
+window.setAnalysisMode=v=>{analysisMode=['weighted','current','historical'].includes(v)?v:'weighted';localStorage.setItem('ulmDefUABAnalysisModeV1',analysisMode);applyAnalysisMode();render()};
 function buildPFFRoster(){
  let all=[...(datasets.qb||[]),...(datasets.receiving||[]),...(datasets.rushing||[]),...(datasets.passBlocking||[]),...(datasets.runBlocking||[])];
  let seen=new Map();
