@@ -181,3 +181,12 @@ No Vercel image fallback is used.
 - Every body row now uses the same dark navy background.
 - Position = gold, player name = white, jersey = bright maroon/red, class/year = muted gray.
 - Hover uses one subtle darker/lighter navy state only.
+
+## v20 — Actual Game Starter Depth-Chart Change
+
+- UAB LG is now game-corrected to #66 Donovan Lawrence as the actual starter.
+- Donovan Lawrence is labeled `ACTUAL GAME STARTER · 86 snaps`.
+- #59 Jaden Ligon is moved to second and labeled `PRE-GAME LISTED STARTER`.
+- The entire LG row is highlighted in gold/maroon to match the depth-chart change treatment used across the other staff apps.
+- The correction is applied even if the live Supabase depth-chart file still has the pre-game order.
+- Player links and the rest of the UAB depth chart remain unchanged.
