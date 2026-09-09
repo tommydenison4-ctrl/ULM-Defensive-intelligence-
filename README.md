@@ -190,3 +190,24 @@ No Vercel image fallback is used.
 - The entire LG row is highlighted in gold/maroon to match the depth-chart change treatment used across the other staff apps.
 - The correction is applied even if the live Supabase depth-chart file still has the pre-game order.
 - Player links and the rest of the UAB depth chart remain unchanged.
+
+## v21 — Mortensen-era UAB sample enforcement
+
+- UAB 2025 team analytics are now restricted to Alex Mortensen's interim-head-coach games beginning with Memphis; every pre-Memphis 2025 game is excluded from the active defensive-intelligence sample.
+- 2026 remains isolated in its own current-season view, with the existing 50/50 toggle blending only 2026 with the Mortensen-interim 2025 cohort.
+- The full 975-row play feed is retained only in memory long enough to preserve exact row alignment with the ULM hybrid; analytics are filtered after that mapping is established.
+- UAB team pages no longer display unfiltered full-package PFF aggregate tables that could leak pre-Mortensen 2025 data. Dashboard passing, personnel/formations, run game, pass game, pressure, situations, coverage and rush-count views now use the eligible play-level sample for Week 2.
+- UAB player 2025 views are also restricted to the Mortensen-interim cohort; unfiltered all-loaded PFF summary cards are hidden in Week 2.
+- The v20 Donovan Lawrence / Jaden Ligon depth-chart game-starter correction remains unchanged.
+
+
+## v22 — Mortensen Toggle + ULM Language Repair
+
+- 2025 UAB scouting data is limited to Mortensen interim-head-coach games beginning with Memphis; pre-Memphis 2025 rows stay out of every active scouting view.
+- Fixed the 2025 / 2026 / Weighted 50/50 toggle so Personnel & Formations and all play-feed-derived scouting pages recalculate from the active cohort.
+- Weighted mode keeps literal play counts while rates, shares, and formation rankings are blended 50/50 behind the scenes.
+- Rebuilt the UAB ULM hybrid as a full 975-row row-aligned translator so filtering no longer breaks ULM terminology.
+- The supplied ULM hybrid is authoritative for manual tags. Missing 2026 defensive response language is filled from raw PFF using the learned ULM translations: coverage, front, front type, stunt, and pressure type.
+- Coverage heat maps, formation-vs-coverage charts, rush-count coverage, and pressure response now prefer ULM translated language rather than leaking raw PFF labels.
+- Run-game personnel filters now use ULM Personnel language.
+- Donovan Lawrence / Jaden Ligon game-starter depth-chart correction remains preserved.
