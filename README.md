@@ -211,3 +211,20 @@ No Vercel image fallback is used.
 - Coverage heat maps, formation-vs-coverage charts, rush-count coverage, and pressure response now prefer ULM translated language rather than leaking raw PFF labels.
 - Run-game personnel filters now use ULM Personnel language.
 - Donovan Lawrence / Jaden Ligon game-starter depth-chart correction remains preserved.
+
+## v23 — Coach Jones Tips & Reminders
+
+- Renamed the staff tab to `Coach Jones Tips & Reminders`.
+- Added the five Week 2 UAB whiteboard notes as a dedicated UAB view while preserving the Week 1 Mississippi State notes.
+- Transcribed the board into five staff sections: D & D Tendencies, Pre-Snap, Formations, Personnel, and QB.
+- Each transcribed section includes a `View actual board note` button that opens the corresponding original photograph in an in-app lightbox.
+- Added an `Actual Board Notes` view showing all five original images with section labels; every photograph is embedded directly inside `index.html` for Vercel/local reliability.
+- No scouting data, play-count logic, ULM translation logic, depth-chart correction, or analytics math was changed in this version.
+
+
+## v24 — Coach Jones Notes Correctly Scoped by Opponent
+
+- Coach Jones Tips & Reminders is visible in both Week 1 and Week 2 workspaces.
+- Week 1 Mississippi State keeps the existing Mississippi State notes and original board images unchanged.
+- Week 2 UAB shows the five new UAB board-note transcriptions and their matching original photographs.
+- The tab content switches by opponent; UAB notes no longer hide behind the Week 1-only navigation rule.
