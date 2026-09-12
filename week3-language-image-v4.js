@@ -2,9 +2,8 @@
 (() => {
   const isW3=()=>typeof prepWeek!=='undefined'&&prepWeek==='W3';
 
-  // IMPORTANT: this is the defensive-scout language used in the Mississippi State/UAB app,
-  // NOT ULM's offensive install language (DICE/TRIO/TOP/etc.).
-  // Mapping is based on the Week 2 UAB raw PFF formation name -> embedded defensive hybrid rows.
+  // Defensive-scout language used in the Mississippi State/UAB app.
+  // This is NOT ULM offensive install language.
   const MAP={
     'TREY - OPEN':'TREY Y OFF',
     'SLOT - PRO':'DUO Y OFF',
@@ -44,6 +43,10 @@
   const scout=s=>MAP[String(s||'').trim().toUpperCase()]||String(s||'').trim();
   const escRe=s=>String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 
+  function setTextIfChanged(el,next){
+    if(el && el.textContent!==next) el.textContent=next;
+  }
+
   function relabelRunLanguage(root=document){
     if(!isW3())return;
     const runPage=[...(root.querySelectorAll?.('h3')||[])].find(x=>x.textContent.trim()==='Run Game Explorer');
@@ -53,20 +56,22 @@
     card.querySelectorAll('label').forEach(l=>{
       if(l.firstChild?.textContent?.trim()==='Formation'){
         const sel=l.querySelector('select');
-        if(sel)[...sel.options].forEach(o=>{if(o.value!=='ALL')o.textContent=scout(o.value)});
+        if(sel)[...sel.options].forEach(o=>{
+          if(o.value==='ALL')return;
+          setTextIfChanged(o,scout(o.value));
+        });
       }
     });
 
     const replaceText=el=>{
       let t=el.textContent;
       Object.entries(MAP).forEach(([p,u])=>{t=t.replace(new RegExp(escRe(p),'gi'),u)});
-      el.textContent=t;
+      setTextIfChanged(el,t);
     };
     card.querySelectorAll('.sle-structure-summary b,.sle-structure-summary span,.run-filter-note,.subtle').forEach(replaceText);
   }
 
-  // Always use our same-origin proxy first for Week 3. It returns image bytes instead of redirecting,
-  // so Sidearm hotlink/referrer behavior cannot knock out the portraits.
+  // Same-origin image proxy for Week 3 portraits.
   const oldPhoto=typeof photo==='function'?photo:null;
   if(oldPhoto) photo=function(p){
     if(!isW3())return oldPhoto(p);
@@ -80,14 +85,16 @@
     return `<img src="${esc(primary)}" alt="${esc(name)}" loading="lazy" data-backup="${esc(backup)}" onerror="if(this.dataset.backup&&!this.dataset.tried){this.dataset.tried='1';this.src=this.dataset.backup}else{this.style.display='none';this.nextElementSibling.style.display='flex'}"><div class="initials" style="display:none">${initials(name)}</div>`;
   };
 
+  // Relabel once after each normal app render. Do NOT observe the whole DOM: that caused
+  // a MutationObserver feedback loop that starved the sidebar click handlers.
   const oldRender=typeof render==='function'?render:null;
-  if(oldRender)render=function(){const out=oldRender.apply(this,arguments);setTimeout(()=>relabelRunLanguage(document),0);return out};
-
-  let obs;
-  const start=()=>{
-    if(!obs){obs=new MutationObserver(()=>relabelRunLanguage(document));obs.observe(document.body,{childList:true,subtree:true})}
-    setTimeout(()=>relabelRunLanguage(document),100);
+  if(oldRender)render=function(){
+    const out=oldRender.apply(this,arguments);
+    setTimeout(()=>relabelRunLanguage(document),0);
+    return out;
   };
-  window.addEventListener('DOMContentLoaded',start);
+
+  const start=()=>setTimeout(()=>relabelRunLanguage(document),100);
+  window.addEventListener('DOMContentLoaded',start,{once:true});
   if(document.readyState!=='loading')start();
 })();
