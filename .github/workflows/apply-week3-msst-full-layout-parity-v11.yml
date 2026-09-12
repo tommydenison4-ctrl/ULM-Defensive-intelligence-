@@ -1,0 +1,55 @@
+name: Apply Week 3 full Mississippi State layout parity v11
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - msst-layout-capture-v11.js
+      - week3-msst-full-layout-parity-v11.js
+      - .github/workflows/apply-week3-msst-full-layout-parity-v11.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert base capture before Week 3 and final parity last
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+
+          capture='<script src="./msst-layout-capture-v11.js?v=20260912a"></script>'
+          parity='<script src="./week3-msst-full-layout-parity-v11.js?v=20260912a"></script>'
+
+          # Remove old copies if workflow re-runs.
+          s=re.sub(r'\s*<script src="\.\/msst-layout-capture-v11\.js\?v=[^"]+"></script>','',s)
+          s=re.sub(r'\s*<script src="\.\/week3-msst-full-layout-parity-v11\.js\?v=[^"]+"></script>','',s)
+
+          first=re.search(r'<script src="\.\/week3-southeastern\.js\?v=[^"]+"></script>',s)
+          if not first:
+              raise SystemExit('First Week 3 script tag not found')
+          s=s[:first.start()]+capture+'\n'+s[first.start():]
+
+          # Final parity must be after every previous Week 3 override.
+          if '</body>' not in s:
+              raise SystemExit('No body close found')
+          s=s.replace('</body>',parity+'\n</body>',1)
+          p.write_text(s)
+          PY
+      - name: Commit patched index
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "index already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Make Southeastern use Mississippi State layout everywhere"
+          git push
