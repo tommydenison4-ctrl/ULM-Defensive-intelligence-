@@ -25,7 +25,7 @@ jobs:
           import re
           p=Path('index.html')
           s=p.read_text()
-          tag='<script src="./week3-player-tabs-v7.js?v=20260912d"></script>'
+          tag='<script src="./week3-player-tabs-v7.js?v=20260912e"></script>'
           pat=r'<script src="\.\/week3-player-tabs-v7\.js\?v=[^"]+"></script>'
           if re.search(pat,s):
               s=re.sub(pat,tag,s)
