@@ -112,4 +112,46 @@
     const n=playsForPlayer(p).length, lab=analysisMode==='current'?'2026':analysisMode==='historical'?'2025':'2025 + 2026';
     return `${n} matched ${lab} Southeastern Louisiana play-feed events`;
   };
+
+  // Use a name-based same-origin resolver even when Supabase roster.json has no profile/image fields.
+  const priorPhoto=typeof photo==='function'?photo:null;
+  photo=function(p){
+    if(!isW3())return priorPhoto?priorPhoto(p):'';
+    const name=String(p?.name||'').trim();
+    if(!name)return `<div class="initials">?</div>`;
+    const src=`/api/sle-player-image?name=${encodeURIComponent(name)}`;
+    return `<img src="${esc(src)}" alt="${esc(name)}" loading="lazy" data-w3-photo="1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="initials" style="display:none">${initials(name)}</div>`;
+  };
+
+  // Week 3 coverage panels use row-aware LASE jersey matching directly.
+  const oldCoverage=typeof coveragePlayerPanel==='function'?coveragePlayerPanel:null;
+  coveragePlayerPanel=function(p,manZoneOnly=false){
+    if(!isW3())return oldCoverage?oldCoverage(p,manZoneOnly):'';
+    const pos=normPos(p.position);
+    let rows=(datasets.plays||[]).filter(r=>{
+      if(String(r.pff_RUNPASS||'').toUpperCase()!=='P')return false;
+      if(pos==='QB')return rowTokenMatches(r,r.pff_PASSER,p,'QB');
+      if(['WR','TE','RB'].includes(pos))return rowTokenMatches(r,r.pff_PASSRECEIVERTARGET,p,'TARGET');
+      return false;
+    });
+    const g={};
+    rows.forEach(r=>{
+      const raw=String(r.pff_PASS_COVERAGE_BASIC||'').trim();
+      if(!raw)return;
+      const man=/COVER 0|COVER 1|2 MAN/i.test(raw);
+      const k=manZoneOnly?(man?'MAN':'ZONE'):raw;
+      const x=g[k]||(g[k]={n:0,att:0,comp:0,y:0,td:0,int:0,expl:0});
+      x.n++;
+      const res=String(r.pff_PASSRESULT||'').toUpperCase(),gain=num0(r.pff_GAINLOSSNET??r.pff_GAINLOSS);
+      if(passAttempt(r))x.att++;if(res==='COMPLETE')x.comp++;if(res==='INTERCEPTION')x.int++;x.y+=gain;if(gain>=15)x.expl++;if(passTD(r))x.td++;
+    });
+    return `<div class="card"><h3>${manZoneOnly?'Man / Zone':'Vs Coverage'}</h3><div class="coverage-grid-v6">${Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([k,x])=>`<div class="coverage-card-v6"><h4>${esc(k)}</h4><div class="big">${x.n} plays</div><div class="metric-grid">${metric('C/A',`${x.comp}/${x.att}`)}${metric('YPP',fmt(x.y/Math.max(1,x.n),2))}${metric('Expl',x.expl)}${metric('TD / INT',`${x.td} / ${x.int}`)}</div></div>`).join('')||'<div class="empty">No coverage tags are available for this player in the active PFF sample.</div>'}</div></div>`;
+  };
+
+  // Clean remaining inherited UAB wording in Week 3 player panels.
+  const oldPortal=typeof renderPortalTab==='function'?renderPortalTab:null;
+  if(oldPortal)renderPortalTab=function(p){
+    let h=oldPortal(p);if(!isW3())return h;
+    return String(h).replace(/UAB/gi,'Southeastern Louisiana');
+  };
 })();
