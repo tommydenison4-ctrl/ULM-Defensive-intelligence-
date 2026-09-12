@@ -1,0 +1,50 @@
+name: Apply Week 3 route visual v9
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - week3-route-visual-v9.js
+      - .github/workflows/apply-week3-route-visual-v9.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert Week 3 route visual after v8
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          tag='<script src="./week3-route-visual-v9.js?v=20260912a"></script>'
+          pat=r'<script src="\.\/week3-route-visual-v9\.js\?v=[^"]+"></script>'
+          if re.search(pat,s):
+              s=re.sub(pat,tag,s)
+          elif tag not in s:
+              anchor=re.search(r'<script src="\.\/week3-player-tabs-v8\.js\?v=[^"]+"></script>',s)
+              if anchor:
+                  s=s[:anchor.end()]+'\n'+tag+s[anchor.end():]
+              elif '</body>' in s:
+                  s=s.replace('</body>',tag+'\n</body>')
+              else:
+                  raise SystemExit('No insertion point found')
+          p.write_text(s)
+          PY
+      - name: Commit patched index
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "index already current"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Load Week 3 route visual v9"
+          git push
