@@ -1,0 +1,43 @@
+name: Apply Week 3 language and image v4
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - week3-language-image-v4.js
+      - api/sle-player-image.js
+      - .github/workflows/apply-week3-language-image-v4.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert Week 3 v4 script
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          tag='<script src="./week3-language-image-v4.js?v=20260912e"></script>'
+          if tag not in s:
+              if '</body>' not in s:
+                  raise SystemExit('index.html has no closing body tag')
+              s=s.replace('</body>',tag+'\n</body>')
+              p.write_text(s)
+          PY
+      - name: Commit patched index
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "index already patched"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Load Week 3 ULM language and image fixes"
+          git push
