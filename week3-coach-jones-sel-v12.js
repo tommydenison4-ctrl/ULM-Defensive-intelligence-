@@ -1,14 +1,20 @@
-/* Week 3 Southeastern Louisiana — Coach Jones Tips & Reminders.
-   Keeps Week 1 Mississippi State and Week 2 UAB notes unchanged. */
+/* Week 3 Southeastern Louisiana — Coach Jones Tips & Reminders. */
 (() => {
   const isSELJonesWeek = () => typeof prepWeek !== 'undefined' && prepWeek === 'W3';
   const oldJonesPage = typeof coachJonesNotesPage === 'function' ? coachJonesNotesPage : null;
   const oldUpdatePrepChrome = typeof updatePrepChrome === 'function' ? updatePrepChrome : null;
-
+  let selJonesView = 'text';
+  const IMG = {motion:'data:image/jpeg;base64,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[... ELLIPSIZATION ...]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',dd:'',personnel:'',opinion:'',philosophy:''};
+  const PHOTOS = [
+    ['Philosophy / QB / Formations',IMG.philosophy],
+    ['My Personal Opinion',IMG.opinion],
+    ['Personnel',IMG.personnel],
+    ['Motion',IMG.motion],
+    ['D/D',IMG.dd]
+  ];
   function ensureSELJonesStyles(){
     if(document.getElementById('selJonesW3Styles')) return;
-    const st=document.createElement('style');
-    st.id='selJonesW3Styles';
+    const st=document.createElement('style'); st.id='selJonesW3Styles';
     st.textContent=`
       .sel-jones-doc{display:flex;flex-direction:column;gap:12px;max-width:980px}
       .sel-jones-doc .jones-card{width:100%;background:#f7f9fb!important;border-color:#d7dee6!important;color:#142434!important}
@@ -17,87 +23,47 @@
       .sel-jones-doc .jones-card li{color:#142434!important;margin:7px 0;line-height:1.45;font-size:13px}
       .sel-jones-doc .jones-source-note{color:#536273!important;font-size:10px;line-height:1.45;margin-top:8px}
       .sel-jones-sequence{font-size:11px;color:#9db0c1;margin:0 0 12px;max-width:980px}
-    `;
-    document.head.appendChild(st);
+      .sel-jones-actions{display:flex;justify-content:flex-end;margin-top:10px;padding-top:10px;border-top:1px solid #dbe3ea}
+      .sel-jones-actions button,.sel-jones-toggle button{background:#102330;color:#fff;border:1px solid #375365;border-radius:8px;padding:7px 10px;font-weight:900;cursor:pointer}
+      .sel-jones-toggle{display:flex;gap:8px;margin:0 0 14px}
+      .sel-jones-toggle button.active{background:#8a2432;border-color:#e0a800}
+      .sel-jones-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:1100px}
+      .sel-jones-photo{background:#0f1b28;border:1px solid #24384a;border-radius:13px;overflow:hidden}
+      .sel-jones-photo h3{margin:0;padding:10px 12px;color:#eef4f8;font-size:14px}
+      .sel-jones-photo img{display:block;width:100%;height:auto;cursor:zoom-in;background:#fff}
+      .sel-jones-lightbox{display:none;position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:28px}
+      .sel-jones-lightbox.open{display:flex}
+      .sel-jones-lightbox img{max-width:96vw;max-height:92vh;object-fit:contain;background:#fff}
+      @media(max-width:760px){.sel-jones-photos{grid-template-columns:1fr}}
+    `; document.head.appendChild(st);
+    if(!document.getElementById('selJonesLightbox')){
+      const lb=document.createElement('div'); lb.id='selJonesLightbox'; lb.className='sel-jones-lightbox'; lb.onclick=()=>lb.classList.remove('open'); lb.innerHTML='<img alt="Coach Jones board note">'; document.body.appendChild(lb);
+    }
   }
-
-  function card(title, bullets, note=''){
-    return `<div class="jones-card"><h3>${title}</h3><ul>${bullets.map(x=>`<li>${x}</li>`).join('')}</ul>${note?`<div class="jones-source-note">${note}</div>`:''}</div>`;
+  function openPhoto(src){ const lb=document.getElementById('selJonesLightbox'); if(!lb)return; lb.querySelector('img').src=src; lb.classList.add('open'); }
+  window.openSELJonesPhoto=i=>openPhoto(PHOTOS[i][1]);
+  window.setSELJonesView=v=>{selJonesView=v==='raw'?'raw':'text'; if(typeof render==='function')render();};
+  function card(title,bullets,photoIndex){
+    return `<div class="jones-card"><h3>${title}</h3><ul>${bullets.map(x=>`<li>${x}</li>`).join('')}</ul><div class="sel-jones-actions"><button onclick="openSELJonesPhoto(${photoIndex})">View actual board note</button></div></div>`;
   }
-
-  function selJonesText(){
-    return `<div class="sel-jones-sequence">Southeastern Louisiana Week 3 board notes · ordered for the staff document exactly as requested.</div>
-      <div class="sel-jones-doc">
-        ${card('Philosophy',[
-          'They make you defend the width of the field.'
-        ])}
-
-        ${card('My Personal Opinion',[
-          'Great scheme.',
-          'Great screen game.',
-          'Best blocking WRs we’ve seen. They relish their role, especially #14.',
-          'Field screen to #73.',
-          'Any guard up = pass.'
-        ])}
-
-        ${card('QB — Last Look',[
-          'Good touch &amp; poise.',
-          'Adequate move-around ability.'
-        ])}
-
-        ${card('Formations',[
-          'Bunch — 9 / 88 / 14 = #9.',
-          '2x2 = QB draw.',
-          'Stack = run.',
-          '4 to a side = sprint out.',
-          'Motion to empty = slants backside.',
-          'Wide open bunch = 100% pass.',
-          'Wide stack = 100% run.',
-          'Rat / Snake to #9.'
-        ],'The parenthetical after “Stack = Run” is not fully legible in the supplied board photo, so it is not expanded here.')}
-
-        ${card('Personnel',[
-          '#14 takes you to a lot of plays.',
-          '#2 is their gadget guy.',
-          '#9 has speed / good P.R.',
-          '#5 is loose with the ball.',
-          '#88 / #85 are good TEs; #30 also.',
-          '#14 &amp; #88 to the same side = you are hot.',
-          '#9 in bunch = hot (Rat / Snake).',
-          '#9 on point in bunch = vertical.',
-          '#88 deep = flat.'
-        ])}
-
-        ${card('Motion',[
-          'Orbit = opposite.',
-          'Across = to.'
-        ])}
-
-        ${card('D/D',[
-          '2nd &amp; long = screen.',
-          '3rd &amp; long = 95% (3x1).'
-        ])}
-      </div>
-      <div class="jones-source-note" style="max-width:980px;margin-top:12px">Transcribed from the five Coach Jones Southeastern Louisiana board photos supplied for Week 3. Wording is kept close to the board; unclear material is not guessed.</div>`;
+  function textView(){
+    return `<div class="sel-jones-sequence">Southeastern Louisiana Week 3 board notes · ordered for the staff document exactly as requested.</div><div class="sel-jones-doc">
+      ${card('Philosophy',['They make you defend the width of the field.'],0)}
+      ${card('My Personal Opinion',['Great scheme.','Great screen game.','Best blocking WRs we’ve seen. They relish their role, especially #14.','Field screen to #73.','Any guard up = pass.'],1)}
+      ${card('QB — Last Look',['Good touch &amp; poise.','Adequate move-around ability.'],0)}
+      ${card('Formations',['Bunch — 9 / 88 / 14 = #9.','2x2 = QB draw.','Stack = run.','4 to a side = sprint out.','Motion to empty = slants backside.','Wide open bunch = 100% pass.','Wide stack = 100% run.','Rat / Snake to #9.'],0)}
+      ${card('Personnel',['#14 takes you to a lot of plays.','#2 is their gadget guy.','#9 has speed / good P.R.','#5 is loose with the ball.','#88 / #85 are good TEs; #30 also.','#14 &amp; #88 to the same side = you are hot.','#9 in bunch = hot (Rat / Snake).','#9 on point in bunch = vertical.','#88 deep = flat.'],2)}
+      ${card('Motion',['Orbit = opposite.','Across = to.'],3)}
+      ${card('D/D',['2nd &amp; long = screen.','3rd &amp; long = 95% (3x1).'],4)}
+    </div><div class="jones-source-note" style="max-width:980px;margin-top:12px">Transcribed from the five Coach Jones Southeastern Louisiana board photos supplied for Week 3.</div>`;
   }
-
-  coachJonesNotesPage = function(){
-    if(!isSELJonesWeek()) return oldJonesPage ? oldJonesPage() : '';
+  function rawView(){return `<div class="sel-jones-photos">${PHOTOS.map((p,i)=>`<div class="sel-jones-photo"><h3>${p[0]}</h3><img src="${p[1]}" alt="${p[0]} board note" onclick="openSELJonesPhoto(${i})"></div>`).join('')}</div>`;}
+  coachJonesNotesPage=function(){
+    if(!isSELJonesWeek()) return oldJonesPage?oldJonesPage():'';
     ensureSELJonesStyles();
-    return `<div class="page-title"><h2>Coach Jones Tips &amp; Reminders</h2><p>Southeastern Louisiana Week 3 board notes and staff reminders.</p></div>${selJonesText()}`;
+    return `<div class="page-title"><h2>Coach Jones Tips &amp; Reminders</h2><p>Southeastern Louisiana Week 3 board notes and staff reminders.</p></div><div class="sel-jones-toggle"><button class="${selJonesView==='text'?'active':''}" onclick="setSELJonesView('text')">Transcribed Tips</button><button class="${selJonesView==='raw'?'active':''}" onclick="setSELJonesView('raw')">Actual Board Notes</button></div>${selJonesView==='raw'?rawView():textView()}`;
   };
-
-  if(oldUpdatePrepChrome){
-    updatePrepChrome = function(){
-      oldUpdatePrepChrome();
-      if(isSELJonesWeek()) document.querySelectorAll('.nav[data-page="jones"]').forEach(b=>b.style.display='');
-    };
-  }
-
-  const showJones=()=>{
-    ensureSELJonesStyles();
-    if(isSELJonesWeek()) document.querySelectorAll('.nav[data-page="jones"]').forEach(b=>b.style.display='');
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(showJones,0));
-  else setTimeout(showJones,0);
+  if(oldUpdatePrepChrome){updatePrepChrome=function(){oldUpdatePrepChrome(); if(isSELJonesWeek())document.querySelectorAll('.nav[data-page="jones"]').forEach(b=>b.style.display='');};}
+  const showJones=()=>{ensureSELJonesStyles(); if(isSELJonesWeek())document.querySelectorAll('.nav[data-page="jones"]').forEach(b=>b.style.display='');};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(showJones,0)); else setTimeout(showJones,0);
 })();
