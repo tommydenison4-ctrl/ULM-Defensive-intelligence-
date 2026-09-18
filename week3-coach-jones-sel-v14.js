@@ -4,13 +4,14 @@
   const oldPage = typeof coachJonesNotesPage === 'function' ? coachJonesNotesPage : null;
   let view='text';
   const P='/assets/coach-jones/sel-week3/';
+  const V='?v=20260918-board-v16';
   const photos=[
-    ['Philosophy / QB / Formations',P+'philosophy-qb-formations.jpg'],
-    ['My Personal Opinion',P+'personal-opinion.jpg'],
-    ['Personnel',P+'personnel.jpg'],
-    ['Motion',P+'motion.jpg'],
-    ['D/D',P+'down-distance.jpg'],
-    ['QB Headgear / Double Move',P+'qb-headgear-dbl-move.jpg']
+    ['Philosophy / QB / Formations',P+'philosophy-qb-formations.jpg'+V],
+    ['My Personal Opinion',P+'personal-opinion.jpg'+V],
+    ['Personnel',P+'personnel.jpg'+V],
+    ['Motion',P+'motion.jpg'+V],
+    ['D/D',P+'down-distance.jpg'+V],
+    ['QB Headgear / Double Move',P+'qb-headgear-dbl-move.jpg'+V]
   ];
   function card(title,items,i){return `<div class="jones-card"><h3>${title}</h3><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>${i==null?'':`<div class="jones-card-actions"><button class="jones-board-link" onclick="openSELJonesBoard(${i})">View actual board note</button></div>`}</div>`;}
   function text(){return `<div class="jones-grid">
