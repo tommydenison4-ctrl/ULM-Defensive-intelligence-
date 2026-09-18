@@ -1,4 +1,4 @@
-name: Apply Week 3 Final Media Roster v16
+name: Apply Week 3 Final Media Roster v17
 on:
   push:
     paths:
@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Insert v16 roster/media layer last
+      - name: Insert v17 current-roster/media layer last
         shell: python
         run: |
           from pathlib import Path
           import re
           p=Path('index.html')
           s=p.read_text()
-          tag='<script src="week3-final-media-roster-v15.js?v=20260918v16"></script>'
+          tag='<script src="week3-final-media-roster-v15.js?v=20260918v17"></script>'
           s=re.sub(r'\s*<script src="week3-final-media-roster-v15\.js[^>]*></script>\s*','\n',s)
           s=s.replace('</body>',tag+'\n</body>')
           p.write_text(s)
@@ -28,5 +28,5 @@ jobs:
           git config user.name "tommydenison4-ctrl"
           git config user.email "tommydenison4@gmail.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "Restore SEL player intel roster and load v16 media layer"
+          git diff --cached --quiet || git commit -m "Filter SEL player cards to current 2026 roster"
           git push
