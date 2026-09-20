@@ -1,4 +1,4 @@
-const ROSTER_URL='https://fausports.com/sports/football/roster/2026';
+const ROSTER_URL='https://fausports.com/sports/football/roster';
 const BASE='https://fausports.com';
 const strip=s=>String(s||'').replace(/<[^>]*>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();
 const abs=u=>{if(!u)return'';if(u.startsWith('//'))return'https:'+u;if(u.startsWith('/'))return BASE+u;return u};
