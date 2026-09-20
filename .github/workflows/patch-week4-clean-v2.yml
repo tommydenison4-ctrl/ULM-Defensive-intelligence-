@@ -1,0 +1,37 @@
+name: Patch Week 4 Clean v2
+on:
+  push:
+    branches: [week4-rebuild-clean]
+    paths:
+      - '.github/workflows/patch-week4-clean-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: week4-rebuild-clean
+      - name: Patch exact FAU summary loading and formation language
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('week4-fau-clean-v1.js')
+          s=p.read_text()
+          s=s.replace("'QUAY - NIX':'TREY Y OFF'", "'QUAY - NIX':'TREY Y OFF','TREY - NIX':'TREY Y OFF'")
+          needle="Object.entries(EMBEDDED).forEach(([k,v])=>{datasets[k]=v;loadState[k]={ok:true,n:v.length,file:'Week 4 supplied PFF export'}});"
+          inject=needle+"\n    // Two larger supplied tables are refreshed from their exact Supabase filenames; embedded data remains the safe fallback.\n    for(const [k,f] of Object.entries({receiving:'pff-data (68).csv',runBlocking:'pff-data (72).csv'})){\n      try{const rr=await fetch(FAU_BASE+encodeURIComponent(f)+'?v='+Date.now(),{cache:'no-store'});if(rr.ok){const rows=parseCSV(await rr.text());if(rows.length){datasets[k]=rows;loadState[k]={ok:true,n:rows.length,file:f}}}}catch(e){console.warn('FAU exact table '+k,e)}\n    }"
+          if needle in s and 'Two larger supplied tables are refreshed' not in s:
+              s=s.replace(needle,inject)
+          p.write_text(s)
+      - name: Syntax check
+        run: node --check week4-fau-clean-v1.js
+      - name: Commit
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add week4-fau-clean-v1.js
+          git diff --cached --quiet || git commit -m "Complete clean FAU data adapter"
+          git push origin HEAD:week4-rebuild-clean
