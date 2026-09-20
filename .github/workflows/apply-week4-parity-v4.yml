@@ -1,0 +1,45 @@
+name: Apply Week 4 Florida Atlantic parity v4
+on:
+  push:
+    paths:
+      - 'week4-parity-v4.js'
+      - 'week3-run-chart-v3.js'
+      - '.github/workflows/apply-week4-parity-v4.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Week 4 run visual from proven Week 3 implementation
+        shell: python
+        run: |
+          from pathlib import Path
+          s=Path('week3-run-chart-v3.js').read_text()
+          s=s.replace('Week 3 Southeastern run-chart correction','Week 4 Florida Atlantic run-chart parity')
+          s=s.replace('const isW3=', 'const isW4=')
+          s=s.replace("prepWeek==='W3'", "prepWeek==='W4'")
+          s=s.replace('selectedW3Runs','selectedW4Runs')
+          s=s.replace('if(!isW3())','if(!isW4())')
+          Path('week4-run-parity-v4.js').write_text(s)
+      - name: Load Week 4 repair and run parity last
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          for name in ['week4-parity-v4.js','week4-run-parity-v4.js']:
+            s=re.sub(r'\s*<script src=["\']'+re.escape(name)+r'[^>]*></script>\s*','\n',s)
+          tags='''<script src="week4-parity-v4.js?v=20260920w4v4"></script>\n<script src="week4-run-parity-v4.js?v=20260920w4v4"></script>'''
+          s=s.replace('</body>',tags+'\n</body>')
+          p.write_text(s)
+      - name: Commit generated run parity and index
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add week4-run-parity-v4.js index.html
+          git diff --cached --quiet || git commit -m "Restore Week 4 FAU depth and run parity"
+          git push
