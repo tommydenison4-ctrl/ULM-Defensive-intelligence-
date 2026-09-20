@@ -1,0 +1,36 @@
+name: Apply Week 4 Clean Rebuild v1
+on:
+  push:
+    branches: [week4-rebuild-clean]
+    paths:
+      - 'week4-fau-clean-v1.js'
+      - 'api/fau-roster.js'
+      - '.github/workflows/apply-week4-clean-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: week4-rebuild-clean
+      - name: Insert exactly one Week 4 clean adapter
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          s=re.sub(r'\s*<script src=["\']week4-[^>]+></script>\s*','\n',s)
+          tag='<script src="week4-fau-clean-v1.js?v=20260920clean1"></script>'
+          s=s.replace('</body>',tag+'\n</body>')
+          p.write_text(s)
+      - name: Commit clean index
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Load clean Week 4 FAU adapter only"
+          git push origin HEAD:week4-rebuild-clean
