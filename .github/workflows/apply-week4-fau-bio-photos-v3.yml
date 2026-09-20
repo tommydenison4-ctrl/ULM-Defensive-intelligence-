@@ -1,0 +1,33 @@
+name: Apply Week 4 FAU Bio Photos v3
+on:
+  push:
+    paths:
+      - 'week4-fau-bio-photos-v3.js'
+      - 'api/fau-player-image.js'
+      - '.github/workflows/apply-week4-fau-bio-photos-v3.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load FAU bio photo layer last
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          tag='<script src="week4-fau-bio-photos-v3.js?v=20260920w4bio1"></script>'
+          s=re.sub(r'\s*<script src="week4-fau-bio-photos-v3\.js[^>]*></script>\s*','\n',s)
+          s=s.replace('</body>',tag+'\n</body>')
+          p.write_text(s)
+      - name: Commit index update
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Load Week 4 FAU bio portrait layer"
+          git push
