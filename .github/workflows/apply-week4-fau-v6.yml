@@ -1,0 +1,33 @@
+name: Apply Week 4 FAU v6
+on:
+  push:
+    paths:
+      - 'week4-fau-v6-hard-repair.js'
+      - 'api/fau-player-image.js'
+      - '.github/workflows/apply-week4-fau-v6.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load v6 hard repair last
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          s=re.sub(r'\s*<script src=["\']week4-fau-v6-hard-repair\.js[^>]*></script>\s*','\n',s)
+          tag='<script src="week4-fau-v6-hard-repair.js?v=20260920w4v6"></script>'
+          s=s.replace('</body>',tag+'\n</body>')
+          p.write_text(s)
+      - name: Commit index
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Load Week 4 FAU v6 hard repair last"
+          git push
