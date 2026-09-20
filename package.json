@@ -1,6 +1,5 @@
 {
-  "name": "ulm-defensive-intelligence",
-  "version": "3.0.0",
+  "name": "ulm-defensive-intelligence-fau-week4",
   "private": true,
-  "type": "module"
+  "version": "1.0.0"
 }

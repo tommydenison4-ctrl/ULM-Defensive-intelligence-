@@ -1,0 +1,323 @@
+[
+  {
+    "name": "Caden Veltkamp",
+    "file": "player-images/caden-veltkamp.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Veltkamp_Caden.jpg",
+    "ok": true
+  },
+  {
+    "name": "Easton Messer",
+    "file": "player-images/easton-messer.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2025/1/24/Messer_Easton.jpg",
+    "ok": true
+  },
+  {
+    "name": "Drew Devillier",
+    "file": "player-images/drew-devillier.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Devillier_Drew.jpg",
+    "ok": true
+  },
+  {
+    "name": "RJ Garcia II",
+    "file": "player-images/rj-garcia-ii.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Garcia_II_RJ.jpg",
+    "ok": true
+  },
+  {
+    "name": "Vincent Fiacable",
+    "file": "player-images/vincent-fiacable.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Fiacable_Vincent.jpg",
+    "ok": true
+  },
+  {
+    "name": "AJ Johnson",
+    "file": "player-images/aj-johnson.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Johnson_AJ.jpg",
+    "ok": true
+  },
+  {
+    "name": "Brooks Johnson",
+    "file": "player-images/brooks-johnson.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Johnson_Brooks.jpg",
+    "ok": true
+  },
+  {
+    "name": "Tucker Holloway",
+    "file": "player-images/tucker-holloway.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Holloway_Tucker.jpg",
+    "ok": true
+  },
+  {
+    "name": "Ja'Kavion Nonar",
+    "file": "player-images/ja-kavion-nonar.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Nonar_Ja_Kavion.jpg",
+    "ok": true
+  },
+  {
+    "name": "Dominique Henry",
+    "file": "player-images/dominique-henry.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Henry_Dominique.jpg",
+    "ok": true
+  },
+  {
+    "name": "Ovie Dubre",
+    "file": "player-images/ovie-dubre.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Dubre_Ovie.jpg",
+    "ok": true
+  },
+  {
+    "name": "Joshua Harriott",
+    "file": "player-images/joshua-harriott.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Harriott_Joshua.jpg",
+    "ok": true
+  },
+  {
+    "name": "Ben Galloway",
+    "file": "player-images/ben-galloway.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Galloway_Benjamin.jpg",
+    "ok": true
+  },
+  {
+    "name": "Marcus Vinson",
+    "file": "player-images/marcus-vinson.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/15/Vinson_Marcus.jpg",
+    "ok": true
+  },
+  {
+    "name": "Germanuel Tanelus",
+    "file": "player-images/germanuel-tanelus.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/15/Tanelus_Germanuel.jpg",
+    "ok": true
+  },
+  {
+    "name": "Kelby Valsin",
+    "file": "player-images/kelby-valsin.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Valsin_Kelby.jpg",
+    "ok": true
+  },
+  {
+    "name": "Kortez Winslow",
+    "file": "player-images/kortez-winslow.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Winslow_Kortez.jpg",
+    "ok": true
+  },
+  {
+    "name": "Brady Tillman III",
+    "file": "player-images/brady-tillman-iii.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Tooley_III_Chris.jpg",
+    "ok": true
+  },
+  {
+    "name": "Braden Cunningham",
+    "file": "player-images/braden-cunningham.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Cunningham_Braden.jpg",
+    "ok": true
+  },
+  {
+    "name": "Mauricio Hinds",
+    "file": "player-images/mauricio-hinds.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Hinds_Mauricio.jpg",
+    "ok": true
+  },
+  {
+    "name": "Keon Rohe",
+    "file": "player-images/keon-rohe.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Rohe_Kion.jpg",
+    "ok": true
+  },
+  {
+    "name": "Jahmari Powell-Wonson",
+    "ok": false,
+    "error": "no 2026 portrait URL found"
+  },
+  {
+    "name": "Almari Brown",
+    "file": "player-images/almari-brown.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Brown_Almari.jpg",
+    "ok": true
+  },
+  {
+    "name": "Kaden Shields-Dutton",
+    "file": "player-images/kaden-shields-dutton.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Shields-Dutton_Kaden.jpg",
+    "ok": true
+  },
+  {
+    "name": "Michael Valentino",
+    "file": "player-images/michael-valentino.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Valentino_Michael.jpg",
+    "ok": true
+  },
+  {
+    "name": "Dyson Sims",
+    "ok": false,
+    "error": "no 2026 portrait URL found"
+  },
+  {
+    "name": "Carson Osmus",
+    "file": "player-images/carson-osmus.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Osmus_Carson.jpg",
+    "ok": true
+  },
+  {
+    "name": "Aiden Jones",
+    "file": "player-images/aiden-jones.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Jones_Aiden.jpg",
+    "ok": true
+  },
+  {
+    "name": "Vincent Forney",
+    "file": "player-images/vincent-forney.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Forney_Vincent.jpg",
+    "ok": true
+  },
+  {
+    "name": "Chase Hanning",
+    "file": "player-images/chase-hanning.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Hanning_Chase.jpg",
+    "ok": true
+  },
+  {
+    "name": "Ethan Ervin",
+    "file": "player-images/ethan-ervin.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Ervin_Ethan.jpg",
+    "ok": true
+  },
+  {
+    "name": "Rain Banick",
+    "file": "player-images/rain-banick.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Banick_Rain.jpg",
+    "ok": true
+  },
+  {
+    "name": "Jordan Magwood",
+    "file": "player-images/jordan-magwood.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Magwood_Jordan.jpg",
+    "ok": true
+  },
+  {
+    "name": "Branden Hoch",
+    "file": "player-images/branden-hoch.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Hoch_Branden.jpg",
+    "ok": true
+  },
+  {
+    "name": "Logan Husband",
+    "file": "player-images/logan-husband.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Husband_Logan.jpg",
+    "ok": true
+  },
+  {
+    "name": "Landon Rapkiewicz",
+    "file": "player-images/landon-rapkiewicz.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2025/8/5/Rapkiewicz_Landon.jpg",
+    "ok": true
+  },
+  {
+    "name": "Aqil Meredith-Smith",
+    "file": "player-images/aqil-meredith-smith.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Meredith-Smith_Aquil.jpg",
+    "ok": true
+  },
+  {
+    "name": "Leonard Farrow",
+    "file": "player-images/leonard-farrow.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Farrow_Leonard.jpg",
+    "ok": true
+  },
+  {
+    "name": "Owen Cheatham",
+    "file": "player-images/owen-cheatham.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Cheatham_Owen.jpg",
+    "ok": true
+  },
+  {
+    "name": "Antojuan Woody",
+    "file": "player-images/antojuan-woody.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Woody_Antojuan.jpg",
+    "ok": true
+  },
+  {
+    "name": "Owen Pollock",
+    "file": "player-images/owen-pollock.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Pollock_Owen.jpg",
+    "ok": true
+  },
+  {
+    "name": "Aedyn Buchanan",
+    "file": "player-images/aedyn-buchanan.webp",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Buchanan_qYZ51.jpg",
+    "ok": true
+  },
+  {
+    "name": "Elijah West",
+    "file": "player-images/elijah-west.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/8/24/West_Elijah.jpg",
+    "ok": true
+  },
+  {
+    "name": "Nicsaint Joseph Jr.",
+    "file": "player-images/nicsaint-joseph-jr.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Joseph_Jr_Nicsaint.jpg",
+    "ok": true
+  },
+  {
+    "name": "Alejandro Schmitt",
+    "file": "player-images/alejandro-schmitt.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/4/24/Schmitt_Alejandro.jpg",
+    "ok": true
+  },
+  {
+    "name": "Jeremiah Daoud",
+    "ok": false,
+    "error": "no 2026 portrait URL found"
+  },
+  {
+    "name": "JJ Rochford",
+    "file": "player-images/jj-rochford.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Rochford_JJ.jpg",
+    "ok": true
+  },
+  {
+    "name": "Peter Cannon",
+    "file": "player-images/peter-cannon.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Cannon_Peter.jpg",
+    "ok": true
+  },
+  {
+    "name": "Maika Kurkowski",
+    "file": "player-images/maika-kurkowski.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Kurkowski_Maika.jpg",
+    "ok": true
+  },
+  {
+    "name": "Grayson Gibson",
+    "file": "player-images/grayson-gibson.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/15/Gibson_Grayson.jpg",
+    "ok": true
+  },
+  {
+    "name": "Spencer Martin",
+    "file": "player-images/spencer-martin.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/15/Martin_Spencer.jpg",
+    "ok": true
+  },
+  {
+    "name": "Aiden Ford",
+    "file": "player-images/aiden-ford.png",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/6/15/Ford_Aiden.png",
+    "ok": true
+  },
+  {
+    "name": "Dveyoun Bonwell-Witte",
+    "file": "player-images/dveyoun-bonwell-witte.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/14/Bonwell-Witte_Dveyoun.jpg",
+    "ok": true
+  },
+  {
+    "name": "Jaylen Gamble",
+    "file": "player-images/jaylen-gamble.jpg",
+    "source": "https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fausports.com/images/2026/7/17/Gamble_Jaylen.jpg",
+    "ok": true
+  }
+]
