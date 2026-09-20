@@ -1,0 +1,66 @@
+name: Apply Week 4 FAU Clean v1
+on:
+  push:
+    branches: [week4-rebuild-clean]
+    paths:
+      - 'week4-fau-clean-v1.js'
+      - 'week4-fau-layout-parity-v1.js'
+      - 'week4-fau-language-v1.js'
+      - 'week4-fau-media-v1.js'
+      - 'api/fau-roster-clean.js'
+      - 'api/fau-image-clean.js'
+      - '.github/workflows/apply-week4-fau-clean-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-clean-week4:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: week4-rebuild-clean
+      - name: Generate exact Week 4 run renderer from Week 3 proven renderer
+        shell: python
+        run: |
+          from pathlib import Path
+          s=Path('week3-run-chart-v3.js').read_text()
+          s=s.replace('Week 3 Southeastern run-chart correction','Week 4 Florida Atlantic run-chart parity')
+          s=s.replace('const isW3=', 'const isW4=')
+          s=s.replace("prepWeek==='W3'", "prepWeek==='W4'")
+          s=s.replace('selectedW3Runs','selectedW4Runs')
+          s=s.replace('if(!isW3())','if(!isW4())')
+          s=s.replace('Southeastern Louisiana','Florida Atlantic')
+          Path('week4-fau-run-parity-v1.js').write_text(s)
+      - name: Insert only the clean Week 4 layers
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html'); s=p.read_text()
+          # No old Week-4 script is allowed in the clean build.
+          s=re.sub(r'\s*<script src=["\'][^"\']*week4[^"\']*["\'][^>]*></script>\s*','\n',s,flags=re.I)
+          tags='''<script src="./week4-fau-clean-v1.js?v=20260920clean1"></script>
+          <script src="./week4-fau-layout-parity-v1.js?v=20260920clean1"></script>
+          <script src="./week4-fau-run-parity-v1.js?v=20260920clean1"></script>
+          <script src="./week4-fau-language-v1.js?v=20260920clean1"></script>
+          <script src="./week4-fau-media-v1.js?v=20260920clean1"></script>'''
+          s=s.replace('</body>',tags+'\n</body>')
+          p.write_text(s)
+      - name: Verify clean script stack
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text()
+          tags=re.findall(r'<script src=["\']([^"\']*week4[^"\']*)',s,re.I)
+          expected=['./week4-fau-clean-v1.js?v=20260920clean1','./week4-fau-layout-parity-v1.js?v=20260920clean1','./week4-fau-run-parity-v1.js?v=20260920clean1','./week4-fau-language-v1.js?v=20260920clean1','./week4-fau-media-v1.js?v=20260920clean1']
+          assert tags==expected,(tags,expected)
+          print('Verified Week4 stack:',tags)
+      - name: Commit clean Week 4 build
+        run: |
+          git config user.name "tommydenison4-ctrl"
+          git config user.email "tommydenison4@gmail.com"
+          git add index.html week4-fau-run-parity-v1.js
+          git diff --cached --quiet || git commit -m "Assemble clean Week 4 FAU build from prior-week template"
+          git push origin HEAD:week4-rebuild-clean
