@@ -3489,8 +3489,62 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
 
   coachJonesNotesPage=function(){
     if(!isW4())return oldCoachJonesNotesPage?oldCoachJonesNotesPage():'';
-    return `<div class="page-title"><h2>Coach Jones Tips</h2><p>Florida Atlantic · Week 4</p></div>
-      <div class="card"><div class="empty">No Week 4 Coach Jones board notes were supplied in the FAU data package. This page is intentionally blank rather than carrying notes forward from another opponent.</div></div>`;
+    return `<div class="page-title"><h2>Coach Jones Tips &amp; Reminders</h2><p>Florida Atlantic · Week 4 · Board notes converted to game-week alerts</p></div>
+      <div class="card" style="border-left:5px solid var(--gold)">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900;margin-bottom:8px">Defensive Philosophy</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px">
+          <div class="detail"><span>Tempo</span><b>Expect pace</b><small>They use tempo to get the defense back on its heels. Get aligned and communicate immediately.</small></div>
+          <div class="detail"><span>Run / Pass Intent</span><b>Pass-first mindset</b><small>Run is an afterthought. Box numbers help determine when they will run.</small></div>
+          <div class="detail"><span>Coverage Reminder</span><b>Be ready for rotation</b><small>Board cue: “They want to spin it.” Stay disciplined through late movement and post-snap rotation.</small></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:900;margin-bottom:8px">Quarterback Alerts</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px">
+          <div class="detail"><span>Eyes</span><b>Last-look QB</b><small>Do not declare too early. Make the final picture matter.</small></div>
+          <div class="detail"><span>Hot / Communication</span><b>Signals WR hot</b><small>Watch the QB-to-WR pre-snap communication and hand signals.</small></div>
+          <div class="detail"><span>Accuracy</span><b>Very accurate</b><small>Board reminder: approximately 70% passer. Contest windows and finish at the catch point.</small></div>
+          <div class="detail"><span>Movement</span><b>Not a runner</b><small>Make him move and reset without losing rush-lane integrity.</small></div>
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="card">
+          <h3 style="margin-top:0;color:var(--maroon)">Personnel Reminders</h3>
+          <div class="detail" style="margin-bottom:8px"><span>#8</span><b>Best WR · Fast</b><small>Speed alert. Know where he is before the snap.</small></div>
+          <div class="detail" style="margin-bottom:8px"><span>#2</span><b>Good WR</b><small>Transfer noted on the board. Treat as a legitimate matchup threat.</small></div>
+          <div class="detail" style="margin-bottom:8px"><span>#1</span><b>Big body · softer blocker</b><small>Board note: size shows up more than physicality as a blocker.</small></div>
+          <div class="detail" style="margin-bottom:8px"><span>TE / Bunch</span><b>Tight = run alert</b><small>TE in bunch tight is a run cue; looser spacing is a pass cue.</small></div>
+          <div class="detail"><span>11 Personnel</span><b>Check #1 alignment</b><small>Board note: 11P loses some value when #1 must be a primary blocker. If #1 is the #2 strong receiver, think screen alert.</small></div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;color:var(--maroon)">Formation Alerts</h3>
+          <div class="detail" style="margin-bottom:8px"><span>22</span><b>Stacks → Screen / Verticals</b><small>Stacks are a screen-and-vertical alert.</small></div>
+          <div class="detail" style="margin-bottom:8px"><span>31</span><b>Spacing</b><small>Boundary alert if there is no safety help.</small></div>
+          <div class="detail" style="margin-bottom:8px"><span>FIB 13</span><b>Run / Pass tells</b><small>Run: bunch is tight; board also flags cross/vertical action. Pass: 3-vertical alert.</small></div>
+          <div class="detail"><span>Duo Y Off</span><b>TE direction matters</b><small>Board cue: throws away from the TE, runs to the TE. Check the split.</small></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--maroon)">Core Defensive Reminders</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px">
+          <div class="detail"><span>1</span><b>Know what to do — and how to do it.</b></div>
+          <div class="detail"><span>2</span><b>Get all 11 to the ball with bad intentions.</b></div>
+          <div class="detail"><span>3</span><b>Keep them out of the end zone.</b></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;color:var(--maroon)">Original Board Photos</h3>
+        <p style="color:var(--muted);margin-top:-4px">Use the originals below when you want the exact handwritten shorthand.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+          <a href="assets/coach-jones/fau-week4-board-1.jpg" target="_blank" rel="noopener"><img src="assets/coach-jones/fau-week4-board-1.jpg" alt="Coach Jones Florida Atlantic board notes - philosophy and quarterback" style="width:100%;max-height:680px;object-fit:contain;background:#0a1118;border:1px solid #263746;border-radius:12px;padding:8px"></a>
+          <a href="assets/coach-jones/fau-week4-board-2.jpg" target="_blank" rel="noopener"><img src="assets/coach-jones/fau-week4-board-2.jpg" alt="Coach Jones Florida Atlantic board notes - personnel and formations" style="width:100%;max-height:680px;object-fit:contain;background:#0a1118;border:1px solid #263746;border-radius:12px;padding:8px"></a>
+        </div>
+      </div>`;
   };
 
   // Replace stale "2025 PFF" labels inherited from the original card template only in W4.
