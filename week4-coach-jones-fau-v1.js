@@ -15,8 +15,6 @@
       .fau-jones-doc .jones-card h3{color:#8a2432!important;margin:0 0 8px}
       .fau-jones-doc .jones-card ul{margin:0;padding-left:20px}
       .fau-jones-doc .jones-card li{color:#142434!important;margin:7px 0;line-height:1.45;font-size:13px}
-      .fau-jones-doc .jones-source-note{color:#536273!important;font-size:10px;line-height:1.45;margin-top:8px}
-      .fau-jones-sequence{font-size:11px;color:#9db0c1;margin:0 0 12px;max-width:1050px}
       .fau-jones-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
       .fau-jones-photos a{display:block;background:#08131d;border:1px solid #2b3c49;border-radius:12px;padding:8px}
       .fau-jones-photos img{display:block;width:100%;height:auto;max-height:720px;object-fit:contain;border-radius:8px}
@@ -25,13 +23,12 @@
     document.head.appendChild(st);
   }
 
-  function card(title, bullets, note=''){
-    return `<div class="jones-card"><h3>${title}</h3><ul>${bullets.map(x=>`<li>${x}</li>`).join('')}</ul>${note?`<div class="jones-source-note">${note}</div>`:''}</div>`;
+  function card(title, bullets){
+    return `<div class="jones-card"><h3>${title}</h3><ul>${bullets.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
   }
 
   function fauJonesText(){
-    return `<div class="fau-jones-sequence">Florida Atlantic Week 4 board notes · converted into quick defensive reminders.</div>
-      <div class="fau-jones-doc">
+    return `<div class="fau-jones-doc">
         ${card('Philosophy',[
           '<b>Tempo:</b> they want to get you back on your heels — align and communicate immediately.',
           '<b>Run is an afterthought:</b> box numbers help determine when they run.',
@@ -53,7 +50,7 @@
           '<b>TE in bunch:</b> tight alignment = run alert; looser alignment = pass alert.',
           '<b>11 personnel:</b> board notes they do not get as much from it when #1 has to block. If #1 is #2 strong, think screen alert.',
           '<b>Motion to empty / 4 strong:</b> curl alert.'
-        ],'Wording is kept close to the board. Unclear personnel shorthand is not expanded beyond what is legible.')}
+        ])}
 
         ${card('Formation Alerts',[
           '<b>22 / stacks:</b> screen or vertical alert.',
@@ -61,7 +58,7 @@
           '<b>FIB 13 — run:</b> bunch is tight; board also flags cross / vertical action.',
           '<b>FIB 13 — pass:</b> 3-vertical alert.',
           '<b>Duo Y Off:</b> throw away from the TE; run to the TE; check the split.'
-        ],'A few small run/pass shorthand marks beside FIB 13 are not fully legible, so they are not guessed here.')}
+        ])}
 
         <div class="jones-card">
           <h3>Original Board Photos</h3>
@@ -69,7 +66,6 @@
             <a href="./assets/coach-jones/fau-week4-board-1.jpg" target="_blank" rel="noopener"><img src="./assets/coach-jones/fau-week4-board-1.jpg" alt="Florida Atlantic Coach Jones board notes — philosophy and quarterback"></a>
             <a href="./assets/coach-jones/fau-week4-board-2.jpg" target="_blank" rel="noopener"><img src="./assets/coach-jones/fau-week4-board-2.jpg" alt="Florida Atlantic Coach Jones board notes — personnel and formations"></a>
           </div>
-          <div class="jones-source-note">Transcribed from the two Florida Atlantic board photos supplied for Week 4. The photos remain here as the source of truth for exact handwritten shorthand.</div>
         </div>
       </div>`;
   }
