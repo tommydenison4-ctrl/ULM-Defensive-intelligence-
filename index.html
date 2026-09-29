@@ -4129,7 +4129,10 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
       const liveDepth=await depthResponse.json();
       const texts=await Promise.all(csvResponses.map(r=>r.text()));
       const liveData={}; Object.keys(SA_FILES).forEach((key,index)=>liveData[key]=parseCSV(texts[index]));
-      roster=liveRoster.filter(p=>['QB','RB','WR','TE','OL','OT','OG','C','LT','LG','RG','RT','FB'].includes(String(p.position||'').toUpperCase()));
+      const embeddedPortraits=new Map(SA_ROSTER.map(p=>[cleanName(p.name),p.image]).filter(([,image])=>image));
+      roster=liveRoster
+        .filter(p=>['QB','RB','WR','TE','OL','OT','OG','C','LT','LG','RG','RT','FB'].includes(String(p.position||'').toUpperCase()))
+        .map(p=>({...p,image:embeddedPortraits.get(cleanName(p.name))||p.image||p.supabaseImageBackup||''}));
       datasets=liveData; rawPlayRows=(datasets.plays||[]).slice();
       if(typeof noPlay==='function')datasets.plays=rawPlayRows.filter(r=>!noPlay(r));
       saDepthCurrent=liveDepth; loadState={};
