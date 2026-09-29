@@ -4191,6 +4191,34 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
   };
   const oldOverview=overview;
   overview=function(p){const html=oldOverview(p);return prepWeek==='W5'?html.replace(/Mississippi State|UAB/g,'South Alabama'):html};
+  const oldUabTokenJersey=uabTokenJersey;
+  uabTokenJersey=function(token){
+    if(prepWeek!=='W5')return oldUabTokenJersey(token);
+    const match=String(token||'').toUpperCase().match(/\bALSO\s+0*(\d{1,2})\b/);
+    return match?String(parseInt(match[1],10)):'';
+  };
+  const oldSeasonOffPlayerMatch=seasonOffPlayerMatch;
+  seasonOffPlayerMatch=function(r,p,season=playerSeasonView){
+    if(prepWeek!=='W5')return oldSeasonOffPlayerMatch(r,p,season);
+    if(!r||!p||seasonYear(r)!==String(season))return false;
+    const jersey=seasonPlayerJersey(p,season); if(!jersey)return false;
+    return new RegExp('(?:^|;\\s*)ALSO\\s+0*'+jersey+'\\s*\\(').test(String(r.pff_OFFPLAYERS||'').toUpperCase());
+  };
+  const oldSeasonLabel=seasonLabel;
+  seasonLabel=function(){return prepWeek==='W5'?'2026 South Alabama':oldSeasonLabel()};
+  const oldPlayerDisplayTitle=playerDisplayTitle;
+  playerDisplayTitle=function(p){return prepWeek==='W5'?'2026 South Alabama':oldPlayerDisplayTitle(p)};
+  const oldRenderFAUDrawer=renderFAUDrawer;
+  renderFAUDrawer=function(p){
+    oldRenderFAUDrawer(p);
+    if(prepWeek!=='W5')return;
+    const body=document.getElementById('fauDrawerBody'); if(!body)return;
+    body.innerHTML=body.innerHTML
+      .replace(/MISSISSIPPI STATE PLAYER INTELLIGENCE/g,'SOUTH ALABAMA WEEK 5 PLAYER INTELLIGENCE')
+      .replace(/2025 SEASON STATS/g,'2026 SOUTH ALABAMA SEASON STATS')
+      .replace(/2026 UAB/g,'2026 SOUTH ALABAMA')
+      .replace(/2025 UAB/g,'2025 SOUTH ALABAMA');
+  };
   const oldPersonnelPage=personnelPage;
   personnelPage=function(){
     const html=oldPersonnelPage();
