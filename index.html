@@ -3280,7 +3280,7 @@ async function loadOpponentData(){
  render();
 }
 async function loadRoster(){return loadOpponentData()}
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{page=b.dataset.page;syncNav();render()});$('reloadBtn').onclick=loadRoster;$('printBtn').onclick=openPrintCenter;render();loadRoster();
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{page=b.dataset.page;syncNav();render()});$('reloadBtn').onclick=loadRoster;$('printBtn').onclick=openPrintCenter;render();
 
 document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0));
 </script>
@@ -4052,6 +4052,67 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
   };
   const clone = value => JSON.parse(JSON.stringify(value));
   let saDepthCurrent=clone(SA_DEPTH);
+  function activateSouthAlabamaULM(){
+    const plays=datasets.plays||[];
+    const formationVotes={};
+    const signature=r=>[
+      r.pff_OFFENSIVE_FORMATION_NAME||r.pff_STARTING_OFFENSIVE_FORMATION_NAME||'',
+      r.pff_OFFFORMATIONGROUP||r.pff_STARTING_OFFENSIVE_FORMATION_GROUP||'',
+      r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||''
+    ].map(v=>String(v).trim().toUpperCase()).join('|');
+    plays.forEach(r=>{
+      const form=String(r.Formation||'').trim(),sig=signature(r);
+      if(!form||!sig)return;
+      const votes=formationVotes[sig]||(formationVotes[sig]={});
+      votes[form]=(votes[form]||0)+1;
+    });
+    const learnedFormation={};
+    Object.entries(formationVotes).forEach(([sig,votes])=>{
+      learnedFormation[sig]=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0][0];
+    });
+    const runConcept=value=>{
+      const v=String(value||'').trim().toUpperCase();
+      return ({'INSIDE ZONE':'INSIDE ZN','OUTSIDE ZONE':'OUTSIDE ZN','COUNTER':'CTR','QB RUNS':'QB RUN','READ OPTION':'READ OPTION','PULL LEAD':'PULL LEAD'})[v]||v;
+    };
+    const playType=r=>{
+      const rc=runConcept(r['Run Concept']||r.pff_RUNCONCEPTPRIMARY);
+      if(String(r.pff_RUNPASS||'').toUpperCase()==='R'){
+        if(/ZONE|ZN|READ OPTION/.test(rc))return 'ZN';
+        if(/COUNTER|CTR|POWER|PULL|LEAD|MAN/.test(rc))return 'GAP';
+        if(/DRAW/.test(rc))return 'DRAW';
+      }
+      if(String(r.pff_RUNPASSOPTION||'')==='1')return 'RPO';
+      if(String(r.pff_SCREEN||'')==='1')return 'SCR';
+      return String(r.pff_RUNPASS||'').toUpperCase()==='P'?'DB':'';
+    };
+    ulmPlayMap=new WeakMap();
+    let exactFormation=0, learned=0;
+    plays.forEach(r=>{
+      const exact=String(r.Formation||'').trim();
+      const inferred=learnedFormation[signature(r)]||'';
+      const pffForm=String(r.pff_OFFENSIVE_FORMATION_NAME||r.pff_STARTING_OFFENSIVE_FORMATION_NAME||r.pff_OFFFORMATIONGROUP||'').trim();
+      if(exact)exactFormation++; else if(inferred)learned++;
+      const blockers=String(r.pff_PASSBLOCKING||'').match(/^s*(d+)/)?.[1]||'';
+      const hybrid={
+        ...r,
+        Personnel:String(r.Personnel||r.pff_OFFPERSONNELBASIC||r.pff_OFF_PERSONNEL_GROUP||'').trim(),
+        Formation:exact||inferred||(pffForm?`PFF · ${pffForm}`:''),
+        'Form Var':String(r['Form Var']||'').trim(),
+        Motion:String(r.Motion||r['Motion 1']||r.pff_SHIFTMOTION||'').trim(),
+        'Y Location':String(r['Y Location']||'').trim(),
+        Backfield:String(r.Backfield||(r.pff_RBALIGNMENT?`PFF · ${r.pff_RBALIGNMENT}`:'' )).trim(),
+        'Run Concept':runConcept(r['Run Concept']||r.pff_RUNCONCEPTPRIMARY),
+        'Pass Concept':String(r['Pass Concept']||(String(r.pff_SCREEN||'')==='1'?'SCREEN':String(r.pff_RUNPASSOPTION||'')==='1'?'RPO':String(r.pff_DEEPPASS||'')==='1'?'DEEP PASS':'')).trim(),
+        'Play Type':String(r['Play Type']||playType(r)).trim(),
+        Proctection:String(r.Proctection||r.Protection||(blockers?`${blockers}-MAN`:'' )).trim()
+      };
+      ulmPlayMap.set(r,hybrid);
+    });
+    datasets.ulmHybrid=plays.map(r=>ulmPlayMap.get(r));
+    ulmHybridReady=plays.length>0;
+    ulmHybridMatchRate=plays.length?1:0;
+    loadState.ulmHybrid={ok:ulmHybridReady,n:plays.length,file:'South Alabama play_feed.csv',exactFormation,learnedFormation:learned};
+  }
   async function loadSouthAlabama(){
     datasets=clone(SA_DATA); rawPlayRows=(datasets.plays||[]).slice();
     if(typeof noPlay==='function')datasets.plays=rawPlayRows.filter(r=>!noPlay(r));
@@ -4076,12 +4137,18 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
     }catch(error){
       console.warn('South Alabama Supabase load failed; using embedded fallback',error);
     }
-    if(typeof ulmPlayMap!=='undefined')ulmPlayMap=new WeakMap();
-    if(typeof ulmHybridReady!=='undefined')ulmHybridReady=false;
+    activateSouthAlabamaULM();
     if(typeof analysisMode!=='undefined')analysisMode='current';
     if(typeof playerSeasonView!=='undefined')playerSeasonView='2026';
   }
   const previousSetPrep=window.setPrepWeek;
+  const previousLoadRoster=window.loadRoster;
+  window.loadRoster=function(){
+    if(prepWeek==='W5')return loadSouthAlabama().then(()=>{if(typeof render==='function')render()});
+    return previousLoadRoster?previousLoadRoster():undefined;
+  };
+  const reloadButton=document.getElementById('reloadBtn');
+  if(reloadButton)reloadButton.onclick=()=>window.loadRoster();
   window.setPrepWeek=async function(w){
     if(w==='W5'){
       prepWeek='W5'; page='dashboard'; selected=null;
@@ -4121,6 +4188,12 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(updatePrepChrome,0))
   };
   const oldOverview=overview;
   overview=function(p){const html=oldOverview(p);return prepWeek==='W5'?html.replace(/Mississippi State|UAB/g,'South Alabama'):html};
+  const oldPersonnelPage=personnelPage;
+  personnelPage=function(){
+    const html=oldPersonnelPage();
+    if(prepWeek!=='W5')return html;
+    return html.replace('Exact terminology from the 999-play ULM hybrid breakdown.','South Alabama ULM tags from the Week 5 master play feed; PFF-labelled fallbacks appear only where the ULM field was blank.');
+  };
   try{localStorage.setItem('ulmDefPrepWeekV1','W5')}catch(e){}
   prepWeek='W5'; loadSouthAlabama().then(()=>{updatePrepChrome();render()});
 })();
