@@ -5,6 +5,14 @@ fetch('./app-base.html?v=20260929-deflang').then(r=>{if(!r.ok)throw new Error('b
  if(!re.test(h))throw new Error('South Alabama language block not found');
  h=h.replace(re,defensiveReplacement);
  h=h.replace('South Alabama ULM tags from the Week 5 master play feed; PFF-labelled fallbacks appear only where the ULM field was blank.','South Alabama ULM DEFENSIVE language: exact charted tags first, then the supplied ULM/PFF defensive formation crosswalk. Offensive formation names are never displayed as ULM labels.');
+ const runBlockFix=`<script>(function(){
+  function saRow(key,p){const rows=datasets[key]||[],name=cleanName(p&&p.name),number=jerseyNum(p&&p.number);return rows.find(r=>cleanName(r.Name)===name)||rows.find(r=>number&&jerseyNum(r['#'])===number)||null}
+  const priorSummary=playerSummary;playerSummary=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorSummary(p);const pb=saRow('passBlocking',p),rb=saRow('runBlocking',p);if(!pb&&!rb)return priorSummary(p);return [[pb&&pb['PBLK GRD']||'—','PB Grade'],[rb&&rb['RBLK GRD']||'—','RB Grade'],[rb&&rb.RBLK||'—','RB Snaps'],[rb&&rb['DEFEATED RBLK%']||'—','Defeated %']]};
+  const priorCards=cardMetricsFAU;cardMetricsFAU=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorCards(p);const pb=saRow('passBlocking',p),rb=saRow('runBlocking',p);if(!pb&&!rb)return priorCards(p);return [['PBLK GRD',pb&&pb['PBLK GRD']||'—'],['RBLK GRD',rb&&rb['RBLK GRD']||'—'],['RBLK',rb&&rb.RBLK||'—'],['DEFEATED %',rb&&rb['DEFEATED RBLK%']||'—']]};
+  const priorStats=playerSeasonStats;playerSeasonStats=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorStats(p);const pb=saRow('passBlocking',p),rb=saRow('runBlocking',p);if(!pb&&!rb)return priorStats(p);return [['PBLK GRD',pb&&pb['PBLK GRD']],['PBLK SNAPS',pb&&pb.PBLK],['PRESSURES',pb&&pb.PR],['SACKS',pb&&pb.SK],['RBLK GRD',rb&&rb['RBLK GRD']],['RBLK SNAPS',rb&&rb.RBLK],['IMPACT',rb&&rb['IMPACT RBLK']],['IMPACT %',rb&&rb['IMPACT RBLK%']],['DEFEATED',rb&&rb['DEFEATED RBLK']],['DEFEATED %',rb&&rb['DEFEATED RBLK%']]]};
+  const priorDisplay=playerDisplayStats;playerDisplayStats=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorDisplay(p);return availablePFFStats(playerSeasonStats(p))};
+})();<\/script>`;
+ h=h.replace('</body>',runBlockFix+'</body>');
  document.open();document.write(h);document.close();
 }).catch(e=>{document.body.innerHTML='<div style="padding:24px"><h2>Unable to load Defensive Intelligence</h2><pre>'+String(e)+'</pre></div>'});
 </script></body></html>
