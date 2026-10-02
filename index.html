@@ -12,7 +12,7 @@ fetch('./app-base.html?v=20260929-deflang').then(r=>{if(!r.ok)throw new Error('b
   const priorStats=playerSeasonStats;playerSeasonStats=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorStats(p);const pb=saRow('passBlocking',p),rb=saRow('runBlocking',p);if(!pb&&!rb)return priorStats(p);return [['PBLK GRD',pb&&pb['PBLK GRD']],['PBLK SNAPS',pb&&pb.PBLK],['PRESSURES',pb&&pb.PR],['SACKS',pb&&pb.SK],['RBLK GRD',rb&&rb['RBLK GRD']],['RBLK SNAPS',rb&&rb.RBLK],['IMPACT',rb&&rb['IMPACT RBLK']],['IMPACT %',rb&&rb['IMPACT RBLK%']],['DEFEATED',rb&&rb['DEFEATED RBLK']],['DEFEATED %',rb&&rb['DEFEATED RBLK%']]]};
   const priorDisplay=playerDisplayStats;playerDisplayStats=function(p){if(prepWeek!=='W5'||normPos(p&&p.position)!=='OL')return priorDisplay(p);return availablePFFStats(playerSeasonStats(p))};
 })();<\/script>`;
- h=h.replace('</body>',runBlockFix+'<script src="./week5-coach-jones-south-alabama-v1.js?v=20261002a"><\/script></body>');
+ h=h.replace('</body>',runBlockFix+'<script src="./week3-coach-jones-sel-v14.js?v=20261002-restore"><\/script><script src="./week4-coach-jones-fau-v1.js?v=20261002-restore"><\/script><script src="./week5-coach-jones-south-alabama-v1.js?v=20261002a"><\/script></body>');
  document.open();document.write(h);document.close();
 }).catch(e=>{document.body.innerHTML='<div style="padding:24px"><h2>Unable to load Defensive Intelligence</h2><pre>'+String(e)+'</pre></div>'});
 </script></body></html>
