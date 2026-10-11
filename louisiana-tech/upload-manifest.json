@@ -1,0 +1,34 @@
+{
+  "team": "Louisiana Tech",
+  "season": 2026,
+  "week": 7,
+  "storageBase": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/Louisiana%20Tech/",
+  "files": {
+    "plays": "play_feed.csv",
+    "qb": "pff-qb.csv",
+    "routes": "pff-routes.csv",
+    "dropbacks": "pff-dropbacks.csv",
+    "passOverall": "pff-pass-overall.csv",
+    "pressure": "pff-pressure.csv",
+    "receiving": "pff-receiving.csv",
+    "rushing": "pff-rushing.csv",
+    "runConcepts": "pff-run-concepts.csv",
+    "runDirections": "pff-run-directions.csv",
+    "runBlocking": "pff-run-blocking.csv",
+    "passBlocking": "pff-pass-blocking.csv",
+    "formations": "pff-formations.csv",
+    "personnel": "pff-personnel.csv",
+    "personnelByWeek": "pff-personnel-by-week.csv",
+    "personnel10": "pff-personnel-10-player.csv",
+    "personnel11": "pff-personnel-11-player.csv",
+    "personnel12": "pff-personnel-12-player.csv",
+    "personnel20": "pff-personnel-20-player.csv",
+    "personnel21": "pff-personnel-21-player.csv",
+    "personnelPlayers": "pff-personnel-player-summary.csv"
+  },
+  "teamField": "pff_OFFTEAM",
+  "teamCodes": [
+    "LATU"
+  ],
+  "rosterFile": "roster.json"
+}
