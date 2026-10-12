@@ -15,13 +15,11 @@ fetch('./app-base.html?v=20260929-deflang').then(r=>{if(!r.ok)throw new Error('b
  h=h.replace('</body>',runBlockFix+'<script src="./week3-coach-jones-sel-v14.js?v=20261002-restore"><\/script><script src="./week4-coach-jones-fau-v1.js?v=20261002-restore"><\/script><script src="./week5-coach-jones-south-alabama-v1.js?v=20261002a"><\/script></body>');
  h=h.replace("function bootFAU(){\n    installReviewBanner();", "function bootFAU(){\n    if(LaTech.initial())return;\n    installReviewBanner();");
  h=h.replace("prepWeek='W5'; loadSouthAlabama().then(()=>{updatePrepChrome();render()});", "if(!LaTech.initial()){prepWeek='W5'; loadSouthAlabama().then(()=>{updatePrepChrome();render()});}");
- h=h.replace('</body>',`<script>(function(){
-  function load(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error('Could not load '+src));document.head.appendChild(s)})}
-  load('./louisiana-tech.js?v=week7-20261012').then(()=>load('./louisiana-tech-week7.js?v=week7-20261012')).catch(e=>{
-    console.error('Louisiana Tech Week 7 failed to start',e);
-    const h=document.getElementById('headerStatus');if(h)h.textContent='Louisiana Tech Week 7 failed to load. Refresh the app.';
-  });
-})();<\/script></body>`);
  document.open();document.write(h);document.close();
+ const addScript=src=>new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=()=>reject(new Error('Could not load '+src));document.head.appendChild(s)});
+ setTimeout(()=>addScript('/louisiana-tech.js?v=week7-20261012').then(()=>addScript('/louisiana-tech-week7.js?v=week7-20261012')).catch(e=>{
+  console.error('Louisiana Tech Week 7 failed to start',e);
+  const h=document.getElementById('headerStatus');if(h)h.textContent='Louisiana Tech Week 7 failed to load. Refresh the app.';
+ }),0);
 }).catch(e=>{document.body.innerHTML='<div style="padding:24px"><h2>Unable to load Defensive Intelligence</h2><pre>'+String(e)+'</pre></div>'});
 </script></body></html>
