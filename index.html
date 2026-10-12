@@ -16,7 +16,8 @@ Promise.all([fetch('./app-base.html?v=20260929-deflang'),fetch('./louisiana-tech
  h=h.replace("function bootFAU(){\n    installReviewBanner();", "function bootFAU(){\n    if(LaTech.initial())return;\n    installReviewBanner();");
  h=h.replace("prepWeek='W5'; loadSouthAlabama().then(()=>{updatePrepChrome();render()});", "if(!LaTech.initial()){prepWeek='W5'; loadSouthAlabama().then(()=>{updatePrepChrome();render()});}");
  const inlineScript=source=>'<script>'+source.replace(/<\/script/gi,'<\\/script')+'<\/script>';
- h=h.replace('</body>',inlineScript(lt)+inlineScript(w7)+'</body>');
+ h=h.replace('<head>','<head>'+inlineScript(lt));
+ h=h.replace('</body>',inlineScript(w7)+'</body>');
  document.open();document.write(h);document.close();
 }).catch(e=>{document.body.innerHTML='<div style="padding:24px"><h2>Unable to load Defensive Intelligence</h2><pre>'+String(e)+'</pre></div>'});
 </script></body></html>
