@@ -5,7 +5,6 @@
   "storageBase": "https://hzrosmevuejjlxigdxmg.supabase.co/storage/v1/object/public/Defensive%20Intelligence/Opponents/Louisiana%20Tech/",
   "files": {
     "plays": "play_feed-4.csv",
-    "internalLanguage": "GAMES_1-5.csv",
     "qb": "pff-data-14.csv",
     "routes": "pff-data-15.csv",
     "dropbacks": "pff-data-16.csv",
@@ -20,14 +19,12 @@
     "formations": "pff-data-25.csv",
     "personnel": "pff-data-26.csv",
     "personnelByWeek": "pff-data-27.csv",
-    "supplemental": "pff-data-28.csv",
-    "personnelPlayers": "pff-data-29.csv"
+    "personnel10": "pff-data-28.csv",
+    "personnel11": "pff-data-29.csv",
+    "languageReference": "GAMES_1-5.csv"
   },
   "teamField": "pff_OFFTEAM",
-  "teamCodes": [
-    "LATC"
-  ],
+  "teamCodes": ["LATC"],
   "rosterFile": "roster.json",
-  "depthFile": "depth-chat.json",
-  "depthFallback": "depth-chart.json"
+  "depthFile": "depth-chat.json"
 }
