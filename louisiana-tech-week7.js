@@ -17,7 +17,7 @@
   const plays=datasets.plays||[];ulmPlayMap=new WeakMap();let translated=0;
   datasets.ulmHybrid=plays.map(r=>{const p=laTechInternalRow(r);if(LA_TECH_DEFENSIVE_FORMATION_MAP[clean(r.pff_OFFENSIVE_FORMATION_NAME||r.pff_STARTING_OFFENSIVE_FORMATION_NAME).toUpperCase()])translated++;ulmPlayMap.set(r,p);return p});
   ulmHybridReady=plays.length>0;ulmHybridMatchRate=plays.length?1:0;
-  const internal=datasets.internalLanguage||[];const games=new Set(internal.map(r=>clean(r.Name).replace(/,\\s*Play\\s+\\d+.*$/i,'')).filter(Boolean));
+  const internal=datasets.internalLanguage||[];const games=new Set(internal.map(r=>clean(r.Name).replace(/,\s*Play\s+\d+.*$/i,'')).filter(Boolean));
   loadState.ulmHybrid={ok:ulmHybridReady,n:plays.length,file:'Week 3–4 defensive-scout language crosswalk; GAMES_1-5.csv retained as reference',formationTranslated:translated,internalReferencePlays:internal.length,internalReferenceGames:games.size};
  }\n const originalPhoto=typeof photo==='function'?photo:null;
  if(originalPhoto)photo=function(p){if(prepWeek!=='W7')return originalPhoto(p);const name=clean(p?.name),number=clean(p?.number);if(!name)return '<div class="initials">?</div>';const src='/api/latech-player-image?name='+encodeURIComponent(name)+'&number='+encodeURIComponent(number)+'&v=week7-photo-v1';return `<img src="${esc(src)}" alt="${esc(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:50% 14%" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="initials" style="display:none">${esc(initials(name))}</div>`};
