@@ -11,10 +11,12 @@
   .season-title,.fau-season-stat small{color:#42566b!important;opacity:1!important}
   .fau-season-stat{background:#f5f8fb!important;color:#15293d!important;border-color:#cbd5df!important}
   .fau-season-stat b{color:#15293d!important;opacity:1!important;text-shadow:none!important}
-  .top-game-card{background:#fff!important;color:#172a3a!important}
-  .top-game-card *{color:#1d344a!important;text-shadow:none!important;opacity:1!important}
-  .top-game-card h3,.top-game-card h4{color:#8a2432!important}
-  .top-game-card small,.top-game-card span{color:#465a6e!important}
+  .top-game{background:#fff!important;color:#172a3a!important}
+  .top-game h4{color:#8a2432!important}
+  .top-game .rank{color:#6b7785!important}
+  .top-game .subtle,.top-game .line{color:#34495e!important;opacity:1!important}
+  .top-game .big{color:#152b40!important;opacity:1!important;text-shadow:none!important}
+  .top-game *{text-shadow:none!important}
   .fau-panel svg text{fill:#aebdca!important}
  `;document.head.appendChild(style)}
  const clean=x=>String(x??'').trim();
