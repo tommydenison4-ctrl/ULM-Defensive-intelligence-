@@ -21,7 +21,7 @@
     "personnelByWeek": "pff-data-27.csv",
     "personnel10": "pff-data-28.csv",
     "personnel11": "pff-data-29.csv",
-    "languageReference": "GAMES_1-5.csv"
+    "languageReference": "ALL_BREAKDOWN_GAMES.csv"
   },
   "teamField": "pff_OFFTEAM",
   "teamCodes": ["LATC"],
