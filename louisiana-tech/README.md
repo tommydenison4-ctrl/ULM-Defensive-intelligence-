@@ -4,29 +4,12 @@ October 17, 2026, from the existing Command Center schedule.
 
 Depth chart: Ourlads posting updated 10/10/2026 9:08 AM ET. `depth-chart.json` is a local snapshot, not a PFF dataset or full official roster.
 
-`upload-manifest.json` specifies proposed public Supabase Storage paths and filenames for the next upload. No folders, tables, files or permissions were created in Supabase. Edit storageBase and files to match the actual uploads; file values can be strings or arrays of candidate names. Reload checks this manifest and then each dataset independently. Missing files stay pending; prior opponents are never used as fallbacks. Play feeds must identify LATU in the appropriate offense/defense field and the 2026 season. The existing project uses LATU in its PFF feeds.
+`upload-manifest.json` points to the existing public Supabase objects under `Defensive Intelligence/Opponents/Louisiana Tech/`. It uses the supplied filenames exactly. Reload checks each dataset independently; missing files stay pending and prior opponents are never used as fallbacks. The uploaded play feed identifies Louisiana Tech as `LATC` in `pff_OFFTEAM` and includes 2026 plays, so the loader filters on `LATC` and season 2026. The PFF summary exports identify the team as `LA TECH` and are already limited to that team.
 
-Expected uploads:
+Existing Supabase objects read by the app:
 
-- plays: `play_feed.csv`
-- qb: `pff-qb.csv`
-- routes: `pff-routes.csv`
-- dropbacks: `pff-dropbacks.csv`
-- passOverall: `pff-pass-overall.csv`
-- pressure: `pff-pressure.csv`
-- receiving: `pff-receiving.csv`
-- rushing: `pff-rushing.csv`
-- runConcepts: `pff-run-concepts.csv`
-- runDirections: `pff-run-directions.csv`
-- runBlocking: `pff-run-blocking.csv`
-- passBlocking: `pff-pass-blocking.csv`
-- formations: `pff-formations.csv`
-- personnel: `pff-personnel.csv`
-- personnelByWeek: `pff-personnel-by-week.csv`
-- personnel10: `pff-personnel-10-player.csv`
-- personnel11: `pff-personnel-11-player.csv`
-- personnel12: `pff-personnel-12-player.csv`
-- personnel20: `pff-personnel-20-player.csv`
-- personnel21: `pff-personnel-21-player.csv`
-- personnelPlayers: `pff-personnel-player-summary.csv`
-- Roster: `roster.json` (array or {players: [...]})
+- Play feed: `play_feed-4.csv`
+- Internal defensive-language reference: `GAMES_1-5.csv`
+- PFF report exports: `pff-data-14.csv` through `pff-data-29.csv`
+- Roster: `roster.json`
+- Depth chart: `depth-chat.json`
