@@ -3,7 +3,20 @@
  const oldName=activeOpponentName,oldLabel=activeWeekLabel,oldNotes=notesTeam,oldSwitch=weekSwitchHTML,oldChrome=updatePrepChrome,oldSet=window.setPrepWeek,oldLoad=window.loadRoster;
  activeOpponentName=()=>prepWeek==='W7'?'Louisiana Tech':oldName();activeWeekLabel=()=>prepWeek==='W7'?'Week 7':oldLabel();notesTeam=()=>prepWeek==='W7'?'Louisiana Tech':oldNotes();
  weekSwitchHTML=()=>oldSwitch().replace('</div>',`<button class="${prepWeek==='W7'?'active':''}" onclick="setPrepWeek('W7')"><b>Week 7 · Louisiana Tech</b><span>Current opponent prep</span></button></div>`);
- updatePrepChrome=function(){if(prepWeek!=='W7')return oldChrome();document.title='ULM Defensive Intelligence | Louisiana Tech';document.querySelector('.side-sub').textContent='Louisiana Tech Week';document.querySelector('.opp-name').textContent='Louisiana Tech';document.querySelector('.opp-meta').textContent='Week 7 · October 17, 2026 · Home';const n=document.querySelector('[data-page="depth"]');n.innerHTML='≡ Louisiana Tech Depth Chart';n.style.display='';document.querySelectorAll('[data-page="jones"]').forEach(b=>b.style.display='')};
+ updatePrepChrome=function(){if(prepWeek!=='W7')return oldChrome();document.title='ULM Defensive Intelligence | Louisiana Tech';installLaTechReadableText();document.querySelector('.side-sub').textContent='Louisiana Tech Week';document.querySelector('.opp-name').textContent='Louisiana Tech';document.querySelector('.opp-meta').textContent='Week 7 · October 17, 2026 · Home';const n=document.querySelector('[data-page="depth"]');n.innerHTML='≡ Louisiana Tech Depth Chart';n.style.display='';document.querySelectorAll('[data-page="jones"]').forEach(b=>b.style.display='')};
+ function installLaTechReadableText(){if(document.getElementById('latech-readable-text'))return;const style=document.createElement('style');style.id='latech-readable-text';style.textContent=`
+  .fau-hero,.fau-hero-info{background:#fff!important;color:#172a3a!important}
+  .fau-hero-name,.drawer-player,.player-name{color:#8a2432!important;text-shadow:none!important}
+  .fau-hero-pos,.drawer-pos,.profile-meta,.fau-meta,.sample-row>span:not(.sample-badge){color:#33475b!important;opacity:1!important}
+  .season-title,.fau-season-stat small{color:#42566b!important;opacity:1!important}
+  .fau-season-stat{background:#f5f8fb!important;color:#15293d!important;border-color:#cbd5df!important}
+  .fau-season-stat b{color:#15293d!important;opacity:1!important;text-shadow:none!important}
+  .top-game-card{background:#fff!important;color:#172a3a!important}
+  .top-game-card *{color:#1d344a!important;text-shadow:none!important;opacity:1!important}
+  .top-game-card h3,.top-game-card h4{color:#8a2432!important}
+  .top-game-card small,.top-game-card span{color:#465a6e!important}
+  .fau-panel svg text{fill:#aebdca!important}
+ `;document.head.appendChild(style)}
  const clean=x=>String(x??'').trim();
  const internalColumns=['Formation','Personnel','Backfield','Form Var','Motion','Y Location','Pass Concept','Run Concept','Play Type','Proctection','Front'];
  const crosswalkSpecs={
