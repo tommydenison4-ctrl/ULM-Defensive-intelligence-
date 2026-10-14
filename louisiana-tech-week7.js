@@ -45,7 +45,7 @@
    ulmPlayMap.set(r,mapped);return mapped;
   });
   ulmHybridReady=plays.length>0;ulmHybridMatchRate=plays.length?matchedFormation/plays.length:0;
-  loadState.ulmHybrid={ok:plays.length>0,n:plays.length,file:'GAMES_1-5.csv · internal ULM tags selected by formation group and personnel',matchedFormation,unmappedFormation,referencePlays:reference.length};
+  loadState.ulmHybrid={ok:plays.length>0,n:plays.length,file:'ALL_BREAKDOWN_GAMES.csv · internal language tags selected by formation group and personnel',matchedFormation,unmappedFormation,referencePlays:reference.length};
  }
  const originalPhoto=typeof photo==='function'?photo:null;
  if(originalPhoto)photo=function(p){if(prepWeek!=='W7')return originalPhoto(p);const name=clean(p?.name),number=clean(p?.number);if(!name)return '<div class="initials">?</div>';const src='/api/latech-player-image?name='+encodeURIComponent(name)+'&number='+encodeURIComponent(number)+'&v=week7-photo-v1';return `<img src="${esc(src)}" alt="${esc(name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:50% 14%" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="initials" style="display:none">${esc(initials(name))}</div>`};
